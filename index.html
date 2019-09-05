@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>华谦保全</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/layui/css/layui.css">
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="shortcut icon" href="img/favicon.ico">
+</head>
+
+<body>
+    <div class="page">
+        <!-- 页面头部导航栏 -->
+        <header class="header">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-holder d-flex align-items-center justify-content-between">
+                        <div class="navbar-header"  id="_slideMenuToggle_">
+                            <!-- logo图片 -->
+                            <a id="logo_header" href="#" class="navbar-brand d-none d-sm-inline-block">
+                                <img src="img/logo.png" alt="">
+                                <img src="img/logo-name.png" alt="">
+                            </a>
+                            <!-- 切换侧边菜单栏按钮 -->
+                            <a id="toggle-btn" href="#" class="menu-btn active">
+                                <span></span><span></span><span></span>
+                            </a>
+                        </div>
+
+                        <!-- 头部导航栏菜单 -->
+                        <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                            <!-- 设备预警 -->
+                            <li class="nav-item dropdown" id="_topbar_alert_"></li>
+                            <!-- 站内信 -->
+                            <li class="nav-item dropdown" id="_topbar_mail_"></li>
+                            <!-- 主题切换 -->
+                            <li id="selfDefiningTheme" class="nav-item dropdown">
+                                <a id="settheme" rel="nofollow" data-target="#" href="javascript:void(0);"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    class="nav-link language dropdown-toggle">
+                                    <span class="d-none d-sm-inline-block">主题</span>
+                                </a>
+                                <ul aria-labelledby="theme" class="dropdown-menu">
+                                    <li data-settheme="default"></li>
+                                    <li data-settheme="blue"></li>
+                                    <li data-settheme="green"></li>
+                                    <li data-settheme="pink"></li>
+                                    <li data-settheme="red"></li>
+                                    <li data-settheme="sea"></li>
+                                </ul>
+                            </li>
+                            <!-- 登出 -->
+                            <li class="nav-item">
+                                <a href="login.html" class="nav-link logout">
+                                    <span class="d-none d-sm-inline">退出</span>
+                                    <i class="fa fa-sign-out"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- 页面主体 -->
+        <div class="page-content d-flex align-items-stretch">
+            <!-- 侧边头像及菜单栏导航 -->
+            <nav class="side-navbar">
+                <!-- 用户头像 -->
+                <div class="sidebar-header d-flex align-items-center">
+                    <div class="nav-item dropdown avatar" id="personalPopverLists">
+                        <a id="personalPopverA" rel="nofollow" data-target="#" href="#" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" class="nav-link">
+                            <i></i>
+                            <img src="img/doggy.jpg" alt="..." class="img-fluid rounded-circle userImg">
+                        </a>
+                        <ul aria-labelledby="notifications" class="dropdown-menu" id="personalPopverList">
+                            <li>
+                                <a rel="nofollow" href="#" class="dropdown-item d-flex">
+                                    <i class="fa fa-file-text-o"></i>我的资料 
+                                </a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="#" class="dropdown-item d-flex">
+                                    <i class="fa fa-key"></i>修改密码 
+                                </a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="#" class="dropdown-item d-flex">
+                                    <i class="fa fa-bell-o"></i>开启提醒 
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="title managerTit">
+                        <h1 class="h4">迪丽热巴</h1>
+                        <p>管理人员</p>
+                    </div>
+                </div>
+
+                <!-- 侧边菜单导航栏-->
+                <div id="hx-slideMenu"  class="hx-slideMenuTitPadding">
+                </div>
+            </nav>
+
+            <!-- 主体内容区 -->
+            <div class="content-inner" id="_content_inner_">
+                <!-- iframe版tab -->
+                <div class="layui-tab" lay-filter="_tab_iframe_" lay-allowClose="true">
+                    <!-- tab区 -->
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" lay-id="11">欢迎</li>
+                    </ul>
+
+                    <!-- 内容区 -->
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show ">
+                            欢迎使用智能车库系统
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 内容区脚部 -->
+                <footer class="main-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <p>Copyright &copy; 2019 江苏华谦保全系统服务有限公司
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- js插件 -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper.js/umd/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/layui/layui.js"></script>
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    
+    <!-- 菜单动态加载逻辑 -->
+    <script src="js/slide-menu-data.js"></script>
+    <script src="js/index.js"></script>
+    
+</body>
+</html>
