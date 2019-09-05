@@ -13,13 +13,255 @@
 </head>
 
 <body>
-    <h1>基础信息管理 / 用户管理</h1>
+    <div class="content-inner" style="z-index: 0;">
+        <!-- ===================================================== -->
+        <!-- 请在此处编写你的业务代码 -->
+        <!-- ===================================================== -->
+        <div class="layui-row layui-col-space30" style="background-color: #FFFFFF;">
+            <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: calc(90vh - 24px);">
+                <div>
+                    <blockquote class="layui-elem-quote">组织机构</blockquote>
+                    <div id="orgTree"></div>
+                </div>
+            </div>
+            <div class="layui-col-md10">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>用户列表</legend>
+                    <div class="layui-field-box">
+                        <div style="margin-top: 2%;">
+                            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">登录名</label>
+                                        <div class="layui-input-block">
+                                            <input name="loginname" class="layui-input" type="text"
+                                                placeholder="请输入" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">手机</label>
+                                        <div class="layui-input-block">
+                                            <input name="telphone" class="layui-input" type="text"
+                                                placeholder="请输入" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">邮箱</label>
+                                        <div class="layui-input-block">
+                                            <input name="email" class="layui-input" type="text"
+                                                placeholder="请输入" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">角色</label>
+                                        <div class="layui-input-block">
+                                            <select name="role">
+                                                <option value="0">管理员</option>
+                                                <option value="1">超级管理员</option>
+                                                <option value="2">纠错员</option>
+                                                <option value="3">采购员</option>
+                                                <option value="4">推销员</option>
+                                                <option value="5">运营人员</option>
+                                                <option value="6">编辑</option>
+                                            </select>
+                                            <div class="layui-unselect layui-form-select">
+                                                <div class="layui-select-title"><input
+                                                        class="layui-input layui-unselect" type="text"
+                                                        readonly="" placeholder="请选择" value="管理员"><i
+                                                        class="layui-edge"></i></div>
+                                                <dl class="layui-anim layui-anim-upbit">
+                                                    <dd class="layui-this" lay-value="0">管理员</dd>
+                                                    <dd lay-value="1">超级管理员</dd>
+                                                    <dd lay-value="2">纠错员</dd>
+                                                    <dd lay-value="3">采购员</dd>
+                                                    <dd lay-value="4">推销员</dd>
+                                                    <dd lay-value="5">运营人员</dd>
+                                                    <dd lay-value="6">编辑</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline" style="margin-top: -1%;">
+                                        <button class="layui-btn layuiadmin-btn-admin"
+                                            lay-filter="LAY-user-back-search" lay-submit="">
+                                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-content">
+                                <!-- 定义行工具 -->
+                                <script type="text/html" id="barDemo">
+                            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                            <a class="layui-btn layui-btn-xs" lay-event="edit" style="color:white;">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs"  style="color:white;" lay-event="del">删除</a>
+                        </script>
+                                <!-- 定义头部工具栏 -->
+                                <script id="toolbar" type="text/html">
+                        <div class="layui-btn-group">
+                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+                                <i class="layui-icon">&#xe654;</i>
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+                                <i class="layui-icon">&#xe642;</i>
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+                                <i class="layui-icon">&#xe640;</i>
+                            </button>
+                         </div>
+                      </script>
+                                <table class="layui-hide" id="t-user" lay-filter="test"></table>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
 
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+
+            <!-- js funcitons -->
+            <script>
+                layui.use(['tree', 'table'], function () {
+                    var tree = layui.tree;
+                    var table = layui.table;
+                    //获取组织机构数据nodes:[{},{}]
+                    var baseUrl = "/hqigservice";
+                    var nodes = [];
+                    $.ajax({
+                        url: baseUrl + '/getOrgTree.json',
+                        //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            "userInfo": {
+                                "userId": 1,
+                                "userName": "许明",
+                                "sessionId": "123456"
+                            },
+                            "orgId": 1
+                        }),
+                        contentType: "application/json",
+                        dataType: 'json',
+                        async: true,
+                        success: function (res) {
+                            //处理返回数据
+                            var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+
+                            var childrens;
+                            childrens = getTreeJson(orgTreeInfo.childOrgList);
+                            var root_node = {
+                                "id": orgTreeInfo.orgId,
+                                "title": orgTreeInfo.orgName,
+                                "spread": true,
+                                "children": childrens
+                            };// 存放tree数据
+                            nodes.push(root_node);
+
+
+                            //渲染tree
+                            tree.render({
+                                elem: '#orgTree',
+                                showLine: false,  //是否开启连接线
+                                data: nodes,
+
+                            });
+                            // 表格初始化
+                            table.render({
+                                title: '基础-用户信息表',
+                                elem: '#t-user',
+                                height: 'full-300',
+                                method: 'POST',
+                                contentType: 'application/json',
+                                limit: 30,
+                                url: baseUrl + '/getUserList.json',
+                                where: {
+                                    "userInfo": {
+                                        "userId": 1,
+                                        "userName": "许明",
+                                        "sessionId": "123456"
+                                    },
+                                    "pageNo": 1,
+                                    "pageSize": 20,
+                                    "orgId": 1
+                                },
+                                parseData: function (res) {
+                                    return {
+                                        code: 0,
+                                        msg: "",
+                                        count: 10,
+                                        data: res.userInfoList
+                                    };
+                                },
+                                toolbar: '#toolbar',
+                                page: true,
+                                cols: [[
+                                    {
+                                        type: 'checkbox', fixed: 'left'
+                                    },
+                                    {
+                                        field: 'userId', title: '用户ID', sort: false, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'loginId', title: '登陆ID', sort: false, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'userName', title: '用户名称', sort: true, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'orgId', title: '组织ID', sort: true, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'roleId', title: '角色ID', sort: true, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'telephone', title: '电话', sort: false, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'mobile', title: '手机', sort: false, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'email', title: '邮件', sort: false, fixed: 'center'
+                                    },
+                                    {
+                                        field: 'enable', title: '是否有效', sort: true, fixed: 'center'
+                                    },
+                                    {
+                                        fixed: 'right', title: '操作', width: 165, align: 'center', toolbar: '#barDemo'
+                                    },
+                                ]]
+                            })
+
+
+                        },
+                        error: function () {
+                            layer.msg("操作失败");
+                        }
+                    });
+                });
+                // js 递归返回的组织树
+                function getTreeJson(childrens) {
+                    var child_node = [];
+                    for (var i in childrens) {
+                        var node = {
+                            "id": childrens[i].orgId,
+                            "title": childrens[i].orgName,
+                            "spread": true,
+                        };// 存放tree数据
+                        var childrens_node = childrens[i].childOrgList;
+                        if (childrens_node != 0) {
+                            var son = getTreeJson(childrens_node);
+                            node.children = son;
+                        }
+                        child_node.push(node);
+                    }
+                    return child_node;
+                }
+            </script>
 </body>
 
 </html>

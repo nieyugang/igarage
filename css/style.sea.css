@@ -126,7 +126,7 @@ table {
 
 .content-inner {
   position: relative;
-  width: calc(100% - 250px);
+  width: calc(100%);
   min-height: calc(100vh - 70px);
   padding-bottom: 60px;
 }
@@ -2133,8 +2133,8 @@ STYLE SWITCHER FOR DEMO
   color: #495057;
 }
 
-/* ========================================= 
-   THEMING OF BOOTSTRAP COMPONENTS           
+/* =========================================
+   THEMING OF BOOTSTRAP COMPONENTS
    ========================================= */
 
 /*
@@ -2980,7 +2980,7 @@ STYLE SWITCHER FOR DEMO
 }
 
 /*
- * 3. TYPE  
+ * 3. TYPE
  */
 
 body {
