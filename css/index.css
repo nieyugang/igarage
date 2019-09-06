@@ -218,7 +218,7 @@ nav.side-navbar ul li li a {
 }
 #_content_inner_ .layui-tab .layui-tab-content {
   height: 100%;
-  padding: 8px 10px 46px 10px;
+  /*padding: 8px 10px 46px 10px;*/
 }
 #_content_inner_ .layui-tab .layui-tab-content .layui-show {
   height: 100%;
@@ -284,4 +284,3 @@ nav.side-navbar ul li li a {
   line-height: 28px;
 }
 
- 

@@ -13,13 +13,271 @@
 </head>
 
 <body>
-    <h1>车库系统 / 日常管理</h1>
+<!-- ===================================================== -->
+<!-- 请在此处编写你的业务代码 -->
+<!-- ===================================================== -->
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <div class="row" style="height: 100%">
+        <div class="col-sm-2" style="overflow: auto;background: #ffdf98;">
+            <div id="test2" class="demo-tree"></div>
+        </div>
+        <div class="col-sm-10">
+            <div class="col-sm-12" style="height: 500px">
+                <div id="allmap"></div>
+            </div>
+            <div class="col-sm-12">
+                <table class="layui-hide" id="test"></table>
+            </div>
+            <div class="col-sm-12">
+                <div class="alert alert-success col-sm-12" id="garageInfo"
+                     style="border: 1px solid #43424236; margin-top: 40px">
+                    <div>
+                        车位信息汇总
+                    </div>
+                    <div class="row" style="border: 1px solid #43424236;margin-top: 10px">
+                        <div class="col-sm-3">
+                            车位总数：72/72
+                        </div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+                        <div class="col-sm-3">
+                            电动车车位：60/69
+                        </div>
+                        <div class="col-sm-3">
+                            三轮车车位：0
+                        </div>
+                        <div class="col-sm-3">
+                            自行车车位：3/3
+                        </div>
+                        <div class="col-sm-3">
+                            残疾车车位：0
+                        </div>
+                        <div class="col-sm-3">
+                            小型电动车车位：0
+                        </div>
+                        <div class="col-sm-3">
+                            报警用户车位：0
+                        </div>
+                        <div class="col-sm-3">
+                            待定车位：0
+                        </div>
+                        <div class="col-sm-12">
+                            摩托车车位：0(如未配置，建议不展示)   
+                        </div>
+                        <div class="col-sm-12">
+                            车库地址: 江苏省常州市武进区
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px">
+                        设备信息
+                    </div>
+                    <div class="row" style="border: 1px solid #43424236;margin-top: 10px">
+                        <div class="col-sm-3">
+                            车位：72
+                        </div>
+                        <div class="col-sm-3">
+                            门禁：2
+                        </div>
+                        <div class="col-sm-3">
+                            充电站：3
+                        </div>
+                        <div class="col-sm-3 ">
+                            监控：1
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容区脚部 -->
+    <footer class="main-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <p>Copyright &copy; 2019 江苏华谦保全系统服务有限公司
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<!-- js插件 -->
+<script type="text/html" id="tableNo">
+    {{d.LAY_TABLE_INDEX + 1}}
+</script>
+
+<script type="text/html" id="ingAndLat">
+    {{d.ing}},{{d.lat}}
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/popper.js/umd/popper.min.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../vendor/jquery.cookie/jquery.cookie.js"></script>
+<script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
+<!-- 模板引擎 需要时引入 -->
+<script src="../../vendor/template-web.js"></script>
+<!-- js公共代码 -->
+<script src="../../js/slide-menu-data.js"></script>
+<script src="../../js/front.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+<script>
+    var baseUrl = "http://61.160.234.13:8088/hqigservice/";
+    var nodes = [];
+    layui.use(['tree', 'util', 'table'], function () {
+        // 百度地图API功能
+        map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(116.417854, 39.921988), 15);
+        var data_info = [[116.417854, 39.921988, "地址：北京市东城区王府井大街88号乐天银泰百货八层"],
+            [116.406605, 39.921585, "地址：北京市东城区东华门大街"],
+            [116.412222, 39.912345, "地址：北京市东城区正义路甲5号\n 测试"]
+        ];
+        var opts = {
+            width: 250,     // 信息窗口宽度
+            height: 80,     // 信息窗口高度
+            enableMessage: true//设置允许信息窗发送短息
+        };
+        for (var i = 0; i < data_info.length; i++) {
+            var marker = new BMap.Marker(new BMap.Point(data_info[i][0], data_info[i][1]));  // 创建标注
+            var content = data_info[i][2];
+            map.addOverlay(marker);               // 将标注添加到地图中
+            addClickHandler(content, marker);
+            marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        }
+
+        function addClickHandler(content, marker) {
+            marker.addEventListener("click", function (e) {
+                    openInfo(content, e)
+                }
+            );
+        }
+
+        function openInfo(content, e) {
+            var p = e.target;
+            var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+            var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow, point); //开启信息窗口
+        }
+
+        // 用经纬度设置地图中心点
+        function theLocation(longitude, latitude) {
+            if (longitude != "" && latitude != "") {
+                map.clearOverlays();
+                var new_point = new BMap.Point(longitude, latitude);
+                var marker = new BMap.Marker(new_point);  // 创建标注
+                map.panTo(new_point);
+            }
+        }
+
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table;
+        table.render({
+            elem: '#test'
+            , method: 'post'
+            , contentType: 'application/json'
+            , where: {userInfo: {userId: 1, sessionId: "123456"}, orgId: 6}
+            , url: 'http://61.160.234.13:8088/hqigservice/getGarageList.json'
+            , parseData: function (res) {
+                return {
+                    code: 0,
+                    msg: "",
+                    count: 10,
+                    data: res.rows
+                };
+            }
+            , cols: [[
+                {
+                    field: 'userId', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '联系方式', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
+                },
+                {
+                    field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '操作', toolbar: "#barDemo", sort: false, fixed: 'center'
+                }
+            ]]
+            , page: true
+        });
+
+        $.ajax({
+            url: baseUrl + '/getOrgTree.json',
+            type: 'POST',
+            data: JSON.stringify({
+                "userInfo": {
+                    "userId": 1,
+                    "userName": "许明",
+                    "sessionId": "123456"
+                },
+                "orgId": 1
+            }),
+            contentType: "application/json",
+            dataType: 'json',
+            async: true,
+            success: function (res) {
+                //处理返回数据
+                var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+                var childrens;
+                childrens = getTreeJson(orgTreeInfo.childOrgList);
+                var root_node = {
+                    "id": orgTreeInfo.orgId,
+                    "title": orgTreeInfo.orgName,
+                    "spread": true,
+                    "children": childrens
+                };// 存放tree数据
+                nodes.push(root_node);
+                //渲染tree
+                tree.render({
+                    elem: '#test2'
+                    , data: nodes
+                    , onlyIconControl: true  //是否仅允许节点左侧图标控制展开收缩
+                    , click: function (obj) {
+                        layer.msg(JSON.stringify(obj.data));
+                    }
+                });
+            },
+            error: function () {
+                layer.msg("操作失败");
+            }
+        });
+
+        // js 递归返回的组织树
+        function getTreeJson(childrens) {
+            var child_node = [];
+            for (var i in childrens) {
+                var node = {
+                    "id": childrens[i].orgId,
+                    "title": childrens[i].orgName,
+                    "spread": true,
+                };// 存放tree数据
+                var childrens_node = childrens[i].childOrgList;
+                if (childrens_node != 0) {
+                    var son = getTreeJson(childrens_node);
+                    node.children = son;
+                }
+                child_node.push(node);
+            }
+            return child_node;
+        }
+    });
+</script>
 </body>
 
 </html>
