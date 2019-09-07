@@ -38,11 +38,11 @@
 <!-- ===================================================== -->
 <div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
     <div class="layui-row layui-col-space30" style="background-color: white;">
-        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: calc(90vh);">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
             <div style="margin-top: 20%; height: 100%">
                 <label
                         style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
-                <div id="test2" class="demo-tree" style="overflow: auto; height: 100%"></div>
+                <div id="orgTree" class="demo-tree"></div>
             </div>
         </div>
         <div class="layui-col-md10">
@@ -57,18 +57,19 @@
                             </div>
                         </div>
                         <div class="layui-inline" style="margin-top: -1%;">
-                            <button type="button" class="layui-btn layuiadmin-btn-admin" lay-filter="LAY-user-back-search"
-                                     id="searchMaintainBtn">
+                            <button type="button" class="layui-btn layuiadmin-btn-admin"
+                                    lay-filter="LAY-user-back-search"
+                                    id="searchMaintainBtn">
                                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12" style="border: 1px solid #848d92;min-height: 100px">
-                    <div>fdsafdsa</div>
-                    <table class="layui-hide" id="test" lay-filter="test"></table>
+                    <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
                 </div>
-                <div class="col-sm-12" id="maintainInfoDetails" style="border: 1px solid #848d92; margin-top: 10px;display: none">
+                <div class="col-sm-12" id="maintainInfoDetails"
+                     style="border: 1px solid #848d92; margin-top: 10px;display: none">
                     <div class="row">
                         <div style="height: 600px;;width: 65%; border: 1px solid #848d92;margin: 10px">
 
@@ -121,28 +122,28 @@
                             <div id="showMaintain">
                                 <div class="layui-form-item" style="margin-top: 10px">
                                     <label class="layui-form-label-right-col-3">车库名称</label>
-                                        <label class="layui-form-label-left-col-7" id="garageNameLabel"></label>
+                                    <label class="layui-form-label-left-col-7" id="garageNameLabel"></label>
                                 </div>
                                 <div class="layui-form-item row">
                                     <label class="layui-form-label-right-col-3">车库地址</label>
-                                        <label class="layui-form-label-left-col-7"
-                                               id="addressLabel"></label>
+                                    <label class="layui-form-label-left-col-7"
+                                           id="addressLabel"></label>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label-right-col-3">经度</label>
-                                        <label class="layui-form-label-left-col-7" id="ingLabel"></label>
+                                    <label class="layui-form-label-left-col-7" id="ingLabel"></label>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label-right-col-3">纬度</label>
-                                        <label class="layui-form-label-left-col-7" id="latLabel"></label>
+                                    <label class="layui-form-label-left-col-7" id="latLabel"></label>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label-right-col-3">管理员</label>
-                                        <label class="layui-form-label-left-col-7" id="adminLabel"></label>
+                                    <label class="layui-form-label-left-col-7" id="adminLabel"></label>
                                 </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label-right-col-3">联系电话</label>
-                                        <label class="layui-form-label-left-col-7" id="mobileLabel"></label>
+                                    <label class="layui-form-label-left-col-7" id="mobileLabel"></label>
                                 </div>
                             </div>
                             <form id="editMaintainForm" style="display: none">
@@ -306,17 +307,6 @@
             }
         });
 
-        $("#buttontest").click(function (event) {
-            layer.open({
-                type: 1,
-                skin: 'layui-layer-rim', //加上边框
-                content: $("#editMaintainForm").html()
-                , area: ['800px', '600px']
-                , success: function (layero) {
-                }
-            });
-        });
-
         $("#positionSearchBtn").click(function (event) {
             searchNameByposition();
         });
@@ -344,9 +334,9 @@
             data.userInfo = {userId: 1, sessionId: "123456"}
             var url;
             if (data.garageId) {
-                url += "garageUpdate.json";
+                url = "garageUpdate.json";
             } else {
-                url += "garageAdd.json";
+                url = "garageAdd.json";
             }
             $.ajax({
                 url: baseUrl + url,
@@ -356,12 +346,16 @@
                 dataType: 'json',
                 async: true,
                 success: function (res) {
-                    maintainInfo = data;
-                    tableReload()
-                    alert("成功");
+                    if (res.resFlag === 'N') {
+                        maintainInfo = data;
+                        tableReload()
+                        layer.msg("保存成功");
+                    } else {
+                        layer.msg("保存失败");
+                    }
                 },
                 error: function () {
-                    alert("失败");
+                    layer.msg("保存失败");
                 }
             });
         });
@@ -375,16 +369,16 @@
         })
 
         var tableIns = table.render({
-            elem: '#test'
+            elem: '#maintainTable'
             , method: 'post'
             , contentType: 'application/json'
             , where: {userInfo: {userId: 1, sessionId: "123456"}, orgId: 0}
             , url: baseUrl + 'getGarageList.json'
             , limit: 20
             , limits: [20, 50, 100]
-            ,request: {
+            , request: {
                 pageName: 'pageNo' //页码的参数名称，默认：page
-                ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
             }
             , parseData: function (res) {
                 return {
@@ -425,17 +419,21 @@
                 //如果是异步请求数据方式，res即为你接口返回的信息。
                 //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                 if (res.data) {
-                    maintainInfo = res.data[0];
-                    theLocation(res.data[0].ing, res.data[0].lat);
-                    showMaintain(res.data[0]);
+                    if (res.data[0]) {
+                        maintainInfo = res.data[0];
+                        theLocation(res.data[0].ing, res.data[0].lat, res.data[0].garageName);
+                        showMaintain(res.data[0]);
+                    } else {
+                        $("#maintainInfoDetails").hide();
+                    }
                 }
             }
         });
 
-        function tableReload(where){
+        function tableReload(where) {
             tableIns.reload({
                 where: where //设定异步数据接口的额外参数
-                ,page: {
+                , page: {
                     curr: 1 //重新从第 1 页开始
                 }
             });
@@ -451,8 +449,9 @@
             $("#admin").val(maintainInfo.admin);//车库管理员
             $("#mobile").val(maintainInfo.mobile);//联系方式
             $("#engPic").val(maintainInfo.engPic);//联系方式
-            theLocation(maintainInfo.ing, maintainInfo.lat);
+            theLocation(maintainInfo.ing, maintainInfo.lat, maintainInfo.garageName);
             maintainImgShowOrHide(maintainInfo.engPic);
+            $("#maintainInfoDetails").show();
         }
 
         function maintainImgShowOrHide(engPic) {
@@ -483,16 +482,18 @@
             $("#addressLabel").html(maintainInfo.address);//地址
             $("#adminLabel").html(maintainInfo.admin);//车库管理员
             $("#mobileLabel").html(maintainInfo.mobile);//联系方式
-            theLocation(maintainInfo.ing, maintainInfo.lat);
+            theLocation(maintainInfo.ing, maintainInfo.lat, maintainInfo.garageName);
         }
 
         // 用经纬度设置地图中心点
-        function theLocation(longitude, latitude) {
+        function theLocation(longitude, latitude, name) {
             if (longitude != "" && latitude != "") {
                 map.clearOverlays();
                 var new_point = new BMap.Point(longitude, latitude);
                 var marker = new BMap.Marker(new_point);  // 创建标注
                 map.addOverlay(marker);              // 将标注添加到地图中
+                var label = new BMap.Label(name, {offset:new BMap.Size(20,-10)});
+                marker.setLabel(label);
                 map.panTo(new_point);
             }
         }
@@ -540,7 +541,7 @@
                 nodes.push(root_node);
                 //渲染tree
                 tree.render({
-                    elem: '#test2'
+                    elem: '#orgTree'
                     , data: nodes
                     , onlyIconControl: true  //是否仅允许节点左侧图标控制展开收缩
                     , click: function (obj) {
@@ -555,9 +556,9 @@
 
         function clickOrg(orgInfo) {
             tableReload({userInfo: {userId: 1, sessionId: "123456"}, orgId: orgInfo.id})
-            if(orgInfo.level === 3) {
+            if (orgInfo.level === 3) {
                 $("#maintainInfoDetails").show();
-            }else {
+            } else {
                 $("#maintainInfoDetails").hide();
             }
         }
@@ -583,7 +584,7 @@
         }
 
         //监听行工具事件
-        table.on('tool(test)', function (obj) {
+        table.on('tool(maintainTable)', function (obj) {
             var data = obj.data;
             //console.log(obj)
             if (obj.event === 'del') {
@@ -597,11 +598,15 @@
                         dataType: 'json',
                         async: true,
                         success: function (res) {
-                            tableReload()
-                            alert("成功");
+                            if (res.resFlag === 'N') {
+                                tableReload()
+                                layer.msg("删除成功");
+                            } else {
+                                layer.msg("删除失败");
+                            }
                         },
                         error: function () {
-                            alert("失败");
+                            layer.msg("删除失败");
                         }
                     });
                     layer.close(index);
@@ -614,13 +619,13 @@
             }
         });
 
-        $.fn.serializeObject = function() {
+        $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
-            $.each(a, function() {
+            $.each(a, function () {
                 if (o[this.name]) {
                     if (!o[this.name].push) {
-                        o[this.name] = [ o[this.name] ];
+                        o[this.name] = [o[this.name]];
                     }
                     o[this.name].push(this.value || '');
                 } else {
