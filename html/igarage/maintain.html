@@ -10,16 +10,633 @@
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <style>
+        #garageInfo div {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        #allmap {
+            width: 100%;
+            height: 100%;
+        }
+
+        #editMaintainForm input {
+            width: 90%;
+        }
+
+        #maintainInfo {
+            font-size: 12px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>车库系统 / 车库维护</h1>
+<h1>车库系统 / 车库维护</h1>
+<!-- ===================================================== -->
+<!-- 请在此处编写你的业务代码 -->
+<!-- ===================================================== -->
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <div class="layui-row layui-col-space30" style="background-color: white;">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
+            <div style="margin-top: 20%; height: 100%">
+                <label
+                        style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
+                <div id="orgTree" class="demo-tree"></div>
+            </div>
+        </div>
+        <div class="layui-col-md10">
+            <div style="margin-top: 2%;">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">车库名称</label>
+                            <div class="layui-input-block">
+                                <input id="garageNameSearch" class="layui-input" type="text" placeholder="请输入"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline" style="margin-top: -1%;">
+                            <button type="button" class="layui-btn layuiadmin-btn-admin"
+                                    lay-filter="LAY-user-back-search"
+                                    id="searchMaintainBtn">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12" style="border: 1px solid #848d92;min-height: 100px">
+                    <div class="row" style="background-color: #848d92">车库列表</div>
+                    <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
+                </div>
+                <div class="col-sm-12" id="maintainInfoDetails"
+                     style="border: 1px solid #848d92; margin-top: 10px;display: none">
+                    <div class="row">
+                        <div style="height: 600px;;width: 65%; border: 1px solid #848d92;margin: 10px">
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+                            <div class="layui-tab layui-tab-brief">
+                                <ul class="layui-tab-title">
+                                    <li class="layui-this">地图</li>
+                                    <li>工程图</li>
+                                </ul>
+                                <div class="layui-tab-content">
+                                    <div class="layui-tab-item layui-show">
+                                        <div class="layui-form-item" style="margin-top: 10px; text-align: center;">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">位置</label>
+                                                <div class="layui-input-block">
+                                                    <input name="cityName" id="cityName" class="layui-input" type="text"
+                                                           placeholder="位置"
+                                                           autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" style="margin-top: -1%;">
+                                                <button class="layui-btn layuiadmin-btn-admin"
+                                                        lay-filter="LAY-user-back-search"
+                                                        lay-submit="" id="positionSearchBtn">
+                                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="allmap" style="height: 450px"></div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="layui-form-item" style="text-align: center">
+                                            <div class="layui-upload">
+                                                <button type="button" class="layui-btn" id="maintainFile">上传工程图片
+                                                </button>
+                                                <img id="maintainImg" style="display: none" src="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form" id="maintainInfo"
+                             style="height: 600px;width: 30%;border: 1px solid #848d92;margin: 10px;">
+                            <div class="layui-btn-group" style="float: right; margin-bottom: 10px">
+                                <button type="button" class="layui-btn layui-btn-sm" id="saveMaintainBtn"><i
+                                        class="layui-icon"></i></button>
+                                <button type="button" class="layui-btn layui-btn-sm" id="editMaintainBtn"><i
+                                        class="layui-icon"></i></button>
+                            </div>
+                            <div id="showMaintain">
+                                <div class="layui-form-item" style="margin-top: 10px">
+                                    <label class="layui-form-label-right-col-3">车库名称</label>
+                                    <label class="layui-form-label-left-col-7" id="garageNameLabel"></label>
+                                </div>
+                                <div class="layui-form-item row">
+                                    <label class="layui-form-label-right-col-3">车库地址</label>
+                                    <label class="layui-form-label-left-col-7"
+                                           id="addressLabel"></label>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label-right-col-3">经度</label>
+                                    <label class="layui-form-label-left-col-7" id="ingLabel"></label>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label-right-col-3">纬度</label>
+                                    <label class="layui-form-label-left-col-7" id="latLabel"></label>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label-right-col-3">管理员</label>
+                                    <label class="layui-form-label-left-col-7" id="adminLabel"></label>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label-right-col-3">联系电话</label>
+                                    <label class="layui-form-label-left-col-7" id="mobileLabel"></label>
+                                </div>
+                            </div>
+                            <form id="editMaintainForm" style="display: none">
+                                <input type="hidden" id="garageId" name="garageId">
+                                <input type="hidden" id="engPic" name="engPic">
+                                <input type="hidden" id="orgId" name="orgId" value="6">
+                                <div>
+                                    <div class="layui-form-item" style="margin-top: 10px">
+                                        <label class="layui-form-label-right-col-3">车库名称</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="garageName" id="garageName" lay-verify="title"
+                                                   autocomplete="off"
+                                                   placeholder="请输入标题"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label-right-col-3">车库地址</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="address" id="address" lay-verify="title"
+                                                   autocomplete="off"
+                                                   placeholder="请输入标题"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label-right-col-3">经度</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="ing" id="ing" lay-verify="title"
+                                                   autocomplete="off"
+                                                   placeholder="请输入标题"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label-right-col-3">纬度</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="lat" id="lat" lay-verify="title"
+                                                   autocomplete="off"
+                                                   placeholder="请输入标题"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label-right-col-3">车库管理员</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="admin" id="admin" lay-verify="title"
+                                                   autocomplete="off"
+                                                   placeholder="请输入标题"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label-right-col-3">联系电话</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="mobile" id="mobile" lay-verify="title"
+                                                   autocomplete="off"
+                                                   placeholder="请输入标题"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="text-align: center">
+                                    <div>
+                                        <button type="button" id="submitSaveMaintain" class="layui-btn"
+                                                lay-filter="demo1">立即提交
+                                        </button>
+                                        <button type="button" id="resetMaintain" class="layui-btn layui-btn-primary">
+                                            重置
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableNo">
+    {{d.LAY_TABLE_INDEX + 1}}
+</script>
+
+<script type="text/html" id="ingAndLat">
+    {{d.ing}}--{{d.lat}}
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" style="color:white;" lay-event="del">删除</a>
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/popper.js/umd/popper.min.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../vendor/jquery.cookie/jquery.cookie.js"></script>
+<script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
+<!-- 模板引擎 需要时引入 -->
+<script src="../../vendor/template-web.js"></script>
+<!-- js公共代码 -->
+<script src="../../js/slide-menu-data.js"></script>
+<script src="../../js/front.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+<script>
+    var baseUrl = "http://61.160.234.13:8088/hqigservice/";
+    var nodes = [];
+    var maintainInfo;
+    layui.use(['tree', 'util', 'table', 'element', 'upload'], function () {
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(119.98186101, 31.77139674);
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
+        map.addOverlay(marker);
+        map.addEventListener("click", function (e) {
+            map.clearOverlays();
+            var new_point = new BMap.Point(e.point.lng, e.point.lat);
+            var marker = new BMap.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.panTo(new_point);
+            $("#ing").val(e.point.lng);//经度
+            $("#lat").val(e.point.lat);//纬度
+        });
+
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table
+            , element = layui.element
+            , $ = layui.jquery
+            , upload = layui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#maintainFile'
+            , url: '/upload/'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        $("#positionSearchBtn").click(function (event) {
+            searchNameByposition();
+        });
+
+        $("#editMaintainBtn").click(function (event) {
+            setMaintain(maintainInfo);
+            $("#editMaintainForm").show();
+            $("#showMaintain").hide()
+        });
+
+        $("#saveMaintainBtn").click(function (event) {
+            cleanMaintain()
+            $("#editMaintainForm").show();
+            $("#showMaintain").hide()
+        });
+
+        $("#submitSaveMaintain").click(function (event) {
+            var data = $("#editMaintainForm").serializeObject();
+            data.garageId = parseInt(data.garageId);
+
+            data.ing = Number(data.ing);
+            data.lat = Number(data.lat);
+            data.orgId = Number(data.orgId);
+
+            data.userInfo = {userId: 1, sessionId: "123456"}
+            var url;
+            if (data.garageId) {
+                url = "garageUpdate.json";
+            } else {
+                url = "garageAdd.json";
+            }
+            $.ajax({
+                url: baseUrl + url,
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: "application/json;charset=utf-8",
+                dataType: 'json',
+                async: true,
+                success: function (res) {
+                    if (res.resFlag === 'N') {
+                        maintainInfo = data;
+                        tableReload()
+                        layer.msg("保存成功");
+                    } else {
+                        layer.msg("保存失败");
+                    }
+                },
+                error: function () {
+                    layer.msg("保存失败");
+                }
+            });
+        });
+
+        $("#resetMaintain").click(function (event) {
+            cleanMaintain();
+        });
+
+        $("#searchMaintainBtn").click(function (event) {
+            tableReload();
+        })
+
+        var tableIns = table.render({
+            elem: '#maintainTable'
+            , method: 'post'
+            , contentType: 'application/json'
+            , where: {userInfo: {userId: 1, sessionId: "123456"}, orgId: 0}
+            , url: baseUrl + 'getGarageList.json'
+            , limit: 20
+            , limits: [20, 50, 100]
+            , request: {
+                pageName: 'pageNo' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , parseData: function (res) {
+                return {
+                    code: 0,
+                    msg: "",
+                    count: 10,
+                    data: res.rows
+                };
+            }
+            , cols: [[
+                {
+                    field: 'userId', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
+                },
+                {
+                    field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
+                },
+                {
+                    field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+                },
+                {
+                    field: 'userId', title: '操作', toolbar: "#barDemo", sort: false, fixed: 'center'
+                }
+            ]]
+            , page: true
+            , done: function (res, curr, count) {
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                if (res.data) {
+                    if (res.data[0]) {
+                        maintainInfo = res.data[0];
+                        theLocation(res.data[0].ing, res.data[0].lat, res.data[0].garageName);
+                        showMaintain(res.data[0]);
+                    } else {
+                        $("#maintainInfoDetails").hide();
+                    }
+                }
+            }
+        });
+
+        function tableReload(where) {
+            tableIns.reload({
+                where: where //设定异步数据接口的额外参数
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        }
+
+
+        function setMaintain(maintainInfo) {
+            $("#garageId").val(maintainInfo.garageId)
+            $("#garageName").val(maintainInfo.garageName);//车库名称
+            $("#ing").val(maintainInfo.ing);//经度
+            $("#lat").val(maintainInfo.lat);//纬度
+            $("#address").val(maintainInfo.address);//地址
+            $("#admin").val(maintainInfo.admin);//车库管理员
+            $("#mobile").val(maintainInfo.mobile);//联系方式
+            $("#engPic").val(maintainInfo.engPic);//联系方式
+            theLocation(maintainInfo.ing, maintainInfo.lat, maintainInfo.garageName);
+            maintainImgShowOrHide(maintainInfo.engPic);
+            $("#maintainInfoDetails").show();
+        }
+
+        function maintainImgShowOrHide(engPic) {
+            if (engPic) {
+                $("#maintainImg").show();
+            } else {
+                $("#maintainImg").hide();
+            }
+        }
+
+        function cleanMaintain() {
+            $("#garageId").val("")
+            $("#garageName").val("");//车库名称
+            $("#ing").val("");//经度
+            $("#lat").val("");//纬度
+            $("#address").val("");//地址
+            $("#admin").val("");//车库管理员
+            $("#mobile").val("");//联系方式
+            $("#engPic").val("");//联系方式
+            maintainImgShowOrHide(null)
+        }
+
+        function showMaintain(maintainInfo) {
+            $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
+            $("#orgIdLabel").html(maintainInfo.orgId);//所属机构id
+            $("#ingLabel").html(maintainInfo.ing);//经度
+            $("#latLabel").html(maintainInfo.lat);//纬度
+            $("#addressLabel").html(maintainInfo.address);//地址
+            $("#adminLabel").html(maintainInfo.admin);//车库管理员
+            $("#mobileLabel").html(maintainInfo.mobile);//联系方式
+            theLocation(maintainInfo.ing, maintainInfo.lat, maintainInfo.garageName);
+        }
+
+        // 用经纬度设置地图中心点
+        function theLocation(longitude, latitude, name) {
+            if (longitude != "" && latitude != "") {
+                map.clearOverlays();
+                var new_point = new BMap.Point(longitude, latitude);
+                var marker = new BMap.Marker(new_point);  // 创建标注
+                map.addOverlay(marker);              // 将标注添加到地图中
+                var label = new BMap.Label(name, {offset:new BMap.Size(20,-10)});
+                marker.setLabel(label);
+                map.panTo(new_point);
+            }
+        }
+
+        //根据城市定位
+        function searchNameByposition() {
+            var city = $("#cityName").val();
+            if (city != "") {
+                map.centerAndZoom(city, 18);      // 用城市名设置地图中心点
+                setTimeout(function () {
+                    var pt = map.getBounds().getCenter();
+                    map.clearOverlays();
+                    map.addOverlay(new BMap.Marker(new BMap.Point(pt.lng, pt.lat)));
+                    $("#ing").val(pt.lng);//经度
+                    $("#lat").val(pt.lat);//纬度
+                }, 500)
+            }
+        }
+
+        $.ajax({
+            url: baseUrl + 'getOrgTree.json',
+            type: 'POST',
+            data: JSON.stringify({
+                "userInfo": {
+                    "userId": 1,
+                    "userName": "许明",
+                    "sessionId": "123456"
+                },
+                "orgId": 1
+            }),
+            contentType: "application/json",
+            dataType: 'json',
+            async: true,
+            success: function (res) {
+                //处理返回数据
+                var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+                var childrens;
+                childrens = getTreeJson(orgTreeInfo.childOrgList);
+                var root_node = {
+                    "id": orgTreeInfo.orgId,
+                    "title": orgTreeInfo.orgName,
+                    "spread": true,
+                    "children": childrens
+                };// 存放tree数据
+                nodes.push(root_node);
+                //渲染tree
+                tree.render({
+                    elem: '#orgTree'
+                    , data: nodes
+                    , onlyIconControl: true  //是否仅允许节点左侧图标控制展开收缩
+                    , click: function (obj) {
+                        clickOrg(obj.data);
+                    }
+                });
+            },
+            error: function () {
+                layer.msg("操作失败");
+            }
+        });
+
+        function clickOrg(orgInfo) {
+            tableReload({userInfo: {userId: 1, sessionId: "123456"}, orgId: orgInfo.id})
+            if (orgInfo.level === 3) {
+                $("#maintainInfoDetails").show();
+            } else {
+                $("#maintainInfoDetails").hide();
+            }
+        }
+
+        // js 递归返回的组织树
+        function getTreeJson(childrens) {
+            var child_node = [];
+            for (var i in childrens) {
+                var node = {
+                    "id": childrens[i].orgId,
+                    "title": childrens[i].orgName,
+                    "spread": true,
+                    "level": childrens[i].orgLevel
+                };// 存放tree数据
+                var childrens_node = childrens[i].childOrgList;
+                if (childrens_node != 0) {
+                    var son = getTreeJson(childrens_node);
+                    node.children = son;
+                }
+                child_node.push(node);
+            }
+            return child_node;
+        }
+
+        //监听行工具事件
+        table.on('tool(maintainTable)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                var data = {userInfo: {userId: 1, sessionId: "123456"}, garageId: data.garageId};
+                layer.confirm('真的删除行么', function (index) {
+                    $.ajax({
+                        url: "http://localhost:8088/hqigservice/garageDelete.json",
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        contentType: "application/json;charset=utf-8",
+                        dataType: 'json',
+                        async: true,
+                        success: function (res) {
+                            if (res.resFlag === 'N') {
+                                tableReload()
+                                layer.msg("删除成功");
+                            } else {
+                                layer.msg("删除失败");
+                            }
+                        },
+                        error: function () {
+                            layer.msg("删除失败");
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'detail') {
+                maintainInfo = data;
+                showMaintain(data)
+                $("#editMaintainForm").hide();
+                $("#showMaintain").show()
+            }
+        });
+
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        }
+    });
+</script>
 </body>
 
 </html>
