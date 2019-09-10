@@ -31,71 +31,21 @@
                     <div class="layui-field-box">
                         <div style="margin-top: 2%;">
                             <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                                <div class="layui-form-item">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">登录名</label>
-                                        <div class="layui-input-block">
-                                            <input name="loginname" class="layui-input" type="text" placeholder="请输入"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">手机</label>
-                                        <div class="layui-input-block">
-                                            <input name="telphone" class="layui-input" type="text" placeholder="请输入"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">邮箱</label>
-                                        <div class="layui-input-block">
-                                            <input name="email" class="layui-input" type="text" placeholder="请输入"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">角色</label>
-                                        <div class="layui-input-block">
-                                            <select name="role">
-                                                <option value="0">管理员</option>
-                                                <option value="1">超级管理员</option>
-                                                <option value="2">纠错员</option>
-                                                <option value="3">采购员</option>
-                                                <option value="4">推销员</option>
-                                                <option value="5">运营人员</option>
-                                                <option value="6">编辑</option>
-                                            </select>
-                                            <div class="layui-unselect layui-form-select">
-                                                <div class="layui-select-title"><input
-                                                        class="layui-input layui-unselect" type="text" readonly=""
-                                                        placeholder="请选择" value="管理员"><i class="layui-edge"></i></div>
-                                                <dl class="layui-anim layui-anim-upbit">
-                                                    <dd class="layui-this" lay-value="0">管理员</dd>
-                                                    <dd lay-value="1">超级管理员</dd>
-                                                    <dd lay-value="2">纠错员</dd>
-                                                    <dd lay-value="3">采购员</dd>
-                                                    <dd lay-value="4">推销员</dd>
-                                                    <dd lay-value="5">运营人员</dd>
-                                                    <dd lay-value="6">编辑</dd>
-                                                </dl>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline" style="margin-top: -1%;">
-                                        <button class="layui-btn layuiadmin-btn-admin" lay-filter="LAY-user-back-search"
-                                            lay-submit="">
-                                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                <form class="layui-form caller-seach" action="" style="position: relative;
+                                padding-bottom: 40px;">
+                                    <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                                    position: absolute;
+                                    top: -3px;
+                                    left: 5px;"></i>
+                                    <input type="text" name="title" required="" lay-verify="required"
+                                        placeholder="请输入登陆ID/用户名/手机号码进行查询" autocomplete="off"
+                                        class="layui-input caller-pl32" style="padding: 0 32px;">
+                                    <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                                    position: absolute;
+                                    top: -3px;left: 98%;"></i>
+                                </form>
                             </div>
                             <div class="table-content">
-                                <!-- 定义行工具栏 -->
-                                <script type="text/html" id="barDemo">
-                                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-                                <a class="layui-btn layui-btn-xs" lay-event="edit" >编辑</a>
-                                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-                            </script>
                                 <!-- 定义头部工具栏 -->
                                 <script id="toolbar" type="text/html">
                                 <div class="layui-btn-group">
@@ -167,6 +117,25 @@
                         elem: '#orgTree',
                         showLine: false,  //是否开启连接线
                         data: nodes,
+                        onlyIconControl: true,
+                        click: function (obj) {
+                            //得到当前点击的节点数据   obj.data
+                            var orgId = obj.data.id;
+
+                            tableIns.reload({
+                                where: {
+                                    "userInfo": {
+                                        "userId": 1,
+                                        "userName": "许明",
+                                        "sessionId": "123456"
+                                    },
+                                    "orgId": orgId
+                                },
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        },
                     });
                 },
                 error: function () {
@@ -175,7 +144,7 @@
             });
 
             // 表格初始化
-            table.render({
+            var tableIns = table.render({
                 title: '基础-用户信息表',
                 elem: '#t-user',
                 height: 'full-200',
@@ -201,8 +170,9 @@
                 },
                 toolbar: '#toolbar',
                 cols: [[
-                    { type: 'checkbox', fixed: 'left' },
-                    { field: 'userId', title: '用户ID', sort: false, align: 'center' },
+                    { type: 'radio', fixed: 'left' },
+                    { type: 'numbers', title: '序号', align: 'center' },
+                    { field: 'userId', title: '用户ID', sort: false, align: 'center', hide: true },
                     { field: 'loginId', title: '登陆ID', sort: false, align: 'center' },
                     { field: 'userName', title: '用户名称', sort: true, align: 'center' },
                     { field: 'orgId', title: '组织ID', sort: true, align: 'center' },
@@ -211,7 +181,7 @@
                     { field: 'mobile', title: '手机', sort: false, align: 'center' },
                     { field: 'email', title: '邮件', sort: false, align: 'center' },
                     { field: 'enable', title: '是否有效', sort: true, align: 'center' },
-                    { fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo' },
+                    // { fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo' },
                 ]]
             });
             // 监听头部工具栏事件
@@ -226,7 +196,7 @@
                             title: false,
                             anim: 1,
                             area: ['700px', '700px'],
-                            content: './userEdit.html',
+                            content: './userAdd.html',
                             end: function () {
                                 location.reload();
                             }
@@ -246,7 +216,8 @@
                                 area: ['700px', '700px'],
                                 content: content,
                                 end: function () {
-                                    location.reload();
+                                    table.reload('t-user');
+                                    //  location.reload();
                                     //  table.reload();
                                 }
                             });
@@ -257,11 +228,42 @@
                         if (data.length === 0) {
                             layer.msg('请选择一行');
                         } else {
-                            layer.msg('删除');
+                            var userId = checkStatus.data[0].userId;
+                            layer.confirm('确定删除吗？', function (index) {
+                                $.ajax({
+                                    url: baseUrl + '/userDelete.json',
+                                    type: 'POST',
+                                    data: JSON.stringify({
+                                        "userInfo": {
+                                            "userId": 1,
+                                            "userName": "许明",
+                                            "sessionId": "123456"
+                                        },
+                                        "userId": userId
+                                    }),
+                                    contentType: "application/json",
+                                    dataType: 'json',
+                                    async: true,
+                                    success: function (res) {
+                                        if (res.resFlag == "N") {
+                                            layer.msg('操作成功', { icon: 1 });
+                                            setTimeout(function () {
+                                                table.reload('t-user');
+                                            }, 2000);
+
+                                        } else {
+                                            layer.msg(res.resFlag, { icon: 2 });
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg(res.resFlag, { icon: 2 });
+                                    }
+                                });
+                            });
                         }
                         break;
-                };
-            });
+                        };
+                });
         });
         // js 递归返回的组织树
         function getTreeJson(childrens) {

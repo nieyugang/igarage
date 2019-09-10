@@ -24,37 +24,34 @@
             <div class="layui-field-box">
                 <div class="work-area" style="margin-top: 10px;margin-left: 10px">
                     <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label" style="width: 90px">角色名称</label>
-                                <div class="layui-input-block">
-                                    <input name="loginname" class="layui-input" type="text" placeholder="请输入角色名称"
-                                        autocomplete="off">
-                                </div>
-                            </div>
-
-                            <div class="layui-inline" style="margin-top: -1%;">
-                                <button class="layui-btn layuiadmin-btn-admin" lay-filter="LAY-user-back-search"
-                                    lay-submit="">
-                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                                </button>
-                            </div>
-                        </div>
+                            <form class="layui-form caller-seach" action="" style="position: relative;
+                            padding-bottom: 40px;">
+                                <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                                position: absolute;
+                                top: -3px;
+                                left: 5px;"></i>
+                                <input type="text" name="title" required="" lay-verify="required"
+                                    placeholder="请输入角色名称进行查询" autocomplete="off"
+                                    class="layui-input caller-pl32" style="padding: 0 32px;">
+                                <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                                position: absolute;
+                                top: -3px;left: 98%;"></i>
+                            </form>
                     </div>
                     <!-- 定义角色授权按钮 -->
                     <script type="text/html" id="authorizationbar">
                     <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-btn-xs">角色授权</button>
+                        <button type="button" class="layui-btn layui-btn-xs">菜单授权</button>
                     </div>
                 </script>
                     <!-- 定义行工具 -->
-                    <script type="text/html" id="bar">
+                    <!-- <script type="text/html" id="bar">
                     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
                     <a class="layui-btn layui-btn-xs" lay-event="edit" style="color:white;">编辑</a>
                     <a class="layui-btn layui-btn-danger layui-btn-xs"  style="color:white;" lay-event="del">删除</a>
-                </script>
+                </script> -->
                     <!-- 定义头部工具栏 -->
-                    <script id="toolbar" type="text/html">
+                    <!-- <script id="toolbar" type="text/html">
                 <div class="layui-btn-group">
                     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
                         <i class="layui-icon">&#xe654;</i>
@@ -66,8 +63,8 @@
                         <i class="layui-icon">&#xe640;</i>
                     </button>
                  </div>
-              </script>
-                    <table class="layui-hide" id="role"></table>
+              </script> -->
+                    <table class="layui-hide" id="role" lay-filter="role"></table>
                 </div>
             </div>
         </fieldset>
@@ -106,71 +103,104 @@
                     return {
                         code: 0,
                         msg: "",
-                        count: 10,
+                        count: res.roleList.length,
                         data: res.roleList
                     };
                 },
-                toolbar: '#toolbar',
+                toolbar: 'default',
                 page: true,
                 cols: [[
-                    {
-                        type: 'checkbox', fixed: 'left'
-                    },
-                    {
-                        field: 'roleId', title: '序号', sort: false, fixed: 'center'
-                    },
-                    {
-                        field: 'roleName', title: '角色名称', sort: false, fixed: 'center'
-                    },
-                    {
-                        field: 'authorization', title: '授权', width: '12%', sort: false, align: 'center', toolbar: '#authorizationbar'
-                    },
-
-                    {
-                        fixed: 'right', title: '操作', width: 165, align: 'center', toolbar: '#bar'
-                    },
+                    { type: 'radio', fixed: 'left'},
+                    { type: 'numbers', title: '序号', align: 'center' },
+                    { field: 'roleId', title: '角色ID', sort: false,  align: 'center',hide:true},
+                    { field: 'roleName', title: '角色名称', sort: false,  align: 'center'},
+                    { field: 'authorization', title: '授权', sort: false, align: 'center', toolbar: '#authorizationbar'}
+                    // {
+                    //     fixed: 'right', title: '操作', width: 165, align: 'center', toolbar: '#bar'
+                    // },
                 ]]
-            })
-        });
+            });
 
-        //头工具栏事件
-        table.on('toolbar(role)', function (obj) {
-            var checkStatus = table.checkStatus(obj.config.id);
-            switch (obj.event) {
-                case 'getCheckData':
-                    var data = checkStatus.data;
-                    layer.alert(JSON.stringify(data));
-                    break;
-                case 'getCheckLength':
-                    var data = checkStatus.data;
-                    layer.msg('选中了：' + data.length + ' 个');
-                    break;
-                case 'isAll':
-                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
-                    break;
-            };
-        });
+            // 监听头部工具栏事件
+            table.on('toolbar(role)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data; //获取选中的数据
+                var layEvet = obj.event;
+                switch (layEvet) {
+                    case 'add':
+                        layer.open({
+                            type: 2,
+                            title: false,
+                            anim: 1,
+                            area: ['800px', '300px'],
+                            content: './roleAdd.html',
+                            end: function () {
+                                table.reload('role');
+                            }
+                        });
+                        break;
+                    case 'update':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else if (data.length > 1) {
+                            layer.msg('只能同时编辑一个', function () { });
+                        } else {
+                            var content = './roleEdit.html?roleInfo=' + encodeURIComponent(JSON.stringify(checkStatus.data[0]));
+                            layer.open({
+                                type: 2,
+                                title: false,
+                                anim: 1,
+                                area: ['800px', '300px'],
+                                content: content,
+                                end: function () {
+                                    table.reload('role');
+                                    //  location.reload();
+                                    //  table.reload();
+                                }
+                            });
 
-        //监听行工具事件
-        table.on('tool(test)', function (obj) {
-            var data = obj.data;
-            //console.log(obj)
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
-                });
-            }
+                        }
+                        break;
+                    case 'delete':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else {
+                            var roleId = checkStatus.data[0].roleId;
+                            layer.confirm('确定删除吗？', function (index) {
+                                $.ajax({
+                                    url: baseUrl + '/roleDelete.json',
+                                    type: 'POST',
+                                    data: JSON.stringify({
+                                        "userInfo": {
+                                            "userId": 1,
+                                            "userName": "许明",
+                                            "sessionId": "123456"
+                                        },
+                                        "roleId": roleId
+                                    }),
+                                    contentType: "application/json",
+                                    dataType: 'json',
+                                    async: true,
+                                    success: function (res) {
+                                        if (res.resFlag == "N") {
+                                            layer.msg('操作成功', { icon: 1 });
+                                            setTimeout(function () {
+                                                table.reload('role');
+                                            }, 2000);
+
+                                        } else {
+                                            layer.msg(res.resFlag, { icon: 2 });
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg(res.resFlag, { icon: 2 });
+                                    }
+                                });
+                            });
+                        }
+                        break;
+                };
+            });
         });
     </script>
 </body>
