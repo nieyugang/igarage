@@ -1,0 +1,157 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="robots" content="all,follow">
+  <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+  <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="../../css/formSelects-v4.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="layui-form">
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>角色编辑</legend>
+      </fieldset>
+      <form class="layui-form layui-form-pane" action="" lay-filter="roleInfo-detail">
+
+        <div class="layui-form-item" style="display: none;">
+          <label class="layui-form-label">角色ID</label>
+          <div class="layui-input-block">
+            <input type="text" name="roleId" autocomplete="off" lay-verify="required" placeholder="请输入角色ID"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">角色名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="roleName" autocomplete="off" lay-verify="required" placeholder="请输入角色名称"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">角色级别</label>
+          <div class="layui-input-block">
+            <input type="radio" name="minOrgLevel" value="0" title="总部">
+            <input type="radio" name="minOrgLevel" value="1" title="一级代理商">
+            <input type="radio" name="minOrgLevel" value="2" title="二级代理商">
+            <input type="radio" name="minOrgLevel" value="3" title="三级代理商">
+          </div>
+        </div>
+
+        <div class="layui-form-item" style="margin: 0 0 0 19%;">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="add">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- js插件 -->
+  <script src="../../vendor/jquery/jquery.js"></script>
+  <script src="../../vendor/layui/layui.js"></script>
+  <!-- 下拉框多选插件 具体用法见：https://hnzzmsf.github.io/example/example_v4.html-->
+  <script src="../../vendor/layui/lay/modules/formSelects-v4.js"></script>
+
+  <script>
+    var baseUrl = "/hqigservice";
+
+
+    //加载模块
+    layui.use(['form', 'layedit'], function () {
+      var form = layui.form;
+      var layer = layui.layer;
+      var layedit = layui.layedit;
+
+
+      var InitializationInfo = eval("(" + decodeURIComponent(RequestParameter()["roleInfo"]) + ")");//转json对象
+      if (InitializationInfo != null) {
+        //表单初始赋值
+        form.val('roleInfo-detail', {
+          "roleId": InitializationInfo.roleId,
+          "roleName": InitializationInfo.roleName,
+          "minOrgLevel": InitializationInfo.minOrgLevel,
+        });
+      }
+
+      // 表单验证
+      form.verify({
+        loginId: function (value) { //value：表单的值、item：表单的DOM对象
+          if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+            return '用户名不能有特殊字符';
+          }
+          if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+            return '用户名首尾不能出现下划线\'_\'';
+          }
+          if (/^\d+\d+\d$/.test(value)) {
+            return '用户名不能全为数字';
+          }
+        },
+        password: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格']
+      });
+
+      //监听提交
+      form.on('submit(formSubmit)', function (data) {
+        var formData = data.field;// JSON.stringify(data.field);
+        var userInfo = {
+          "userId": 1,
+          "userName": "许明",
+          "sessionId": "123456"
+        };
+        formData.userInfo = userInfo;
+
+        formData.roleId = parseInt(formData.roleId);
+        formData.minOrgLevel = parseInt(formData.minOrgLevel);
+        console.log('====================================');
+        console.log(formData);
+        console.log('====================================');
+        // 提交
+        $.ajax({
+          url: baseUrl + '/roleUpdate.json',
+          type: 'POST',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify(formData),
+          success: function (res) {
+            if (res.resFlag == "N") {
+              layer.msg('操作成功', { icon: 1 });
+              setTimeout(function () {
+                window.parent.layer.closeAll();//关闭弹窗
+              }, 3000);
+            } else {
+              layer.msg('通信异常', { icon: 2 });
+            }
+          },
+          error: function () {
+            layer.msg('通信异常', { icon: 2 });
+          }
+
+        });
+        return false;
+      });
+    });
+
+    //获取url中"?"符后的字串
+    function RequestParameter() {
+      var url = window.location.search;
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        var strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+        }
+      }
+      return theRequest
+    }
+  </script>
+</body>
+
+</html>
