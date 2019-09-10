@@ -14,6 +14,22 @@
         #maintainInfoDetails div {
             font-size: 12px;
         }
+        #parkingInfo ul{
+            list-style: none;
+            line-height: 50px;
+        }
+        #parkingInfo li{
+            border-bottom: 1px solid #bbbbbb;
+            text-align: center;
+        }
+        #parkingInfo .active{
+            background-color: #00a0e9;
+            color: #fff;
+            text-align: center;
+        }
+        #parkingInfo li span{
+            float: right;
+        }
     </style>
 </head>
 
@@ -161,6 +177,9 @@
                                         <label class="layui-form-label-right-col-4">监控</label>
                                         <label class="layui-form-label-left-col-6"></label>
                                     </div>
+                                    <div style="text-align: center">
+                                        <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
+                                    </div>
                                 </div>
                                 <div class="layui-tab-item">
                                     <div class="layui-form-item" style="text-align: center">
@@ -195,16 +214,71 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-sm-12"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%">
-                    <div class="row" style="background-color: #848d92">车库列表</div>
-                    <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
-                </div>
+                    <div class="col-sm-12" id="garageTable"
+                         style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%">
+                        <div class="row" style="background-color: #848d92">车库列表</div>
+                        <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
+                    </div>
 
-                <div class="col-sm-12" id="maintainMomeDiv"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%; display: none">
-                    <div class="row" style="background-color: #848d92">备忘录</div>
-                    <table class="layui-hide" id="maintainMomeTable" lay-filter="maintainMomeTable"></table>
+                    <div class="col-sm-12" id="maintainMomeDiv"
+                         style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%; display: none">
+                        <div class="row" style="background-color: #848d92">备忘录</div>
+                        <table class="layui-hide" id="maintainMomeTable" lay-filter="maintainMomeTable"></table>
+                    </div>
+                <div id="deviceContent"  class="col-sm-12" style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%; display: none">
+                    <div class="row" style="background-color: #848d92">设备信息</div>
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">车位</li>
+                            <li>门禁</li>
+                            <li>充电站</li>
+                            <li>监控</li>
+                        </ul>
+                        <div class="layui-tab-content" id="parkingInfo">
+                            <div class="layui-tab-item layui-show">车位内容1</div>
+                            <div class="layui-tab-item">
+                                <ui class="row">
+                                    <li class="col-sm-2 active">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door.PNG">
+                                    </li>
+
+                                </ui>
+                            </div>
+                            <div class="layui-tab-item">充电站内容3</div>
+                            <div class="layui-tab-item">监控内容4</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -243,7 +317,7 @@
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
 <script>
-    var baseUrl = "http://61.160.234.13:8088/hqigservice/";
+    var baseUrl = "http://localhost/hqigservice/";
     var nodes = [];
     var maintainInfo;
     layui.use(['tree', 'util', 'table', 'element', 'upload'], function () {
@@ -269,6 +343,17 @@
         //点击查看微信用户详情
         $("#wxUserNum").click(function (event) {
 
+        });
+
+        $("#deviceBtn").click(function (event) {
+            $("#garageTable").hide();
+            $("#maintainMomeDiv").hide();
+            $("#deviceContent").show();
+        });
+
+        $("#parkingInfo li").click(function(){
+            $("#parkingInfo li").removeClass("active");
+            $(this).addClass("active");
         });
 
         $("#garageMemoAddPageBtn").click(function (event) {
@@ -530,10 +615,14 @@
                 $("#maintainInfoDetails").show();
                 $("#maintainMomeDiv").show();
                 $("#maintainMapInfo").css("min-width", "65%");
+                $("#garageTable").show();
+                $("#deviceContent").hide();
             } else {
                 theLocation(119.98186101, 31.77139674, true);
                 $("#maintainInfoDetails").hide();
                 $("#maintainMomeDiv").hide();
+                $("#garageTable").show();
+                $("#deviceContent").hide();
                 $("#maintainMapInfo").css("min-width", "98%");
             }
         }

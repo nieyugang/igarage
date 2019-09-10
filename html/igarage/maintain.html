@@ -105,6 +105,8 @@
                                             <div class="layui-upload">
                                                 <button type="button" class="layui-btn" id="maintainFile">上传工程图片
                                                 </button>
+                                                    <button type="button" class="layui-btn" id="testModel">测试
+                                                </button>
                                                 <img id="maintainImg" style="display: none" src="">
                                             </div>
                                         </div>
@@ -253,7 +255,7 @@
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
 <script>
-    var baseUrl = "http://61.160.234.13:8088/hqigservice/";
+    var baseUrl = "http://localhost/hqigservice/";
     var nodes = [];
     var maintainInfo;
     layui.use(['tree', 'util', 'table', 'element', 'upload'], function () {
