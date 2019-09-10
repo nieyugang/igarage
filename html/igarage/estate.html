@@ -6,20 +6,271 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+
 </head>
 
 <body>
-    <h1>车库系统 / 小区管理</h1>
+    <h1>基础信息管理 / 用户管理</h1>
+    <button type="button" class="layui-btn">一个标准的按钮</button>
+    <a href="http://www.layui.com" class="layui-btn">一个可跳转的按钮 啊手动阀</a>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+          <label class="layui-form-label">输入框</label>
+          <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">密码框</label>
+          <div class="layui-input-inline">
+            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid layui-word-aux">辅助文字</div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">选择框</label>
+          <div class="layui-input-block">
+            <select name="city" lay-verify="required">
+              <option value=""></option>
+              <option value="0">北京</option>
+              <option value="1">上海</option>
+              <option value="2">广州</option>
+              <option value="3">深圳</option>
+              <option value="4">杭州</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">复选框</label>
+          <div class="layui-input-block">
+            <input type="checkbox" name="like[write]" title="写作">
+            <input type="checkbox" name="like[read]" title="阅读" checked>
+            <input type="checkbox" name="like[dai]" title="发呆">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">开关</label>
+          <div class="layui-input-block">
+            <input type="checkbox" name="switch" lay-skin="switch">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">单选框</label>
+          <div class="layui-input-block">
+            <input type="radio" name="sex" value="男" title="男">
+            <input type="radio" name="sex" value="女" title="女" checked>
+          </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+          <label class="layui-form-label">文本域</label>
+          <div class="layui-input-block">
+            <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+    </form>
+    
+    <div id="test1"></div>
+    <div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+        <button data-method="setTop" class="layui-btn">
+          多窗口模式，层叠置顶
+        </button>
+        <button data-method="confirmTrans" class="layui-btn">
+          配置一个透明的询问框
+        </button>
+        <button data-method="notice" class="layui-btn">
+          示范一个公告层
+        </button>
+        <button
+          data-method="offset"
+          data-type="t"
+          class="layui-btn layui-btn-normal"
+        >
+          上弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="r"
+          class="layui-btn layui-btn-normal"
+        >
+          右弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="b"
+          class="layui-btn layui-btn-normal"
+        >
+          下弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="l"
+          class="layui-btn layui-btn-normal"
+        >
+          左弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="lt"
+          class="layui-btn layui-btn-normal"
+        >
+          左上弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="lb"
+          class="layui-btn layui-btn-normal"
+        >
+          左下弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="rt"
+          class="layui-btn layui-btn-normal"
+        >
+          右上弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="rb"
+          class="layui-btn layui-btn-normal"
+        >
+          右下弹出
+        </button>
+        <button
+          data-method="offset"
+          data-type="auto"
+          class="layui-btn layui-btn-normal"
+        >
+          居中弹出
+        </button>
+      </div>
 
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+
+    <script>
+        //Demo
+        layui.use(['form', 'layer', 'laypage'], function(){
+            var form = layui.form;
+            //监听提交
+            form.on('submit(formDemo)', function(data){
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+            /* ------------------------------------------------------ */
+
+            var laypage = layui.laypage;
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+                ,count: 50 //数据总数，从服务端得到
+            });
+            /* ------------------------------------------------------ */
+
+            //独立版的layer无需执行这一句
+            var layer = layui.layer; //独立版的layer无需执行这一句
+            //触发事件
+            var active = {
+            // 多窗口模式，层叠置顶
+            setTop: function() {
+                var that = this;
+                parent.window.setTop({
+                type: 2, //此处以iframe举例
+                title: "当你选择该窗体时，即会在最顶端",
+                area: ["390px", "260px"],
+                shade: 0,
+                maxmin: true,
+                offset: [
+                    //为了演示，随机坐标
+                    Math.random() * ($(window).height() - 300),
+                    Math.random() * ($(window).width() - 390)
+                ],
+                content: "//layer.layui.com/test/settop.html",
+                btn: ["继续弹出", "全部关闭"], //只是为了演示
+                yes: function() {
+                    $(that).click();
+                },
+                btn2: function() {
+                    parent.window.closeAll();
+                },
+
+                zIndex: layer.zIndex, //重点1
+                success: function(layero) {
+                    // layer.setTop(layero); //重点2
+                    window.parent.hx_setTop(layero) //重点2
+                }
+                });
+            },
+            // 配置一个透明的询问框
+            confirmTrans: function() {
+                parent.window.confirmTrans(
+                "大部分参数都是可以公用的<br>合理搭配，展示不一样的风格",
+                {
+                    time: 10000, //10s后自动关闭
+                    btn: ["确定"]
+                }
+                );
+            },
+            // 示范一个公告层
+            notice: function() {
+                parent.window.notice({
+                type: 1,
+                title: false, //不显示标题栏
+                closeBtn: false,
+                area: "300px;",
+                shade: 0.8,
+                id: "LAY_layuipro", //设定一个id，防止重复弹出
+                btn: ["火速围观", "残忍拒绝"],
+                btnAlign: "c",
+                moveType: 1, //拖拽模式，0或者1
+                content:
+                    '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">你知道吗？亲！<br>layer ≠ layui<br><br>layer只是作为Layui的一个弹层模块，由于其用户基数较大，所以常常会有人以为layui是layerui<br><br>layer虽然已被 Layui 收编为内置的弹层模块，但仍然会作为一个独立组件全力维护、升级。<br><br>我们此后的征途是星辰大海 ^_^</div>',
+                success: function(layero) {
+                    var btn = layero.find(".layui-layer-btn");
+                    btn.find(".layui-layer-btn0").attr({
+                    href: "http://www.layui.com/",
+                    target: "_blank"
+                    });
+                }
+                });
+            },
+            // 上下左右弹出
+            offset: function(othis) {
+                var type = othis.data("type");
+                var text = othis.text();
+                parent.window.notice({
+                type: 1,
+                offset: type, //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                id: "layerDemo" + type, //防止重复弹出
+                content: '<div style="padding: 20px 100px;">' + text + "</div>",
+                btn: "关闭全部",
+                btnAlign: "c", //按钮居中
+                shade: 0, //不显示遮罩
+                yes: function() {
+                    parent.window.closeAll();
+                }
+                });
+            }
+            };
+
+            $("#layerDemo .layui-btn").on("click", function() {
+            var othis = $(this),
+                method = othis.data("method");
+            active[method] ? active[method].call(this, othis) : "";
+            });
+        });
+    </script>
 </body>
 
 </html>

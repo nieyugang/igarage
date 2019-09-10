@@ -97,6 +97,57 @@ nav.navbar .nav-link.logout i {
   background-color: #379392;
   margin-right: 0px;
 }
+/* 左侧侧边栏导航滚动样式 */
+#_hx_wrap_{
+  position: relative;
+}
+#_hx_content{
+  overflow: hidden;
+  overflow-y: auto;
+  /* height */
+}
+#_hx_content::-webkit-scrollbar{
+  display: none;
+}
+#_hx_content{
+  -ms-overflow-style: none;
+}
+#_hx_scroll_wrap{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 4px;
+  background-color: transparent;
+  /* background-color: red; */
+  animation: hide 1s 1 forwards;
+}
+#_hx_wrap_:hover #_hx_scroll_wrap{
+  animation: show 1s 1 forwards;
+}
+#_hx_scroll{
+  position: absolute;
+  top: 0px;
+  width: 4px;
+  border-radius: 2px;
+  background-color: #ccc;
+}
+@keyframes show{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+@keyframes hide{
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+
 
 /* 左侧侧边栏导航 */
 .userPopShow {
@@ -218,7 +269,7 @@ nav.side-navbar ul li li a {
 }
 #_content_inner_ .layui-tab .layui-tab-content {
   height: 100%;
-  /*padding: 8px 10px 46px 10px;*/
+  padding: 8px 10px 46px 10px;
 }
 #_content_inner_ .layui-tab .layui-tab-content .layui-show {
   height: 100%;
@@ -284,3 +335,4 @@ nav.side-navbar ul li li a {
   line-height: 28px;
 }
 
+ 

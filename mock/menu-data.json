@@ -1,0 +1,471 @@
+{
+  "resFlag": "N",
+  "menuInfoList": [
+    {
+      "menuId": 1,
+      "menuName": "基础信息管理",
+      "parentMenuId": 0,
+      "menuType": "D",
+     "menuFunc": "config",
+      "reserve": null,
+      "enable": true,
+      "subMenuList": [
+        {
+          "menuId": 11,
+          "menuName": "用户管理",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "config/user.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 12,
+          "menuName": "角色管理",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "config/role.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 13,
+          "menuName": "机构管理",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "config/origanization.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 14,
+          "menuName": "菜单管理",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "config/menu.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 15,
+          "menuName": "权限管理",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "config/permission.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        }
+      ]
+    },
+    {
+      "menuId": 2,
+      "menuName": "用户基础操作",
+      "parentMenuId": 0,
+      "menuType": "D",
+      "menuFunc": "work",
+      "reserve": null,
+      "enable": true,
+      "subMenuList": [
+        {
+          "menuId": 21,
+          "menuName": "设备预警",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "work/alert.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 22,
+          "menuName": "系统消息",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "work/message.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 23,
+          "menuName": "站内信",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "work/mail.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 24,
+          "menuName": "帮助与文档",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "work/help.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 25,
+          "menuName": "用户相关操作",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "work/operation.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        }
+      ]
+    },
+    {
+      "menuId": 3,
+      "menuName": "全局监控",
+      "parentMenuId": 0,
+      "menuType": "D",
+      "menuFunc": "monitor",
+      "reserve": null,
+      "enable": true,
+      "subMenuList": [
+        {
+          "menuId": 31,
+          "menuName": "地图展示",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "monitor/map.html",
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        },
+        {
+          "menuId": 32,
+          "menuName": "大数据监控",
+          "parentMenuId": 1,
+          "menuType": "F",
+          "menuFunc": "monitor/bigdata.html",  
+          "reserve": null,
+          "enable": false,
+          "subMenuList": []
+        }
+      ]
+    },
+    {
+      "menuId": 4,
+      "menuName": "产品中心",
+      "parentMenuId": 0,
+      "menuType": "D",
+      "menuFunc": "cpzx",
+      "reserve": null,
+      "enable": true,
+      "subMenuList": [
+        {
+          "menuId": 41,
+          "menuName": "电瓶车充电站",
+          "parentMenuId": 3,
+          "menuType": "D",
+          "menuFunc": "ebike",
+          "reserve": null,
+          "enable": true,
+          "subMenuList": [
+            {
+              "menuId": 411,
+              "menuName": "管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "ebike/maintain.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 412,
+              "menuName": "订单",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "ebike/bill.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 413,
+              "menuName": "订单处理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "ebike/bill-manage.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 414,
+              "menuName": "版本管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "ebike/version.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 415,
+              "menuName": "消费标准",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "ebike/payment.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            }
+          ]
+        },
+        {
+          "menuId": 42,
+          "menuName": "充值机",
+          "parentMenuId": 3,
+          "menuType": "D",
+          "menuFunc": "charge",
+          "reserve": null,
+          "enable": true,
+          "subMenuList": [
+            {
+              "menuId": 421,
+              "menuName": "管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "charge/maintain.html",
+              "reserve": null,
+              "enable": false,
+              "icon": "gl",
+
+              "subMenuList": []
+            },
+            {
+              "menuId": 422,
+              "menuName": "订单",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "charge/bill.html",
+              "reserve": null,
+              "enable": false,
+              "icon": "dd",
+
+              "subMenuList": []
+            },
+            {
+              "menuId": 423,
+              "menuName": "版本管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "charge/version.html",
+              "reserve": null,
+              "enable": false,
+              "icon": "bbgl",
+
+              "subMenuList": []
+            },
+            {
+              "menuId": 6,
+              "menuName": "包月充值标准",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "charge/payment-month.html",
+              "reserve": null,
+              "enable": false,
+              "icon": "byczbz",
+
+              "subMenuList": []
+            }
+          ]
+        },
+        {
+          "menuId": 43,
+          "menuName": "车库系统",
+          "parentMenuId": 3,
+          "menuType": "D",
+          "menuFunc": "igarage",
+          "reserve": null,
+          "enable": true,
+          "subMenuList": [
+            {
+              "menuId": 431,
+              "menuName": "车库维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/maintain.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 432,
+              "menuName": "门禁维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/door.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 433,
+              "menuName": "充电站维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/charge.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 434,
+              "menuName": "监控维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/monitor.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 435,
+              "menuName": "车位维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/parking.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 436,
+              "menuName": "远程读表",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/remote.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 437,
+              "menuName": "智慧用电",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/power.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 438,
+              "menuName": "日常管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/daily.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 439,
+              "menuName": "版本管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/version.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 440,
+              "menuName": "订单处理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/bill.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 441,
+              "menuName": "充值订单",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/bill-prepaid.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 442,
+              "menuName": "车位类别维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/parking-type.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 443,
+              "menuName": "消费标准维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/payment.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 444,
+              "menuName": "小区管理",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/estate.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            },
+            {
+              "menuId": 445,
+              "menuName": "车库备忘录维护",
+              "parentMenuId": 1,
+              "menuType": "F",
+              "menuFunc": "igarage/memo.html",
+              "reserve": null,
+              "enable": false,
+              "subMenuList": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "userInfo": {
+    "name": "迪丽热巴",
+    "role": "管理员"
+  },
+  "alert": {
+    "total": 12,
+    "info": [
+      { "type": "a1", "time": 1, "msg": "a1111" },
+      { "type": "a2", "time": 2, "msg": "a2222" },
+      { "type": "a3", "time": 3, "msg": "a3333" },
+      { "type": "a4", "time": 4, "msg": "a4444" }
+    ]
+  },
+  "mail": {
+    "total": 10,
+    "info": [
+      { "type": "m1", "time": 1, "msg": "m1111" },
+      { "type": "m2", "time": 2, "msg": "m2222" },
+      { "type": "m3", "time": 3, "msg": "m3333" }
+    ]
+  }
+}
