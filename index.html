@@ -18,7 +18,7 @@
 <body>
     <div class="page">
         <!-- 页面头部导航栏 -->
-        <header class="header">
+        <header class="header" id="_hx_header_">
             <nav class="navbar">
                 <div class="container-fluid">
                     <div class="navbar-holder d-flex align-items-center justify-content-between">
@@ -74,7 +74,7 @@
             <!-- 侧边头像及菜单栏导航 -->
             <nav class="side-navbar">
                 <!-- 用户头像 -->
-                <div class="sidebar-header d-flex align-items-center">
+                <div class="sidebar-header d-flex align-items-center" id="_hx_slidebar_header_">
                     <div class="nav-item dropdown avatar" id="personalPopverLists">
                         <a id="personalPopverA" rel="nofollow" data-target="#" href="#" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" class="nav-link">
@@ -84,17 +84,17 @@
                         <ul aria-labelledby="notifications" class="dropdown-menu" id="personalPopverList">
                             <li>
                                 <a rel="nofollow" href="#" class="dropdown-item d-flex">
-                                    <i class="fa fa-file-text-o"></i>我的资料 
+                                    <i class="fa fa-file-text-o"></i>我的资料
                                 </a>
                             </li>
                             <li>
                                 <a rel="nofollow" href="#" class="dropdown-item d-flex">
-                                    <i class="fa fa-key"></i>修改密码 
+                                    <i class="fa fa-key"></i>修改密码
                                 </a>
                             </li>
                             <li>
                                 <a rel="nofollow" href="#" class="dropdown-item d-flex">
-                                    <i class="fa fa-bell-o"></i>开启提醒 
+                                    <i class="fa fa-bell-o"></i>开启提醒
                                 </a>
                             </li>
                         </ul>
@@ -106,8 +106,16 @@
                 </div>
 
                 <!-- 侧边菜单导航栏-->
-                <div id="hx-slideMenu"  class="hx-slideMenuTitPadding">
+                <div id="_hx_wrap_">
+                    <div id="_hx_content">
+                        <div id="hx-slideMenu"  class="hx-slideMenuTitPadding">
+                        </div>
+                    </div>
+                    <div id="_hx_scroll_wrap">
+                        <div id="_hx_scroll"></div>
+                    </div>
                 </div>
+
             </nav>
 
             <!-- 主体内容区 -->
@@ -116,7 +124,7 @@
                 <div class="layui-tab" lay-filter="_tab_iframe_" lay-allowClose="true">
                     <!-- tab区 -->
                     <ul class="layui-tab-title">
-                        <li class="layui-this" lay-id="11">欢迎</li>
+                        <li class="layui-this" lay-id="hx_welcome">欢迎</li>
                     </ul>
 
                     <!-- 内容区 -->
@@ -148,12 +156,13 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/layui/layui.js"></script>
     <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-    
+
     <!-- 菜单动态加载逻辑 -->
-    <script src="js/slide-menu-data.js"></script>
+    <script src="js/load-menu.js"></script>
     <script src="js/index.js"></script>
     <script>
         window.baseUrl = "http://localhost/hqigservice/";
     </script>
+
 </body>
 </html>

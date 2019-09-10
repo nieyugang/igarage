@@ -1,0 +1,36 @@
+{
+  "resFlag": "N",
+  "alert": {
+    "data": [
+      {
+        "message": "警告消息1",
+        "type": "fa fa-address-card-o",
+        "time": "2019-09-01 15:42:36"
+      },
+      {
+        "message": "警告消息2",
+        "type": "fa fa-wrench",
+        "time": "2019-09-01 15:42:36"
+      },
+      {
+        "message": "警告消息3",
+        "type": "fa fa-address-card-o",
+        "time": "2019-09-01 15:42:36"
+      },
+      {
+        "message": "警告消息4",
+        "type": "fa fa-wrench",
+        "time": "2019-09-01 15:42:36"
+      }
+    ],
+    "total": "12"
+  },
+  "mail": {
+    "data": [
+      { "name": "李白", "avatar": "img/doggy.jpg" },
+      { "name": "杜甫", "avatar": "img/doggy.jpg" },
+      { "name": "王安石", "avatar": "img/doggy.jpg" }
+    ],
+    "total": "8"
+  }
+}
