@@ -5117,7 +5117,7 @@ body .layui-util-face .layui-layer-content {
 
 .layui-tree-icon {
     height: 12px;
-    line-height: 12px;
+    line-height: 0px;
     width: 12px;
     text-align: center;
     border: 1px solid #c0c4cc

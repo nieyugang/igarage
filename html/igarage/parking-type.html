@@ -13,13 +13,63 @@
 </head>
 
 <body>
-    <h1>车库系统 / 车位类别维护</h1>
+<div class="content-inner" style=" background-color: white; z-index: 0;">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>角色列表</legend>
+        <div class="layui-field-box">
+            <div class="work-area" style="margin-top: 10px;margin-left: 10px">
+                <table class="layui-hide" id="parkingTypeTable" lay-filter="parkingTypeTable"></table>
+            </div>
+        </div>
+    </fieldset>
+</div>
 
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+    <script src="../../js/common.js"></script>
+
+<script type="text/html" id="tableNo">
+    {{d.LAY_TABLE_INDEX + 1}}
+</script>
+<script type="application/javascript">
+    var baseUrl = "http://localhost/hqigservice/";
+
+    layui.use('table', function () {
+        var table = layui.table;
+
+        var parkingSpaceTypeListCols = [[
+            {
+                field: 'id', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
+            },
+            {
+                field: 'name', title: '类型名称', width: 60, sort: false, fixed: 'center'
+            }
+        ]];
+
+        function res(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.rows.length,
+                data: res.rows
+            };
+        }
+
+        initTable(table, "parkingTypeTable", 20, "getParkingSpaceTypeList.json", {}, res, parkingSpaceTypeListCols, null)
+
+
+        // 监听头部工具栏事件
+        table.on('toolbar(parkingTypeTable)', function (obj) {
+
+        });
+    });
+</script>
 </body>
 
 </html>

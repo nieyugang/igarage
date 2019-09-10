@@ -21,6 +21,8 @@
         #parkingInfo li{
             border-bottom: 1px solid #bbbbbb;
             text-align: center;
+            height: 90px;
+            padding-top: 14px;
         }
         #parkingInfo .active{
             background-color: #00a0e9;
@@ -30,6 +32,7 @@
         #parkingInfo li span{
             float: right;
         }
+        .anchorBL{display:none;}
     </style>
 </head>
 
@@ -272,7 +275,12 @@
                                     <li class="col-sm-2">
                                         <img src="../../img/door.PNG">
                                     </li>
-
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door-red.png">
+                                    </li>
+                                    <li class="col-sm-2">
+                                        <img src="../../img/door-red.png">
+                                    </li>
                                 </ui>
                             </div>
                             <div class="layui-tab-item">充电站内容3</div>
@@ -306,21 +314,23 @@
 <script src="../../vendor/jquery/jquery.min.js"></script>
 <script src="../../vendor/popper.js/umd/popper.min.js"></script>
 <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="../../vendor/jquery.cookie/jquery.cookie.js"></script>
 <script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
-<!-- 模板引擎 需要时引入 -->
-<script src="../../vendor/template-web.js"></script>
 <!-- js公共代码 -->
 <script src="../../js/slide-menu-data.js"></script>
+<script src="../../js/common.js"></script>
 <script src="../../js/front.js"></script>
 <script src="../../vendor/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
 <script>
-    var baseUrl = "http://localhost/hqigservice/";
-    var nodes = [];
     var maintainInfo;
     layui.use(['tree', 'util', 'table', 'element', 'upload'], function () {
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table
+            , element = layui.element
+            , $ = layui.jquery;
+
         // 百度地图API功能
         var map = new BMap.Map("allmap");
         var point = new BMap.Point(119.98186101, 31.77139674);
@@ -329,15 +339,9 @@
         var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
         map.addOverlay(marker);
 
-        var tree = layui.tree
-            , layer = layui.layer
-            , table = layui.table
-            , element = layui.element
-            , $ = layui.jquery;
-
         //列表搜索按钮
         $("#searchMaintainBtn").click(function (event) {
-            tableReload();
+            tableReload(tableIns);
         });
 
         //点击查看微信用户详情
@@ -360,11 +364,6 @@
             layer.prompt({title: '增加车库备忘录', formType: 2}, function (text, index) {
                 layer.close(index);
                 saveGarageMemoBtn({
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
                     "garageId": maintainInfo.garageId,
                     "content": text,
                     "orgId": maintainInfo.orgId
@@ -372,168 +371,108 @@
             });
         });
 
+        //增加备忘录
         function saveGarageMemoBtn(content) {
             if (content) {
                 var url = "garageMemoAdd.json";
                 if (content.id) {
                     url = "garageMemoUpdate.json";
                 }
-                $.ajax({
-                    url: baseUrl + url,
-                    type: 'POST',
-                    data: JSON.stringify(content),
-                    contentType: "application/json",
-                    dataType: 'json',
-                    async: true,
-                    success: function (res) {
-                        if (res.resFlag === 'N') {
-                            layer.msg("保存成功");
-                            momeTableReload({
-                                userInfo: {userId: 1, sessionId: "123456"},
-                                garageId: maintainInfo.garageId
-                            })
-                        } else {
-                            layer.msg("保存失败");
-                        }
-                    },
-                    error: function () {
-                        layer.msg("操作失败");
-                    }
+                sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
+                    if (res.resFlag === 'N') {
+                        layer.msg("保存成功");
+                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                    } else {
+                        layer.msg("保存失败");
+                    }}, function () {
+                    layer.msg("操作失败");
                 });
             } else {
                 layer.msg("请填写备注")
             }
         }
 
-        var tableIns = table.render({
-            elem: '#maintainTable'
-            , method: 'post'
-            , contentType: 'application/json'
-            , where: {userInfo: {userId: 1, sessionId: "123456"}, orgId: 0}
-            , url: baseUrl + 'getGarageList.json'
-            , limit: 20
-            , limits: [20, 50, 100]
-            , request: {
-                pageName: 'pageNo' //页码的参数名称，默认：page
-                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+        var garageListCols = [[
+            {
+                field: 'userId', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
+            },
+            {
+                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
+            },
+            {
+                field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
             }
-            , parseData: function (res) {
-                return {
-                    code: 0,
-                    msg: "",
-                    count: 10,
-                    data: res.rows
-                };
-            }
-            , cols: [[
-                {
-                    field: 'userId', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
-                },
-                {
-                    field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
-                },
-                {
-                    field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
-                },
-                {
-                    field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
-                },
-                {
-                    field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
-                },
-                {
-                    field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
-                },
-                {
-                    field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
-                },
-                {
-                    field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
-                }
-            ]]
-            , page: true
-            , done: function (res, curr, count) {
-                //如果是异步请求数据方式，res即为你接口返回的信息。
-                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                if (res.data) {
-                    if (res.data[0]) {
-                        maintainInfo = res.data[0];
-                        setTimeout(function () {
-                            for (var i = 0; i < res.data.length; i++) {
-                                theLocation(res.data[i].ing, res.data[i].lat, true, res.data[i].garageName)
-                            }
-                        }, 500);
-                        showMaintain(res.data[0], true);
-                        momeTableReload({userInfo: {userId: 1, sessionId: "123456"}, garageId: res.data[0].garageId})
-                    } else {
-                        $("#maintainInfoDetails").hide();
-                        $("#maintainMapInfo").css("min-width", "98%");
-                    }
-                }
-            }
-        });
-
-
-        var momeTableIns = table.render({
-            elem: '#maintainMomeTable'
-            , method: 'post'
-            , contentType: 'application/json'
-            , where: {userInfo: {userId: 1, sessionId: "123456"}, garageId: -1}
-            , url: baseUrl + 'getGarageMemoListByGarage.json'
-            , limit: 20
-            , limits: [20, 50, 100]
-            , request: {
-                pageName: 'pageNo' //页码的参数名称，默认：page
-                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
-            }
-            , parseData: function (res) {
-                return {
-                    code: 0,
-                    msg: "",
-                    count: 10,
-                    data: res.rows
-                };
-            }
-            , cols: [[
-                {
-                    field: 'memoId', title: '编号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
-                },
-                {
-                    field: 'userName', title: '操作者', width: 160, sort: false, fixed: 'center'
-                },
-                {
-                    field: 'createTime', title: '创建时间', width: 200, sort: false, fixed: 'center'
-                },
-                {
-                    field: 'garageName', title: '车库名称', width: 400, sort: false, fixed: 'center'
-                },
-                {
-                    field: 'content', title: '备注内容', sort: false, fixed: 'center'
-                },
-                {
-                    field: 'memoId', title: '操作', width: 160, toolbar: "#garageMomeBar", sort: false, fixed: 'center'
-                }
-            ]]
-            , page: true
-        });
-
-        function tableReload(where) {
-            tableIns.reload({
-                where: where //设定异步数据接口的额外参数
-                , page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-            });
+        ]];
+        
+        function res(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.rows.length,
+                data: res.rows
+            };
         }
 
-        function momeTableReload(where) {
-            momeTableIns.reload({
-                where: where //设定异步数据接口的额外参数
-                , page: {
-                    curr: 1 //重新从第 1 页开始
+        function garageListdone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    maintainInfo = res.data[0];
+                    setTimeout(function () {
+                        for (var i = 0; i < res.data.length; i++) {
+                            theLocation(res.data[i].ing, res.data[i].lat, true, res.data[i].garageName, res.data[i].address)
+                        }
+                    }, 500);
+                    showMaintain(res.data[0], true);
+                    tableReload(momeTableIns, {garageId: res.data[0].garageId})
+                } else {
+                    $("#maintainInfoDetails").hide();
+                    $("#maintainMapInfo").css("min-width", "98%");
                 }
-            });
+            }
         }
+
+        var tableIns = initTable(table, "maintainTable", 20, "getGarageList.json", {orgId: 0}, res, garageListCols, garageListdone);
+
+
+        var maintainMomeCols = [[
+            {
+                field: 'memoId', title: '编号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userName', title: '操作者', width: 160, sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', width: 200, sort: false, fixed: 'center'
+            },
+            {
+                field: 'garageName', title: '车库名称', width: 400, sort: false, fixed: 'center'
+            },
+            {
+                field: 'content', title: '备注内容', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', width: 160, toolbar: "#garageMomeBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        var momeTableIns = initTable(table, "maintainMomeTable", 20, "getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null);
 
         function showMaintain(maintainInfo, locationFlag) {
             $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
@@ -546,70 +485,38 @@
             $("#createTime").html(maintainInfo.createTime);//创建时间
             $("#accessControlNum").html("门禁数量");//门禁数量
             if (locationFlag) {
-                theLocation(maintainInfo.ing, maintainInfo.lat, false);
+                theLocation(maintainInfo.ing, maintainInfo.lat, false, maintainInfo.garageName, maintainInfo.address);
             }
             $("#maintainInfoDetails").show();
             $("#maintainMapInfo").css("min-width", "65%");
         }
 
         // 用经纬度设置地图中心点
-        function theLocation(longitude, latitude, addFlag, name) {
+        function theLocation(longitude, latitude, addFlag, name, address) {
             if (longitude != "" && latitude != "") {
                 var new_point = new BMap.Point(longitude, latitude);
                 map.centerAndZoom(new_point, 15);
                 var marker = new BMap.Marker(new_point);  // 创建标注
                 if (addFlag) {
                     map.addOverlay(marker);              // 将标注添加到地图中
-                    var label = new BMap.Label(name, {offset: new BMap.Size(20, -10)});
-                    marker.setLabel(label);
+                    var opts = {
+                        width : 200,     // 信息窗口宽度
+                        height: 100,     // 信息窗口高度
+                        title : name // 信息窗口标题
+                    }
+                    var infoWindow = new BMap.InfoWindow("地址：" + address, opts);  // 创建信息窗口对象
+                    marker.addEventListener("click", function(){
+                        map.openInfoWindow(infoWindow,new_point); //开启信息窗口
+                    });
                 }
                 map.panTo(new_point);
             }
         }
 
-        $.ajax({
-            url: baseUrl + 'getOrgTree.json',
-            type: 'POST',
-            data: JSON.stringify({
-                "userInfo": {
-                    "userId": 1,
-                    "userName": "许明",
-                    "sessionId": "123456"
-                },
-                "orgId": 1
-            }),
-            contentType: "application/json",
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                //处理返回数据
-                var orgTreeInfo = res.orgTreeInfo;// 顶层节点
-                var childrens;
-                childrens = getTreeJson(orgTreeInfo.childOrgList);
-                var root_node = {
-                    "id": orgTreeInfo.orgId,
-                    "title": orgTreeInfo.orgName,
-                    "spread": true,
-                    "children": childrens
-                };// 存放tree数据
-                nodes.push(root_node);
-                //渲染tree
-                tree.render({
-                    elem: '#orgTree'
-                    , data: nodes
-                    , onlyIconControl: true  //是否仅允许节点左侧图标控制展开收缩
-                    , click: function (obj) {
-                        clickOrg(obj.data);
-                    }
-                });
-            },
-            error: function () {
-                layer.msg("操作失败");
-            }
-        });
+        initTree(tree, '#orgTree', "getOrgTree.json", JSON.stringify({"orgId": 1}) , clickOrg)
 
         function clickOrg(orgInfo) {
-            tableReload({userInfo: {userId: 1, sessionId: "123456"}, orgId: orgInfo.id})
+            tableReload(tableIns, {orgId: orgInfo.data.id})
             if (orgInfo.level === 3) {
                 map.clearOverlays();
                 $("#maintainInfoDetails").show();
@@ -618,33 +525,13 @@
                 $("#garageTable").show();
                 $("#deviceContent").hide();
             } else {
-                theLocation(119.98186101, 31.77139674, true);
+                map.clearOverlays();
                 $("#maintainInfoDetails").hide();
                 $("#maintainMomeDiv").hide();
                 $("#garageTable").show();
                 $("#deviceContent").hide();
                 $("#maintainMapInfo").css("min-width", "98%");
             }
-        }
-
-        // js 递归返回的组织树
-        function getTreeJson(childrens) {
-            var child_node = [];
-            for (var i in childrens) {
-                var node = {
-                    "id": childrens[i].orgId,
-                    "title": childrens[i].orgName,
-                    "spread": true,
-                    "level": childrens[i].orgLevel
-                };// 存放tree数据
-                var childrens_node = childrens[i].childOrgList;
-                if (childrens_node != 0) {
-                    var son = getTreeJson(childrens_node);
-                    node.children = son;
-                }
-                child_node.push(node);
-            }
-            return child_node;
         }
 
         //监听行工具事件
@@ -656,7 +543,7 @@
                 $("#editMaintainForm").hide();
                 $("#showMaintain").show()
             } else if (obj.event === 'garageMemo') {
-                momeTableReload({userInfo: {userId: 1, sessionId: "123456"}, garageId: data.garageId})
+                tableReload(momeTableIns, {garageId: data.garageId})
             }
         });
 
@@ -670,11 +557,6 @@
                 layer.prompt({title: '修改备注', formType: 2, value: data.content}, function (text, index) {
                     layer.close(index);
                     var content = {
-                        "userInfo": {
-                            "userId": 1,
-                            "userName": "许明",
-                            "sessionId": "123456"
-                        },
                         "memoId": data.memoId,
                         "garageId": data.garageId,
                         "content": text,
@@ -683,26 +565,18 @@
                     saveGarageMemoBtn(content);
                 });
             }else if (obj.event === 'delete'){
-                var data = {userInfo: {userId: 1, sessionId: "123456"}, memoId: data.memoId};
+                var data = {memoId: data.memoId};
                 layer.confirm('真的删除行么', function (index) {
-                    $.ajax({
-                        url: baseUrl + "garageMemoDelete.json",
-                        type: 'POST',
-                        data: JSON.stringify(data),
-                        contentType: "application/json;charset=utf-8",
-                        dataType: 'json',
-                        async: true,
-                        success: function (res) {
-                            if (res.resFlag === 'N') {
-                                momeTableReload({userInfo: {userId: 1, sessionId: "123456"}, garageId: maintainInfo.garageId})
-                                layer.msg("删除成功");
-                            } else {
-                                layer.msg("删除失败");
-                            }
-                        },
-                        error: function () {
+
+                    sendAjaxRequest("POST", "garageMemoDelete.json", "json", JSON.stringify(data), function (res) {
+                        if (res.resFlag === 'N') {
+                            tableReload(momeTableIns,{garageId: maintainInfo.garageId})
+                            layer.msg("删除成功");
+                        } else {
                             layer.msg("删除失败");
                         }
+                    }, function () {
+                        layer.msg("删除失败");
                     });
                     layer.close(index);
                 });
