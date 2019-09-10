@@ -13,7 +13,12 @@ function ajaxStart() {
 }
 
 function ajaxSend(event, jqXHR, options) {
-    var data = JSON.parse(options.data);
+    var data;
+    if (options.data == null || options.data == '') {
+        data = {};
+    } else {
+        data = JSON.parse(options.data);
+    }
     data.userInfo = {
         "userId": 1,
         "userName": "许明",
@@ -66,7 +71,7 @@ function getBaseUrl() {
         return window.baseUrl;
     } else if (parent.window.baseUrl) {
         return parent.window.baseUrl;
-    }else if (parent.parent.window.baseUrl){
+    } else if (parent.parent.window.baseUrl) {
         return parent.parent.window.baseUrl;
     }
 }
@@ -101,10 +106,11 @@ function tableReload(table, where) {
     });
 }
 
-function initTree(ztree, elem, url, where , clickOrg){
+function initTree(ztree, elem, url, where, clickOrg) {
     var nodes = [];
     sendAjaxRequest("POST", url, "json", where, getOrgTreeSuccess, getOrgTreeError);
-    function getOrgTreeSuccess(res){
+
+    function getOrgTreeSuccess(res) {
         //处理返回数据
         var orgTreeInfo = res.orgTreeInfo;// 顶层节点
         var childrens;
@@ -125,7 +131,7 @@ function initTree(ztree, elem, url, where , clickOrg){
         });
     }
 
-    function getOrgTreeError(){
+    function getOrgTreeError() {
         layer.msg("操作失败");
     }
 

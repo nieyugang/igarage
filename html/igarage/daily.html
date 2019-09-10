@@ -42,16 +42,16 @@
     <!-- ===================================================== -->
     <!-- 请在此处编写你的业务代码 -->
     <!-- ===================================================== -->
-    <div class="layui-row layui-col-space30" style="background-color: white;">
-        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
+    <div class="row" style="background-color: white;">
+        <div class="col-sm-2" style="border-right:2px solid #f2f2f2;height: 100%;">
             <div style="margin-top: 20%; height: 100%">
                 <label
                         style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
                 <div id="orgTree" class="demo-tree"></div>
             </div>
         </div>
-        <div class="layui-col-md10">
-            <div style="margin-top: 2%;">
+        <div class="col-sm-10">
+            <div style="margin-top: 2%;" class="row">
                 <div class="col-sm-7" id="maintainMapInfo"
                      style="border: 1px solid #848d92;min-height: 100px; min-width: 98%">
                     <div class="layui-tab layui-tab-brief">
@@ -317,7 +317,6 @@
 <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
 <!-- js公共代码 -->
-<script src="../../js/slide-menu-data.js"></script>
 <script src="../../js/common.js"></script>
 <script src="../../js/front.js"></script>
 <script src="../../vendor/layui/layui.js" charset="utf-8"></script>
@@ -339,6 +338,15 @@
         map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
         var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
         map.addOverlay(marker);
+
+        sendAjaxRequest("POST", "getParkingSpaceTypeList.json", "json", {}, function (res) {
+            if (res.resFlag === 'N') {
+                
+            } else {
+                layer.msg("查询失败");
+            }}, function () {
+            layer.msg("查询失败");
+        });
 
         //列表搜索按钮
         $("#searchMaintainBtn").click(function (event) {
@@ -519,7 +527,8 @@
 
         function clickOrg(orgInfo) {
             tableReload(tableIns, {orgId: orgInfo.data.id})
-            if (orgInfo.level === 3) {
+
+            if (orgInfo.data.level === 3) {
                 map.clearOverlays();
                 $("#maintainInfoDetails").show();
                 $("#maintainMomeDiv").show();
