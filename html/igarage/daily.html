@@ -37,10 +37,11 @@
 </head>
 
 <body>
-<!-- ===================================================== -->
-<!-- 请在此处编写你的业务代码 -->
-<!-- ===================================================== -->
-<div class="work-area" style="margin-top: 10px;margin-left: 10px; margin-bottom: 10px; height: 100%">
+<h1>车库系统 / 日常管理</h1>
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
     <div class="layui-row layui-col-space30" style="background-color: white;">
         <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
             <div style="margin-top: 20%; height: 100%">
@@ -50,7 +51,7 @@
             </div>
         </div>
         <div class="layui-col-md10">
-            <div class="row" style="margin-top: 2%;">
+            <div style="margin-top: 2%;">
                 <div class="col-sm-7" id="maintainMapInfo"
                      style="border: 1px solid #848d92;min-height: 100px; min-width: 98%">
                     <div class="layui-tab layui-tab-brief">
@@ -434,11 +435,12 @@
             if (res.data) {
                 if (res.data[0]) {
                     maintainInfo = res.data[0];
+                    map.clearOverlays();
                     setTimeout(function () {
                         for (var i = 0; i < res.data.length; i++) {
                             theLocation(res.data[i].ing, res.data[i].lat, true, res.data[i].garageName, res.data[i].address)
                         }
-                    }, 500);
+                    }, 100);
                     showMaintain(res.data[0], true);
                     tableReload(momeTableIns, {garageId: res.data[0].garageId})
                 } else {
