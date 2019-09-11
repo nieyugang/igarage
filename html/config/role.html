@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,46 +24,25 @@
             <div class="layui-field-box">
                 <div class="work-area" style="margin-top: 10px;margin-left: 10px">
                     <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                            <form class="layui-form caller-seach" action="" style="position: relative;
+                        <form class="layui-form caller-seach" action="" style="position: relative;
                             padding-bottom: 40px;">
-                                <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                            <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
                                 position: absolute;
                                 top: -3px;
                                 left: 5px;"></i>
-                                <input type="text" name="title" required="" lay-verify="required"
-                                    placeholder="请输入角色名称进行查询" autocomplete="off"
-                                    class="layui-input caller-pl32" style="padding: 0 32px;">
-                                <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                            <input type="text" name="title" required="" lay-verify="required" placeholder="请输入角色名称进行查询"
+                                autocomplete="off" class="layui-input caller-pl32" style="padding: 0 32px;">
+                            <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
                                 position: absolute;
                                 top: -3px;left: 98%;"></i>
-                            </form>
+                        </form>
                     </div>
                     <!-- 定义角色授权按钮 -->
                     <script type="text/html" id="authorizationbar">
-                    <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-btn-xs">菜单授权</button>
-                    </div>
-                </script>
-                    <!-- 定义行工具 -->
-                    <!-- <script type="text/html" id="bar">
-                    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-                    <a class="layui-btn layui-btn-xs" lay-event="edit" style="color:white;">编辑</a>
-                    <a class="layui-btn layui-btn-danger layui-btn-xs"  style="color:white;" lay-event="del">删除</a>
-                </script> -->
-                    <!-- 定义头部工具栏 -->
-                    <!-- <script id="toolbar" type="text/html">
-                <div class="layui-btn-group">
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                        <i class="layui-icon">&#xe654;</i>
-                    </button>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                        <i class="layui-icon">&#xe642;</i>
-                    </button>
-                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                        <i class="layui-icon">&#xe640;</i>
-                    </button>
-                 </div>
-              </script> -->
+                        <div class="layui-btn-group">
+                            <button type="button" class="layui-btn layui-btn-xs" id = "roleAuthorization"  lay-event="roleAuthorization" >菜单授权</button>
+                        </div>
+                     </script>
                     <table class="layui-hide" id="role" lay-filter="role"></table>
                 </div>
             </div>
@@ -79,15 +59,15 @@
         var baseUrl = "/hqigservice";
         layui.use('table', function () {
             var table = layui.table;
-
+            var $ = layui.jquery;
+            var layer = layui.layer;
             // 表格初始化
             table.render({
                 title: '基础-用户信息表',
                 elem: '#role',
-                height: 'full-300',
+                height: 'full-150',
                 method: 'POST',
                 contentType: 'application/json',
-                limit: 30,
                 url: baseUrl + '/getRoleList.json',
                 where: {
                     "userInfo": {
@@ -109,11 +89,11 @@
                 toolbar: 'default',
                 page: true,
                 cols: [[
-                    { type: 'radio', fixed: 'left'},
+                    { type: 'radio', fixed: 'left' },
                     { type: 'numbers', title: '序号', align: 'center' },
-                    { field: 'roleId', title: '角色ID', sort: false,  align: 'center',hide:true},
-                    { field: 'roleName', title: '角色名称', sort: false,  align: 'center'},
-                    { field: 'authorization', title: '授权', sort: false, align: 'center', toolbar: '#authorizationbar'}
+                    { field: 'roleId', title: '角色ID', sort: false, align: 'center', hide: true },
+                    { field: 'roleName', title: '角色名称', sort: false, align: 'center' },
+                    { field: 'authorization', title: '授权', sort: false, align: 'center', toolbar: '#authorizationbar' }
                     // {
                     //     fixed: 'right', title: '操作', width: 165, align: 'center', toolbar: '#bar'
                     // },
@@ -200,6 +180,39 @@
                         break;
                 };
             });
+
+            //监听行工具事件
+            table.on('tool(role)', function (obj) {
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                switch (layEvent) {
+                    case 'roleAuthorization': // 角色授权
+                        layer.open({
+                            type: 2,
+                            title: false,
+                            anim: 1,
+                            area: ['800px', '400px'],
+                            content: './roleAuthorization.html?roleId=' + data.roleId+"&roleName="+ encodeURIComponent(data.roleName),
+                            end: function () {
+                                table.reload('role');
+                            }
+                        });
+                        break;
+                };
+            });
+            // // 监听角色按钮 roleAuthorization.html
+            // $(document).on('click', '#roleAuthorization', function () {
+            //     layer.open({
+            //         type: 2,
+            //         title: false,
+            //         anim: 1,
+            //         area: ['800px', '300px'],
+            //         content: './roleAuthorization.html',
+            //         end: function () {
+            //             table.reload('role');
+            //         }
+            //     });
+            // });
         });
     </script>
 </body>

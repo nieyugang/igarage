@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
   <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
   <link rel="stylesheet" href="../../css/formSelects-v4.css">
+  <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
@@ -101,6 +102,7 @@
   <script src="../../vendor/layui/lay/modules/formSelects-v4.js"></script>
   <!-- md5插件 -->
   <script src="../../vendor/md5/md5.js"></script>
+  <script src="../../js/front.js"></script>
 
   <script>
     var baseUrl = "/hqigservice";
@@ -232,7 +234,7 @@
               setTimeout(function () {
                 window.parent.layer.closeAll();//关闭弹窗
               }, 3000);
-            }else{
+            } else {
               layer.msg('通信异常', { icon: 2 });
             }
           },
