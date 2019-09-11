@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+
+</head>
+
+<body>
+    <div class="content-inner" style="z-index: 0;  width: 98%;">
+        <!-- ===================================================== -->
+        <!-- 请在此处编写你的业务代码 -->
+        <!-- ===================================================== -->
+        <div class="layui-row layui-col-space30" style="background-color: #FFFFFF;">
+            <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: calc(95vh);">
+                <div>
+                    <div id="orgTree"></div>
+                </div>
+            </div>
+            <div class="layui-col-md10" style="height: calc(95vh);">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>门禁操作</legend>
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <div class="layui-input-inline">
+                                <select name="quiz1">
+                                    <option value="">请选车库</option>
+                                    <option value="1" selected="">丽华新村1号车库</option>
+                                    <option value="2">丽华新村2号车库</option>
+                                    <option value="3">丽华新村3号车库</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <div class="layui-card-body">
+
+                        <div class="layui-carousel layui-col-xs6">
+                            <ul class="layui-row layui-col-space10">
+                                <li class="layui-col-xs3">
+                                    <a lay-href="home/homepage1.html">
+                                        <img src="../../img/door.png" alt="" style="width:100%;">
+                                        <cite>1号门</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="home/homepage1.html">
+                                        <img src="../../img/door.png" alt="" style="width:100%;">
+                                        <cite>2号门</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="home/homepage1.html">
+                                        <img src="../../img/door.png" alt="" style="width:100%;">
+                                        <cite>3号门</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="home/homepage1.html">
+                                        <img src="../../img/door.png" alt="" style="width:100%;">
+                                        <cite>4号门</cite>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="layui-carousel layui-col-xs6">
+                            <ul class="layui-row layui-col-space10">
+                                <li class="layui-col-xs3">
+                                    <button type="button" class="layui-btn">设置参数</button>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <button type="button" class="layui-btn">远程开门</button>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <button type="button" class="layui-btn">远程读卡</button>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <button type="button" class="layui-btn">卡授权信息</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <table id="table_card" lay-filter="table_card"></table>
+
+                <!--<script type="text/html" id="barCard">-->
+                <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+                <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+                <!--</script>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- js插件 -->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/layui/layui.js"></script>
+    <script src="../../js/front.js"></script>
+
+    <!-- js funcitons -->
+    <script>
+        layui.config({
+            version: '1566370370424' //为了更新 js 缓存，可忽略
+        });
+        layui.use(['tree', 'table'], function () {
+            var tree = layui.tree;
+            var table = layui.table;
+            //获取组织机构数据nodes:[{},{}]
+            var baseUrl = "/hqigservice";
+            var nodes = [];
+            $.ajax({
+                url: baseUrl + '/getOrgTree.json',
+                type: 'POST',
+                data: JSON.stringify({
+                    "userInfo": {
+                        "userId": 1,
+                        "userName": "许明",
+                        "sessionId": "123456"
+                    },
+                    "orgId": 1
+                }),
+                contentType: "application/json",
+                dataType: 'json',
+                async: true,
+                success: function (res) {
+                    //处理返回数据
+                    var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+                    var childrens;
+                    childrens = getTreeJson(orgTreeInfo.childOrgList);
+                    var root_node = {
+                        "id": orgTreeInfo.orgId,
+                        "title": orgTreeInfo.orgName,
+                        "spread": true,
+                        "children": childrens
+                    };// 存放tree数据
+                    nodes.push(root_node);
+                    //渲染tree
+                    tree.render({
+                        elem: '#orgTree',
+                        showLine: false,  //是否开启连接线
+                        data: nodes,
+                        onlyIconControl: true,
+                        click: function (obj) {
+                            //得到当前点击的节点数据   obj.data
+                            var orgId = obj.data.id;
+
+                            // tableIns.reload({
+                            //     where: {
+                            //         "userInfo": {
+                            //             "userId": 1,
+                            //             "userName": "许明",
+                            //             "sessionId": "123456"
+                            //         },
+                            //         "orgId": orgId
+                            //     },
+                            //     page: {
+                            //         curr: 1 //重新从第 1 页开始
+                            //     }
+                            // });
+                        },
+                    });
+                },
+                error: function () {
+                    layer.msg("操作失败");
+                }
+            });
+
+            table.render({
+                elem: '#table_card'
+                ,url: './json/demoCard.json'
+                ,contentType: 'application/json'
+                ,page: { //详细参数可参考 laypage 组件文档
+                    curr: 5
+                    ,groups: 1
+                    ,first: false
+                    ,last: false
+                    ,layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+                }
+                //,height: 300
+                ,cellMinWidth: 80
+                //,skin: 'line'
+                ,toolbar: true
+                ,cols: [[
+                    {field:'cardnum', title:'卡号'}
+                    // ,{field:'username', title:'用户'}
+                    ,{field:'begdate', title:'开始时间'}
+                    ,{field:'enddate', title:'结束时间'}
+                    ,{field:'door1', title:'1号门',templet: function(x){
+                            return x.door1>0 ? '已授权': '未授权';
+                        }}
+                    ,{field:'door2', title:'2号门',templet: function(x){
+                            return x.door2>0 ? '已授权': '未授权';
+                        }}
+                    ,{field:'door3', title:'3号门',templet: function(x){
+                            return x.door3>0 ? '已授权': '未授权';
+                        }}
+                    ,{field:'door4', title:'4号门',templet: function(x){
+                            return x.door4>0 ? '已授权': '未授权';
+                        }}
+                    // ,{title:'操作', align:'center', toolbar: '#barCard'}
+                ]]
+            });
+        });
+        // js 递归返回的组织树
+        function getTreeJson(childrens) {
+            var child_node = [];
+            for (var i in childrens) {
+                var node = {
+                    "id": childrens[i].orgId,
+                    "title": childrens[i].orgName,
+                    "spread": true,
+                };// 存放tree数据
+                var childrens_node = childrens[i].childOrgList;
+                if (childrens_node != 0) {
+                    var son = getTreeJson(childrens_node);
+                    node.children = son;
+                }
+                child_node.push(node);
+            }
+            return child_node;
+        }
+
+    </script>
+</body>
+
+</html>

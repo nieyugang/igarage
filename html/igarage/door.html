@@ -13,13 +13,238 @@
 </head>
 
 <body>
-    <h1>车库系统 / 门禁维护</h1>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <select name="quiz1">
+                    <option value="">请选择省</option>
+                    <option value="js" selected="">江苏省</option>
+                    <option value="sh">上海市</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="quiz2">
+                    <option value="">请选择市</option>
+                    <option value="常州" selected="">常州</option>
+                    <option value="南通">南通</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="quiz3">
+                    <option value="">请选小区</option>
+                    <option value="1" selected="">丽华新村</option>
+                    <option value="2">清潭新村</option>
+                    <option value="3">邮电公寓</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="igarageId" id="igarageId" lay-filter="igarageId">
+                    <option value="">请选车库</option>
+                    <option value="1">丽华新村1号车库</option>
+                    <option value="2">丽华新村2号车库</option>
+                    <option value="3" selected>丽华新村3号车库</option>
+                </select>
+            </div>
+        </div>
+
+        <table id="table_door" lay-filter="table_door"></table>
+
+        <script type="text/html" id="acTpl">
+            <select lay-ignore>
+                <option value="1">微耕品牌</option>
+                <option value="2">其他品牌</option>
+            </select>
+        </script>
+
+        <!--<div class="layui-form-item">-->
+            <!--<div  class="layui-input-inline">-->
+                <!--<button type="button" class="layui-btn"  id="btn_edit">门禁编辑</button>-->
+            <!--</div>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<button type="button" class="layui-btn">门禁新增</button>-->
+            <!--</div>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<button type="button" class="layui-btn">门禁删除</button>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn">设置网络</button>
+            </div>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn">清除权限</button>
+            </div>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn">设置时间</button>
+            </div>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn">设置门</button>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn" id="tabAdd">IC卡用户管理</button>
+            </div>
+            <div class="layui-input-inline">
+                <a href="door-operation.html" class="layui-btn">门禁操作</a>
+            </div>
+        </div>
+        <input id="accessId" value="aa" type="hidden"/>
+
+    </form>
+
+    <script src="../../vendor/layui/layui.js"></script>
+    <script>
+        var baseUrl = "/hqigservice";
+        layui.use(['table','form'], function () {
+            var table = layui.table
+                ,form = layui.form;
+
+            // 表格初始化
+            table.render({
+                title: '小区所属门禁信息表',
+                elem: '#table_door',
+                height: 'full-300',
+                method: 'POST',
+                contentType: 'application/json',
+                limit: 30,
+                url: baseUrl + '/getAccessControllerList.json',
+                where: {
+                    "userInfo": {
+                        "userId": 1,
+                        "userName": "许明",
+                        "sessionId": "123456"
+                    },
+                    "garageId": parseInt($("#igarageId").val())
+                },
+                parseData: function (res) {
+                    return {
+                        code: 0,
+                        msg: "",
+                        count: res.accessControllerInfoList.length,
+                        data: res.accessControllerInfoList
+                    };
+                },
+                toolbar: 'default',
+                page: true,
+                cols: [[
+                    { type: 'radio', fixed: 'left'},
+                    { type: 'numbers', title: '序号', align: 'center' },
+                    {field:'acType', title:'控制器类型',templet: function(x){
+                            return x.acType>1 ? '其他品牌': '微耕品牌';
+                        }},
+                    {field:'sn', title:'产品序列号'},
+                    {field:'ip', title:'IP'},
+                    {field:'port', title:'PORT'},
+                    {field:'remark', title:'所在区域'},
+                    {field:'mac', title:'所控制的门'}
+                ]]
+            });
+
+            // 监听头部工具栏事件
+            table.on('toolbar(table_door)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data; //获取选中的数据
+                var layEvet = obj.event;
+                switch (layEvet) {
+                    case 'add':
+                        $("#accessId").attr("value","");
+                        layer.open({
+                            type: 2,
+                            title: false,
+                            anim: 1,
+                            area: ['480px', '600px'],
+                            content: './door-edit.html',
+                            end: function () {
+                                table.reload('table_door');
+                            }
+                        });
+                        break;
+                    case 'update':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else if (data.length > 1) {
+                            layer.msg('只能同时编辑一个', function () { });
+                        } else {
+                            $("#accessId").attr("value",JSON.stringify(data[0]));
+                            // layer.msg($("#accessId").val());
+                            layer.open({
+                                type: 2,
+                                title: false,
+                                anim: 1,
+                                area: ['480px', '600px'],
+                                content: './door-edit.html',
+                                end: function () {
+                                    table.reload('table_door');
+                                }
+                            });
+
+                        }
+                        break;
+                    case 'delete':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else {
+                            layer.confirm('确定删除吗？', function (index) {
+                                $.ajax({
+                                    url: baseUrl + '/accessControllerDelete.json',
+                                    type: 'POST',
+                                    data: JSON.stringify({
+                                        "userInfo": {
+                                            "userId": 1,
+                                            "userName": "许明",
+                                            "sessionId": "123456"
+                                        },
+                                        "acId": data[0].acId
+                                    }),
+                                    contentType: "application/json",
+                                    dataType: 'json',
+                                    async: true,
+                                    success: function (res) {
+                                        if (res.resFlag == "N") {
+                                            layer.msg('操作成功', { icon: 1 });
+                                            setTimeout(function () {
+                                                table.reload('table_door');
+                                            }, 1000);
+                                        } else {
+                                            layer.msg(res.resFlag, { icon: 2 });
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg(res.resFlag, { icon: 2 });
+                                    }
+                                });
+                            });
+                        }
+                        break;
+                };
+            });
+
+            form.on('select(igarageId)', function(data){
+                // layer.msg($("#igarageId").val());
+                table.reload('table_door',{
+                    where: {
+                        "userInfo": {
+                            "userId": 1,
+                            "userName": "许明",
+                            "sessionId": "123456"
+                        },
+                        "garageId": parseInt($("#igarageId").val())
+                    }
+                });
+            })
+        });
+
+    </script>
 
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
+
     <script src="../../js/front.js"></script>
+
 </body>
 
 </html>
