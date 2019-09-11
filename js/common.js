@@ -80,6 +80,7 @@ function initTable(table, elem, limit, url, where, parseData, cols, done) {
     return table.render({
         title: '车位类型表',
         elem: '#' + elem,
+        height: 'full-300',
         method: 'POST',
         contentType: 'application/json',
         limit: limit,
@@ -97,12 +98,33 @@ function initTable(table, elem, limit, url, where, parseData, cols, done) {
     });
 }
 
+function initNotPageTable(table, elem, url, where, parseData, cols) {
+    return table.render({
+        elem: '#' + elem
+        , height: 'full-300'
+        , method: 'POST'
+        , url: getBaseUrl() + url
+        , where: where
+        , contentType: 'application/json'
+        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , parseData: parseData
+        , cols: cols
+        ,page: false
+    });
+}
+
 function tableReload(table, where) {
     table.reload({
         where: where //设定异步数据接口的额外参数
         , page: {
             curr: 1 //重新从第 1 页开始
         }
+    });
+}
+
+function noPageTableReload(table, where) {
+    table.reload({
+        where: where
     });
 }
 
