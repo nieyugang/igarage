@@ -23,56 +23,42 @@
             <div class="layui-row ">
                 <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: calc(90vh - 24px);">
                     <div>
-                        <div id="orgTree"></div>
+                        <div id="menuTree"></div>
                     </div>
                 </div>
                 <div class="layui-col-md10">
                     <fieldset class="layui-elem-field layui-field-title">
-                        <legend>菜单详情</legend>
+                        <legend>菜单列表</legend>
                         <div class="layui-field-box">
-                            <div style="margin: 5% 5% 5% 19%;width: 47%;">
-                                <form class="layui-form layui-form-pane" action="">
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">菜单名称</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="" placeholder="请输入菜单名称" autocomplete="off"
-                                                class="layui-input">
+                            <div style="margin-top: 2%;">
+                                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                                    <form class="layui-form caller-seach" action="" style="position: relative;
+                                    padding-bottom: 40px;">
+                                        <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                                        position: absolute;
+                                        top: -3px;
+                                        left: 5px;"></i>
+                                        <input type="text" name="title" required="" lay-verify="required"
+                                            placeholder="请输入菜单名称查询" autocomplete="off" class="layui-input caller-pl32"
+                                            style="padding: 0 32px;">
+                                        <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                                        position: absolute;
+                                        top: -3px;left: 98%;"></i>
+                                    </form>
+                                </div>
+                                <div class="table-content">
+                                    <script type="text/html" id="toolbar">
+                                        <div class="layui-btn-group">
+                                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"  lay-event="update" >
+                                                <i class="layui-icon">&#xe642;</i>
+                                            </button>
+                                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="delete" >
+                                                <i class="layui-icon">&#xe640;</i>
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">菜单类型</label>
-                                        <div class="layui-input-block">
-                                            <input name="sex" title="目录" type="radio" checked="" value="D">
-                                            <input name="sex" title="菜单" type="radio" value="F">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">菜单路径</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="" placeholder="请输入菜单路径" autocomplete="off"
-                                                class="layui-input">
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">是否有效</label>
-                                        <div class="layui-input-block">
-                                            <input name="close" type="checkbox" lay-skin="switch" lay-text="有效|无效">
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="layui-form-item layui-form-text">
-                                        <div class="layui-input-block">
-                                            <textarea name="desc" class="layui-textarea"
-                                                placeholder="请输入说明内容">请输入说明内容</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <div class="layui-input-block">
-                                            <button class="layui-btn" lay-filter="demo1" lay-submit="">立即提交</button>
-                                            <button type="reset" class="layui-btn layui-btn-primary">新增菜单</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </script>
+                                    <table class="layui-hide" id="t-menu" lay-filter="t-menu"></table>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
@@ -91,54 +77,232 @@
         //获取组织机构数据nodes:[{},{}]
         var baseUrl = "/hqigservice";
         var nodes = [];
-        $.ajax({
-            url: baseUrl + '/getMenuList.json',
-            //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
-            type: 'POST',
-            data: JSON.stringify({
-                "userInfo": {
-                    "userId": 1,
-                    "userName": "许明",
-                    "sessionId": "123456"
-                },
-            }),
-            contentType: "application/json",
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                //处理返回数据
-                var root_node =//根节点
-                {
-                    "id": res.menuInfo.menuId,
-                    "title": res.menuInfo.menuName,
-                    "spread": true,
-                };
-                var subMenuList = getTreeJson(res.menuInfo.subMenuList);
-                root_node.children = subMenuList;
+        var menuId;
+        layui.use(['tree', 'element', 'form', 'table'], function () {
+            $.ajax({
+                url: baseUrl + '/getMenuList.json',
+                type: 'POST',
+                data: JSON.stringify({
+                    "userInfo": {
+                        "userId": 1,
+                        "userName": "许明",
+                        "sessionId": "123456"
+                    },
+                }),
+                contentType: "application/json",
+                dataType: 'json',
+                async: true,
+                success: function (res) {
+                    //处理返回数据
+                    var root_node =
+                    {
+                        "id": res.menuInfo.menuId,
+                        "title": res.menuInfo.menuName,
+                        "spread": true,
+                    };
+                    var subMenuList = getTreeJson(res.menuInfo.subMenuList);
+                    root_node.children = subMenuList;
 
-                nodes.push(root_node);
-                layui.use(['tree', 'element', 'form'], function () {
+                    nodes.push(root_node);
+
                     var tree = layui.tree;
                     var element = layui.element;
                     var form = layui.form;
+                    var table = layui.table;
                     //渲染tree
                     tree.render({
-                        elem: '#orgTree',
-                        showLine: false,  //是否开启连接线
+                        elem: '#menuTree',
+                        showLine: false,
                         onlyIconControl: true,
                         data: nodes,
+                        edit: ['add'],
+                        click: function (obj) {
+                            //得到当前点击的节点数据   obj.data
+                            menuId = obj.data.id;
+                            tableIns.reload({
+                                where: { //设定异步数据接口的额外参数，任意设
+                                    menuId: menuId
+                                }
+                            });
+                        },
+                        operate: function (obj) {
+                            var type = obj.type;// 得到操作类型：add、edit、del
+                            var data = obj.data;// 得到节点的数据
+                            var node_id = obj.data.id;
+                            if (type === 'add') {
+                                layer.open({
+                                    type: 2,
+                                    title: false,
+                                    anim: 1,
+                                    area: ['800px', '500px'],
+                                    content: './menuAdd.html?parent_id=' + node_id,
+                                    end: function () {
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        },
                     });
+                    // 表格初始化
+                    var tableIns = table.render({
+                        title: '基础-用户信息表',
+                        elem: '#t-menu',
+                        height: 'full-200',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        limit: 30,
+                        url: baseUrl + '/getMenuList.json',
+                        where: {
+                            "userInfo": {
+                                "userId": 1,
+                                "userName": "许明",
+                                "sessionId": "123456"
+                            },
+                            "menuId": menuId
+                        },
+                        parseData: function (res) {
+                            return {
+                                code: 0,
+                                msg: "",
+                                count: res.menuInfo.subMenuList.length,
+                                data: res.menuInfo.subMenuList //只加载它的直属子节点
+                            };
+                        },
+                        toolbar: '#toolbar',
+                        page: true,
+                        cols: [[
+                            { type: 'radio', fixed: 'left' },
+                            { type: 'numbers', title: '序号', align: 'center' },
+                            { field: 'menuId', title: '菜单ID', sort: false, hide: true },
+                            { field: 'menuName', title: '菜单名称', sort: false, align: 'center' },
+                            {
+                                field: 'menuType', title: '菜单类型', sort: true, align: 'center', templet: function (item) {
+                                    if (item.menuType == 'D') {
+                                        return "目录";
+                                    } else {
+                                        return "功能";
+                                    }
+                                }
+                            },
+                            {
+                                field: 'reserve', title: '是否有效', sort: true, align: 'center', templet: function (item) {
+                                    if (item.reserve == 'OFF') {
+                                        return "无效";
+                                    } else {
+                                        return "有效"
+                                    }
+                                }
+                            },
+                        ]]
+                    })
 
                     //监听提交
                     form.on('submit(formDemo)', function (data) {
                         layer.msg(JSON.stringify(data.field));
                         return false;
                     });
-                });
-            },
-            error: function () {
-                layer.msg("操作失败");
-            }
+
+
+                    // 监听头部工具栏事件
+                    table.on('toolbar(t-menu)', function (obj) {
+                        var checkStatus = table.checkStatus(obj.config.id);
+                        var data = checkStatus.data; //获取选中的数据
+                        var layEvet = obj.event;
+                        switch (layEvet) {
+                            case 'update':
+                                if (data.length === 0) {
+                                    layer.msg('请选择一行', function () { });
+                                } else if (data.length > 1) {
+                                    layer.msg('只能同时编辑一个', function () { });
+                                } else {
+                                    var node_id = checkStatus.data[0].menuId;
+                                    edit(node_id);
+
+                                }
+                                break;
+                            case 'delete':
+                                if (data.length === 0) {
+                                    layer.msg('请选择一行', function () { });
+                                } else {
+                                    for (var i in checkStatus.data) {
+                                        if (checkStatus.data.hasOwnProperty(i)) {
+                                            var element = checkStatus.data[i];
+                                            var node_id = element.menuId;
+                                            del(node_id);
+                                        }
+                                    }
+
+                                }
+                                break;
+                        };
+                    });
+
+                    // 删除
+                    function del(node_id) {
+                        if (node_id == '0') {
+                            layer.msg("根节点无法删除", function () { });
+                            return false;
+                        } else {
+                            layer.confirm('确定删除吗？', function (index) {
+                                $.ajax({
+                                    url: baseUrl + '/menuDelete.json',
+                                    type: 'POST',
+                                    data: JSON.stringify({
+                                        "userInfo": {
+                                            "userId": 1,
+                                            "userName": "许明",
+                                            "sessionId": "123456"
+                                        },
+                                        "menuId": node_id
+                                    }),
+                                    contentType: "application/json",
+                                    dataType: 'json',
+                                    async: true,
+                                    success: function (res) {
+                                        if (res.resFlag == "N") {
+                                            layer.msg('操作成功', { icon: 1 });
+                                            setTimeout(function () {
+                                                tableIns.reload({
+                                                    where: {
+                                                        menuId: menuId
+                                                    }
+                                                });
+                                            }, 2000);
+
+                                        } else {
+                                            layer.msg(res.resFlag, { icon: 2 });
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg(res.resFlag, { icon: 2 });
+                                    }
+                                });
+                            });
+                        }
+                    };
+                    //编辑
+                    function edit(node_id) {
+                        layer.open({
+                            type: 2,
+                            title: false,
+                            anim: 1,
+                            area: ['800px', '500px'],
+                            content: './menuEdit.html?parent_id=' + node_id,
+                            end: function () {
+                                tableIns.reload({
+                                    where: {
+                                        menuId: menuId
+                                    }
+                                });
+                            }
+                        });
+                    };
+
+                },
+                error: function () {
+                    layer.msg("操作失败");
+                }
+            });
         });
         // js 递归返回的组织树
         function getTreeJson(childrens) {
