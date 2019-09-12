@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 
 </head>
+
 <body>
     <!-- 主体内容区 -->
     <div class="content-inner" style=" z-index: 0;width: 98%">
@@ -105,22 +107,16 @@
             async: true,
             success: function (res) {
                 //处理返回数据
-                var menuList = res.menuInfoList;//json数组
-                for (var i in menuList) {
-                    if (menuList.hasOwnProperty(i)) {
-                        var menuElement = menuList[i];
-                        //递归遍历子菜单 返回[{},{}]
-                        var subMenuList;
-                        subMenuList = getTreeJson(menuElement.subMenuList);
-                        var root_node = { // 存放tree数据
-                            "id": menuElement.menuId,
-                            "title": menuElement.menuName,
-                            // "spread": true,
-                            "children": subMenuList
-                        };
-                    }
-                    nodes.push(root_node);
-                }
+                var root_node =//根节点
+                {
+                    "id": res.menuInfo.menuId,
+                    "title": res.menuInfo.menuName,
+                    "spread": true,
+                };
+                var subMenuList = getTreeJson(res.menuInfo.subMenuList);
+                root_node.children = subMenuList;
+
+                nodes.push(root_node);
                 layui.use(['tree', 'element', 'form'], function () {
                     var tree = layui.tree;
                     var element = layui.element;
@@ -129,6 +125,7 @@
                     tree.render({
                         elem: '#orgTree',
                         showLine: false,  //是否开启连接线
+                        onlyIconControl: true,
                         data: nodes,
                     });
 

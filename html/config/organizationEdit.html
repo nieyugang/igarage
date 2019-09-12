@@ -1,0 +1,230 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="robots" content="all,follow">
+  <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+  <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+</head>
+
+
+<body>
+  <div class="container">
+    <div class="layui-form">
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>组织机构编辑</legend>
+      </fieldset>
+      <form class="layui-form layui-form-pane" action="" lay-filter="organization-detail">
+        <div class="layui-form-item">
+          <label class="layui-form-label">机构名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="orgName" autocomplete="off" lay-verify="required" placeholder="请输入机构名称"
+              class="layui-input">
+          </div>
+        </div>
+
+        <div class="layui-form-item" id="area-picker">
+          <div class="layui-form-label" style="width: 115px;">机构归属地</div>
+          <div class="layui-input-inline">
+            <select name="provinceId">
+              <option value="">请选择省</option>
+            </select>
+          </div>
+          <div class="layui-input-inline">
+            <select name="cityId">
+              <option value="">请选择市</option>
+            </select>
+          </div>
+          <!-- 省市联动组件
+          <div class="layui-input-inline" style="width: 200px;">
+              <select name="province" class="province-selector" data-value="广东省" lay-filter="province-1">
+                  <option value="">请选择省</option>
+              </select>
+          </div>
+          <div class="layui-input-inline" style="width: 200px;">
+              <select name="city" class="city-selector" data-value="深圳市" lay-filter="city-1">
+                  <option value="">请选择市</option>
+              </select>
+          </div>
+          <div class="layui-input-inline" style="width: 200px;">
+              <select name="county" class="county-selector" data-value="龙岗区" lay-filter="county-1">
+                  <option value="">请选择区</option>
+              </select>
+          </div> -->
+        </div>
+
+        <div class="layui-form-item">
+          <div class="layui-form-item" style="display: none">
+            <label class="layui-form-label">机构ID</label>
+            <div class="layui-input-block">
+              <input type="text" name="orgId" autocomplete="off" placeholder="请输入机构名称" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">负责人</label>
+            <div class="layui-input-block">
+              <input type="text" name="principal" autocomplete="off" lay-verify="required" placeholder="请输入负责人姓名"
+                class="layui-input">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-block">
+              <input type="text" name="mobile" autocomplete="off" lay-verify="required" placeholder="请输入负责人联系电话"
+                class="layui-input">
+            </div>
+          </div>
+
+
+
+          <div class="layui-form-item" style="margin: 0 0 0 19%;">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="add">更新</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+  <!-- js插件 -->
+  <script src="../../vendor/jquery/jquery.js"></script>
+  <script src="../../vendor/layui/layui.js"></script>
+  <script src="../../js/front.js"></script>
+
+  <script>
+    //配置插件目录
+    layui.config({
+      base: '../../vendor/layui/lay/modules/'
+      , version: '1.0'
+    });
+
+    var baseUrl = "/hqigservice";
+    //加载模块
+    layui.use(['form', 'layedit', 'layarea'], function () {
+      var form = layui.form;
+      var layer = layui.layer;
+      var layedit = layui.layedit;
+      var layarea = layui.layarea;
+
+      //表单初始赋值
+      var parent_id = RequestParameter()["parent_id"];
+      $.ajax({
+        url: baseUrl + '/getOrgTree.json',
+        type: 'POST',
+        data: JSON.stringify({
+          "userInfo": {
+            "userId": 1,
+            "userName": "许明",
+            "sessionId": "123456"
+          },
+          "orgId": parseInt(parent_id)
+        }),
+        contentType: "application/json",
+        dataType: 'json',
+        async: true,
+        success: function (res) {
+          console.log('=======res=============================');
+          console.log(res);
+          console.log('=========res===========================');
+          if (res.resFlag == "N") {
+            form.val('organization-detail', {
+              "mobile": res.orgTreeInfo.mobile,
+              "principal": res.orgTreeInfo.principal,
+              "cityId": res.orgTreeInfo.cityId,
+              "provinceId": res.orgTreeInfo.provinceId,
+              "orgId": res.orgTreeInfo.orgId,
+              "orgName": res.orgTreeInfo.orgName,
+            });
+          } else {
+            layer.msg(res.resFlag, { icon: 2 });
+          }
+        },
+        error: function () {
+          layer.msg(res.resFlag, { icon: 2 });
+        }
+      });
+
+      layarea.render({
+        elem: '#area-picker',
+        change: function (res) {
+          console.log(res);
+        }
+      });
+
+      // 表单验证
+      form.verify({
+        loginId: function (value) { //value：表单的值、item：表单的DOM对象
+          if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+            return '用户名不能有特殊字符';
+          }
+          if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+            return '用户名首尾不能出现下划线\'_\'';
+          }
+          if (/^\d+\d+\d$/.test(value)) {
+            return '用户名不能全为数字';
+          }
+        },
+        password: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格']
+      });
+
+      //监听提交
+      form.on('submit(formSubmit)', function (data) {
+        var formData = data.field;
+        var userInfo = {
+          "userId": 1,
+          "userName": "许明",
+          "sessionId": "123456"
+        };
+        formData.userInfo = userInfo;
+        //TODO  省市由于数据不全，暂时无法处理
+        formData.cityId = 320400;
+        formData.provinceId = 320200;
+        formData.orgId = parseInt(formData.orgId);
+        //提交
+        $.ajax({
+          url: baseUrl + '/orgUpdate.json',
+          type: 'POST',
+          contentType: 'application/json',
+          dataType: 'json',
+          data: JSON.stringify(formData),
+          success: function (res) {
+            if (res.resFlag == "N") {
+              layer.msg('操作成功', { icon: 1 });
+              setTimeout(function () {
+                window.parent.layer.closeAll();//关闭弹窗
+              }, 3000);
+            } else {
+              layer.msg('通信异常', { icon: 2 });
+            }
+          },
+          error: function () {
+            layer.msg('通信异常', { icon: 2 });
+          }
+
+        });
+        return false;
+      });
+    });
+    //获取url中"?"符后的字串
+    function RequestParameter() {
+      var url = window.location.search;
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        var strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+        }
+      }
+      return theRequest
+    }
+  </script>
+</body>
+
+</html>
