@@ -149,24 +149,9 @@
                         showLine: false,  //是否开启连接线
                         data: nodes,
                         onlyIconControl: true,
-                        click: function (obj) {
-                            //得到当前点击的节点数据   obj.data
-                            var orgId = obj.data.id;
-
-                            // tableIns.reload({
-                            //     where: {
-                            //         "userInfo": {
-                            //             "userId": 1,
-                            //             "userName": "许明",
-                            //             "sessionId": "123456"
-                            //         },
-                            //         "orgId": orgId
-                            //     },
-                            //     page: {
-                            //         curr: 1 //重新从第 1 页开始
-                            //     }
-                            // });
-                        },
+                        click: function(obj){
+                            layer.msg(JSON.stringify(obj.data));
+                        }
                     });
                 },
                 error: function () {

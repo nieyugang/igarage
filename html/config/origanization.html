@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,38 +31,33 @@
                     <div class="layui-field-box">
                         <div style="margin-top: 2%;">
                             <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                                <div class="layui-form-item">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label" style="width: 100px;">代理商名称</label>
-                                        <div class="layui-input-block">
-                                            <input name="loginname" class="layui-input" type="text" placeholder="请输入"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">负责人</label>
-                                        <div class="layui-input-block">
-                                            <input name="telphone" class="layui-input" type="text" placeholder="请输入"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label" style="width: 100px;">联系方式</label>
-                                        <div class="layui-input-block">
-                                            <input name="email" class="layui-input" type="text" placeholder="请输入"
-                                                autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <button class="layui-btn layuiadmin-btn-admin" lay-filter="LAY-user-back-search"
-                                            lay-submit="" style="margin-top: -23%;">
-                                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                <form class="layui-form caller-seach" action="" style="position: relative;
+                                padding-bottom: 40px;">
+                                    <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                                    position: absolute;
+                                    top: -3px;
+                                    left: 5px;"></i>
+                                    <input type="text" name="title" required="" lay-verify="required"
+                                        placeholder="请输入机构名称/负责人进行查询" autocomplete="off" class="layui-input caller-pl32"
+                                        style="padding: 0 32px;">
+                                    <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                                    position: absolute;
+                                    top: -3px;left: 98%;"></i>
+                                </form>
                             </div>
                             <div class="table-content">
-                                <table class="layui-hide" id="t-user" lay-filter="test"></table>
+                                <script type="text/html" id="toolbar">
+                                    <div class="layui-btn-group">
+                                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"  lay-event="update" >
+                                            <i class="layui-icon">&#xe642;</i>
+                                        </button>
+                                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="delete" >
+                                            <i class="layui-icon">&#xe640;</i>
+                                        </button>
+                                    </div>
+                                </script>
+
+                                <table class="layui-hide" id="t-organization" lay-filter="t-organization"></table>
                             </div>
                         </div>
                     </div>
@@ -79,6 +75,7 @@
     <script>
         //获取组织机构数据nodes:[{},{}]
         var baseUrl = "/hqigservice";
+        var orgId = 1;
         var nodes = [];
         $.ajax({
             url: baseUrl + '/getOrgTree.json',
@@ -90,7 +87,7 @@
                     "userName": "许明",
                     "sessionId": "123456"
                 },
-                "orgId": 1
+                "orgId": orgId
             }),
             contentType: "application/json",
             dataType: 'json',
@@ -117,18 +114,60 @@
                     tree.render({
                         elem: '#orgTree',
                         showLine: false,  //是否开启连接线
+                        onlyIconControl: true,
                         data: nodes,
+                        edit: ['add', 'del'],
+                        click: function (obj) {
+                            //得到当前点击的节点数据   obj.data
+                            orgId = obj.data.id;
 
+                            tableIns.reload({
+                                where: {
+                                    "userInfo": {
+                                        "userId": 1,
+                                        "userName": "许明",
+                                        "sessionId": "123456"
+                                    },
+                                    "orgId": orgId
+                                },
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        },
+                        operate: function (obj) {
+                            var type = obj.type;// 得到操作类型：add、edit、del
+                            var data = obj.data;// 得到节点的数据
+                            var elem = obj.elem; //得到当前节点元素
+
+                            var node_id = obj.data.id;
+                            if (type === 'add') {
+                                layer.open({
+                                    type: 2,
+                                    title: false,
+                                    anim: 1,
+                                    area: ['800px', '500px'],
+                                    content: './organizationAdd.html?parent_id=' + node_id,
+                                    end: function () {
+                                        location.reload();
+                                    }
+                                });
+                            } else if (type === 'update') {
+                                edit(node_id);
+                            } else if (type === 'del') {
+                                del(node_id);
+                            }
+                        },
                     });
                     // 表格初始化
-                    table.render({
+                    var tableIns = table.render({
                         title: '基础-用户信息表',
-                        elem: '#t-user',
-                        height: 'full-300',
+                        elem: '#t-organization',
+                        height: 'full-200',
                         method: 'POST',
                         contentType: 'application/json',
                         limit: 30,
-                        url: baseUrl + '/getUserList.json',
+                        url: baseUrl + '/getOrgTree.json',
                         where: {
                             "userInfo": {
                                 "userId": 1,
@@ -137,39 +176,107 @@
                             },
                             "pageNo": 1,
                             "pageSize": 20,
-                            "orgId": 1
+                            "orgId": orgId
                         },
                         parseData: function (res) {
                             return {
                                 code: 0,
                                 msg: "",
-                                count: 10,
-                                data: res.userInfoList
+                                count: res.orgTreeInfo.childOrgList.length,
+                                data: res.orgTreeInfo.childOrgList //只加载它的直属子节点
                             };
                         },
-                        toolbar: 'default',
+                        toolbar: '#toolbar',
                         page: true,
                         cols: [[
-                            {
-                                type: 'checkbox', fixed: 'left'
-                            },
-                            {
-                                field: 'userId', title: '编号', sort: false, fixed: 'center'
-                            },
-                            {
-                                field: 'loginId', title: '代理商名称', sort: false, fixed: 'center'
-                            },
-                            {
-                                field: 'userName', title: '负责人', sort: true, fixed: 'center'
-                            },
-                            {
-                                field: 'orgId', title: '联系方式', sort: true, fixed: 'center'
-                            },
-
+                            { type: 'radio', fixed: 'left' },
+                            { type: 'numbers', title: '序号', align: 'center' },
+                            { field: 'orgId', title: '机构ID', sort: false, hide: true },
+                            { field: 'orgName', title: '机构名称', sort: false, align: 'center' },
+                            { field: 'principal', title: '负责人', sort: true, align: 'center' },
+                            { field: 'mobile', title: '联系方式', sort: true, align: 'center' },
+                            { field: 'provinceId', title: '所在省', sort: true, align: 'center' },
+                            { field: 'cityId', title: '所在市', sort: true, align: 'center' },
                         ]]
                     })
-                });
 
+                    // 监听头部工具栏事件
+                    table.on('toolbar(t-organization)', function (obj) {
+                        var checkStatus = table.checkStatus(obj.config.id);
+                        var data = checkStatus.data; //获取选中的数据
+                        var layEvet = obj.event;
+                        switch (layEvet) {
+                            case 'update':
+                                if (data.length === 0) {
+                                    layer.msg('请选择一行');
+                                } else if (data.length > 1) {
+                                    layer.msg('只能同时编辑一个', function () { });
+                                } else {
+                                    var node_id = checkStatus.data[0].orgId;
+                                    edit(node_id);
+
+                                }
+                                break;
+                            case 'delete':
+                                if (data.length === 0) {
+                                    layer.msg('请选择一行');
+                                } else {
+                                    var node_id = checkStatus.data[0].orgId;
+                                    del(node_id);
+                                }
+                                break;
+                        };
+                    });
+
+                    // 删除
+                    function del(node_id) {
+                        layer.confirm('确定删除吗？', function (index) {
+                            $.ajax({
+                                url: baseUrl + '/orgDelete.json',
+                                type: 'POST',
+                                data: JSON.stringify({
+                                    "userInfo": {
+                                        "userId": 1,
+                                        "userName": "许明",
+                                        "sessionId": "123456"
+                                    },
+                                    "orgId": node_id
+                                }),
+                                contentType: "application/json",
+                                dataType: 'json',
+                                async: true,
+                                success: function (res) {
+                                    if (res.resFlag == "N") {
+                                        layer.msg('操作成功', { icon: 1 });
+                                        setTimeout(function () {
+                                            table.reload('role');
+                                        }, 2000);
+
+                                    } else {
+                                        layer.msg(res.resFlag, { icon: 2 });
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg(res.resFlag, { icon: 2 });
+                                }
+                            });
+                        });
+                    }
+                    //编辑
+                    function edit(node_id) {
+                        layer.open({
+                            type: 2,
+                            title: false,
+                            anim: 1,
+                            area: ['800px', '500px'],
+                            content: './organizationEdit.html?parent_id=' + node_id,
+                            end: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+
+                });
             },
             error: function () {
                 layer.msg("操作失败");
@@ -182,7 +289,7 @@
                 var node = {
                     "id": childrens[i].orgId,
                     "title": childrens[i].orgName,
-                    "spread": true,
+                    // "spread": true,
                 };// 存放tree数据
                 var childrens_node = childrens[i].childOrgList;
                 if (childrens_node != 0) {

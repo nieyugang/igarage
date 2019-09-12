@@ -51,8 +51,8 @@
 
         <script type="text/html" id="acTpl">
             <select lay-ignore>
-                <option value="1">微耕品牌</option>
-                <option value="2">其他品牌</option>
+                <option value="1">单门双向控制器</option>
+                <option value="2">四门单向控制器</option>
             </select>
         </script>
 
@@ -133,7 +133,7 @@
                     { type: 'radio', fixed: 'left'},
                     { type: 'numbers', title: '序号', align: 'center' },
                     {field:'acType', title:'控制器类型',templet: function(x){
-                            return x.acType>1 ? '其他品牌': '微耕品牌';
+                            return x.acType>1 ? '四门单向控制器': '单门双向控制器';
                         }},
                     {field:'sn', title:'产品序列号'},
                     {field:'ip', title:'IP'},
