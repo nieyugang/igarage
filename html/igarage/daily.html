@@ -60,7 +60,7 @@
         <div class="layui-col-md10">
             <div style="margin-top: 2%;" class="row">
                 <div class="layui-col-md7" id="maintainMapInfo"
-                     style="border: 1px solid #848d92;min-height: 100px; min-width: 98%">
+                     style="border: 1px solid #848d92;min-height: 100px; min-width: 97%">
                     <div class="layui-tab layui-tab-brief">
                         <ul class="layui-tab-title">
                             <li class="layui-this">地图</li>
@@ -478,6 +478,7 @@
             sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
                 if (res.resFlag === 'N') {
                     layer.msg("保存成功");
+                    noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
                     layer.closeAll();
                 } else {
                     layer.msg("保存失败");
@@ -490,13 +491,10 @@
 
         $("#cameraAddPageBtn").click(function (event) {
             layer.open({
-                type: 1
+                 type: 1
                 , title: false //不显示标题栏
-                , closeBtn: false
                 , area: ['500px', '600px']
-                , shade: 0.8
                 , id: 'LAY_layuipro' //设定一个id，防止重复弹出
-                , moveType: 1 //拖拽模式，0或者1
                 , content: $("#cameraEditPage").html()
             });
         });
@@ -601,7 +599,7 @@
                     // tableReload(momeTableIns, {garageId: res.data[0].garageId})
                 } else {
                     $("#maintainInfoDetails").hide();
-                    $("#maintainMapInfo").css("min-width", "98%");
+                    $("#maintainMapInfo").css("min-width", "97%");
                 }
             }
         }
@@ -724,26 +722,22 @@
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
 
             {
-                field: 'chargerName', title: '充电站名称111', sort: false, fixed: 'center'
+                field: 'cameraName', title: '监控名称', sort: false, fixed: 'center'
             },
             {
-                field: 'sn', title: '产品序列号111', sort: false, fixed: 'center'
+                field: 'cameraType', title: '监控类型', sort: false, fixed: 'center'
             },
             {
-                field: 'status', title: '设备状态111', sort: false, fixed: 'center'
+                field: 'ip', title: '监控ip', sort: false, fixed: 'center'
             },
             {
-                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
+                field: 'loginAccount', title: '登录账号', sort: false, fixed: 'center'
             },
             {
-                field: 'thirdPay',
-                title: '是否支持第三方支付',
-                toolbar: "#garageChargerThirdPayToolbar",
-                sort: false,
-                fixed: 'center'
+                field: 'installAddress', title: '安装地址描述', sort: false, fixed: 'center'
             },
             {
-                field: 'spaceName', title: '创建时间', sort: false, fixed: 'center'
+                field: 'status', title: '状态', sort: false, fixed: 'center'
             },
         ]];
 
@@ -815,7 +809,7 @@
                 $("#maintainMomeDiv").hide();
                 $("#garageTable").show();
                 $("#deviceContent").hide();
-                $("#maintainMapInfo").css("min-width", "98%");
+                $("#maintainMapInfo").css("min-width", "97%");
             }
         }
 
