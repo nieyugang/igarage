@@ -56,7 +56,6 @@
                                         </button>
                                     </div>
                                 </script>
-
                                 <table class="layui-hide" id="t-organization" lay-filter="t-organization"></table>
                             </div>
                         </div>
@@ -116,7 +115,7 @@
                         showLine: false,  //是否开启连接线
                         onlyIconControl: true,
                         data: nodes,
-                        edit: ['add', 'del'],
+                        edit: ['add'],
                         click: function (obj) {
                             //得到当前点击的节点数据   obj.data
                             orgId = obj.data.id;
@@ -261,7 +260,7 @@
                                 }
                             });
                         });
-                    }
+                    };
                     //编辑
                     function edit(node_id) {
                         layer.open({
@@ -274,7 +273,7 @@
                                 location.reload();
                             }
                         });
-                    }
+                    };
 
                 });
             },

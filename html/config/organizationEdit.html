@@ -129,9 +129,6 @@
         dataType: 'json',
         async: true,
         success: function (res) {
-          console.log('=======res=============================');
-          console.log(res);
-          console.log('=========res===========================');
           if (res.resFlag == "N") {
             form.val('organization-detail', {
               "mobile": res.orgTreeInfo.mobile,
