@@ -25,7 +25,6 @@ function ajaxSend(event, jqXHR, options) {
         "sessionId": "123456"
     };
     options.data = JSON.stringify(data);
-    console.log(options.data);
 }
 
 /**
@@ -51,7 +50,6 @@ function ajaxError(e, jqxhr, settings, exception) {
     } catch (e) {
 
     }
-debugger
     if (!response) {
         try {
             var responseText = jqxhr.responseText.substring(2);
@@ -197,4 +195,20 @@ function sendAjaxRequest(type, url, dataType, data, successCallback, errorCallba
         success: successCallback,
         error: errorCallback
     })
+}
+
+$.fn.serializeObject = function () {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function () {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
 }
