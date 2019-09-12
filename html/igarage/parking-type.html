@@ -51,10 +51,14 @@
         ]];
 
         function res(res) {
+            var count = 0;
+            if(res.parkingSpaceTypeList){
+                count = res.parkingSpaceTypeList.length;
+            }
             return {
                 code: 0,
                 msg: "",
-                count: 10,
+                count: count,
                 data: res.parkingSpaceTypeList
             };
         }

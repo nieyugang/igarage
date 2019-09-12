@@ -14,25 +14,32 @@
         #maintainInfoDetails div {
             font-size: 12px;
         }
-        #parkingInfo ul{
+
+        #parkingInfo ul {
             list-style: none;
             line-height: 50px;
         }
-        #parkingInfo li{
+
+        #parkingInfo li {
             border-bottom: 1px solid #bbbbbb;
             text-align: center;
             height: 90px;
             padding-top: 14px;
         }
-        #parkingInfo .active{
+
+        #parkingInfo .active {
             background-color: #00a0e9;
             color: #fff;
             text-align: center;
         }
-        #parkingInfo li span{
+
+        #parkingInfo li span {
             float: right;
         }
-        .anchorBL{display:none;}
+
+        .anchorBL {
+            display: none;
+        }
     </style>
 </head>
 
@@ -43,16 +50,16 @@
     <!-- 请在此处编写你的业务代码 -->
     <!-- ===================================================== -->
     <div class="row" style="background-color: white;">
-        <div class="col-sm-2" style="border-right:2px solid #f2f2f2;height: 100%;">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
             <div style="margin-top: 20%; height: 100%">
                 <label
                         style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
                 <div id="orgTree" class="demo-tree"></div>
             </div>
         </div>
-        <div class="col-sm-10">
+        <div class="layui-col-md10">
             <div style="margin-top: 2%;" class="row">
-                <div class="col-sm-7" id="maintainMapInfo"
+                <div class="layui-col-md7" id="maintainMapInfo"
                      style="border: 1px solid #848d92;min-height: 100px; min-width: 98%">
                     <div class="layui-tab layui-tab-brief">
                         <ul class="layui-tab-title">
@@ -71,8 +78,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4" id="maintainInfoDetails"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-left: 2%; max-width: 31%; display: none">
+                <div class="layui-col-md4" id="maintainInfoDetails"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-left: 2%; max-width: 30%; display: none">
                     <div class="layui-tab layui-tab-brief" id="showMaintain">
                         <div class="layui-tab layui-tab-brief">
                             <ul class="layui-tab-title">
@@ -184,6 +191,19 @@
                                     <div style="text-align: center">
                                         <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
                                     </div>
+                                    <div style="text-align: center; margin-top: 10px">
+                                        <button type="button" class="layui-btn" title="增加车位"><i class="fa fa-car"
+                                                                                                aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="layui-btn" title="增加充电站"><i class="fa fa-bolt"
+                                                                                                 aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="layui-btn" title="增加门禁"><i class="fa fa-unlock-alt"
+                                                                                                aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="layui-btn" title="增加监控"><i
+                                                class="fa fa-video-camera" aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
                                 <div class="layui-tab-item">
                                     <div class="layui-form-item" style="text-align: center">
@@ -202,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12" style="display: none">
+                <div class="layui-col-md12" style="display: none">
                     <!--                    暂时不用-->
                     <div class="layui-inline">
                         <label class="layui-form-label">车库名称</label>
@@ -218,20 +238,30 @@
                         </button>
                     </div>
                 </div>
-                    <div class="col-sm-12" id="garageTable"
-                         style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%">
-                        <div class="row" style="background-color: #848d92">车库列表</div>
-                        <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
-                    </div>
+                <div class="layui-col-md12" id="garageTable"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
+                    <div class="" style="background-color: #848d92">车库列表</div>
+                    <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
+                </div>
 
-                    <div class="col-sm-12" id="maintainMomeDiv"
-                         style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%; display: none">
-                        <div class="row" style="background-color: #848d92">备忘录</div>
-                        <table class="layui-hide" id="maintainMomeTable" lay-filter="maintainMomeTable"></table>
+                <div class="layui-col-md12" id="maintainMomeDiv"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
+                    <div class="" style="background-color: #848d92">备忘录</div>
+                    <table class="layui-hide" id="maintainMomeTable" lay-filter="maintainMomeTable"></table>
+                </div>
+                <div id="deviceContent" class="layui-col-md12"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
+                    <div style="background-color: #848d92" class="layui-col-md12">
+                        <div class="layui-col-md11">设备信息</div>
+                        <div class="layui-col-md1" style="text-align: right;">
+                            <a class="layui-btn-xs" style="line-height: 20px;cursor: pointer;color: #ffffff"
+                               lay-event="detail">
+                                <i class="fa fa-times" aria-hidden="true" id="closeDeviceContent"
+                                   style="font-size: 20px !important"></i>
+                            </a>
+                        </div>
                     </div>
-                <div id="deviceContent"  class="col-sm-12" style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 98%; display: none">
-                    <div class="row" style="background-color: #848d92">设备信息</div>
-                    <div class="layui-tab">
+                    <div class="layui-tab layui-col-md12" lay-filter="deviceDetails">
                         <ul class="layui-tab-title">
                             <li class="layui-this">车位</li>
                             <li>门禁</li>
@@ -239,53 +269,18 @@
                             <li>监控</li>
                         </ul>
                         <div class="layui-tab-content" id="parkingInfo">
-                            <div class="layui-tab-item layui-show">车位内容1</div>
-                            <div class="layui-tab-item">
-                                <ui class="row">
-                                    <li class="col-sm-2 active">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door.PNG">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door-red.png">
-                                    </li>
-                                    <li class="col-sm-2">
-                                        <img src="../../img/door-red.png">
-                                    </li>
-                                </ui>
+                            <div class="layui-tab-item layui-show">
+                                <table class="layui-hide" id="parkingSpaceTable" lay-filter="parkingSpaceTable"></table>
                             </div>
-                            <div class="layui-tab-item">充电站内容3</div>
-                            <div class="layui-tab-item">监控内容4</div>
+                            <div class="layui-tab-item">
+                                <table class="layui-hide" id="accessTable" lay-filter="accessTable"></table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <table class="layui-hide" id="garageChargerTable" lay-filter="garageChargerTable"></table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <table class="layui-hide" id="cameraTable" lay-filter="cameraTable"></table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -293,13 +288,44 @@
         </div>
     </div>
 </div>
-<script type="text/html" id="tableNo">
-    {{d.LAY_TABLE_INDEX + 1}}
+<script type="text/html" id="parkingSpaceStatus">
+    {{#  if(d.status === 0){ }}
+    空闲
+    {{#  } else if(d.status === 1) { }}
+    故障
+    {{#  } else if(d.status === 2) { }}
+    保留
+    {{#  } else if(d.status === 3) { }}
+    已预约
+    {{#  } else if(d.status === 4) { }}
+    使用中
+    {{#  } else if(d.status === 5) { }}
+    冻结
+    {{#  } else if(d.status === 6) { }}
+    停卡
+    {{#  } }}
 </script>
 
 <script type="text/html" id="ingAndLat">
     {{d.ing}}--{{d.lat}}
 </script>
+
+<script type="text/html" id="plugToolbar">
+    {{#  if(d.addCharger === 1){ }}
+    附加
+    {{#  } else { }}
+    不附加
+    {{#  } }}
+</script>
+
+<script type="text/html" id="garageChargerThirdPayToolbar">
+    {{#  if(d.thirdPay === 1){ }}
+    支持
+    {{#  } else { }}
+    不支持
+    {{#  } }}
+</script>
+
 <script type="text/html" id="garageBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="garageMemo">备忘录</a>
@@ -307,7 +333,7 @@
 
 <script type="text/html" id="garageMomeBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-<!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>-->
+    <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>-->
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
@@ -341,10 +367,11 @@
 
         sendAjaxRequest("POST", "getParkingSpaceTypeList.json", "json", {}, function (res) {
             if (res.resFlag === 'N') {
-                
+
             } else {
                 layer.msg("查询失败");
-            }}, function () {
+            }
+        }, function () {
             layer.msg("查询失败");
         });
 
@@ -358,13 +385,19 @@
 
         });
 
+        $("#closeDeviceContent").click(function (event) {
+            $("#deviceContent").hide();
+            $("#garageTable").show();
+        })
+
         $("#deviceBtn").click(function (event) {
             $("#garageTable").hide();
             $("#maintainMomeDiv").hide();
             $("#deviceContent").show();
+            tableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId})
         });
 
-        $("#parkingInfo li").click(function(){
+        $("#parkingInfo li").click(function () {
             $("#parkingInfo li").removeClass("active");
             $(this).addClass("active");
         });
@@ -393,7 +426,8 @@
                         tableReload(momeTableIns, {garageId: maintainInfo.garageId})
                     } else {
                         layer.msg("保存失败");
-                    }}, function () {
+                    }
+                }, function () {
                     layer.msg("操作失败");
                 });
             } else {
@@ -402,9 +436,7 @@
         }
 
         var garageListCols = [[
-            {
-                field: 'userId', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
-            },
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
             {
                 field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
             },
@@ -427,12 +459,12 @@
                 field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
             }
         ]];
-        
+
         function res(res) {
             return {
                 code: 0,
                 msg: "",
-                count: res.rows.length,
+                count: res.records,
                 data: res.rows
             };
         }
@@ -450,7 +482,7 @@
                         }
                     }, 100);
                     showMaintain(res.data[0], true);
-                    tableReload(momeTableIns, {garageId: res.data[0].garageId})
+                    // tableReload(momeTableIns, {garageId: res.data[0].garageId})
                 } else {
                     $("#maintainInfoDetails").hide();
                     $("#maintainMapInfo").css("min-width", "98%");
@@ -462,27 +494,145 @@
 
 
         var maintainMomeCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
             {
-                field: 'memoId', title: '编号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
+                field: 'userName', title: '操作者', sort: false, fixed: 'center'
             },
             {
-                field: 'userName', title: '操作者', width: 160, sort: false, fixed: 'center'
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
             },
             {
-                field: 'createTime', title: '创建时间', width: 200, sort: false, fixed: 'center'
-            },
-            {
-                field: 'garageName', title: '车库名称', width: 400, sort: false, fixed: 'center'
+                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
             },
             {
                 field: 'content', title: '备注内容', sort: false, fixed: 'center'
             },
             {
-                field: 'memoId', title: '操作', width: 160, toolbar: "#garageMomeBar", sort: false, fixed: 'center'
+                field: 'memoId', title: '操作', toolbar: "#garageMomeBar", sort: false, fixed: 'center'
             }
         ]];
 
         var momeTableIns = initTable(table, "maintainMomeTable", 20, "getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null);
+
+
+        function accessRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.accessControllerInfoList
+            };
+        }
+
+        var accessCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'ip', title: 'IP地址', sort: false, fixed: 'center'
+            },
+            {
+                field: 'port', title: '端口', sort: false, fixed: 'center'
+            }
+        ]];
+
+        var accessTableIns = initNotPageTable(table, "accessTable", "getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
+
+
+        function parkingSpaceRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        var parkingSpaceCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'spaceTypeName', title: '车位类别', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '车位状态', toolbar: "#parkingSpaceStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
+            }
+        ]];
+        var parkingSpaceTableIns = initTable(table, "parkingSpaceTable", 20, "getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null);
+
+
+        function garageChargerRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.garageChargerInfoList
+            };
+        }
+
+        var garageChargerCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'chargerName', title: '充电站名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '设备状态', sort: false, fixed: 'center'
+            },
+            {
+                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
+            },
+            {
+                field: 'thirdPay', title: '是否支持第三方支付',toolbar: "#garageChargerThirdPayToolbar", sort: false, fixed: 'center'
+            },
+            {
+                field: 'spaceName', title: '创建时间', sort: false, fixed: 'center'
+            },
+        ]];
+        var garageChargerTableIns = initTable(table, "garageChargerTable", 20, "getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null);
+
+        var cameraCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'chargerName', title: '充电站名称111', sort: false, fixed: 'center'
+            },
+            {
+                field: 'sn', title: '产品序列号111', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '设备状态111', sort: false, fixed: 'center'
+            },
+            {
+                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
+            },
+            {
+                field: 'thirdPay', title: '是否支持第三方支付',toolbar: "#garageChargerThirdPayToolbar", sort: false, fixed: 'center'
+            },
+            {
+                field: 'spaceName', title: '创建时间', sort: false, fixed: 'center'
+            },
+        ]];
+
+        function cameraRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                data: res.cameraInfoList
+            };
+        }
+
+        var cameraTableIns = initNotPageTable(table, "cameraTable", "getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
+
 
         function showMaintain(maintainInfo, locationFlag) {
             $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
@@ -510,20 +660,20 @@
                 if (addFlag) {
                     map.addOverlay(marker);              // 将标注添加到地图中
                     var opts = {
-                        width : 200,     // 信息窗口宽度
+                        width: 200,     // 信息窗口宽度
                         height: 100,     // 信息窗口高度
-                        title : name // 信息窗口标题
+                        title: name // 信息窗口标题
                     }
                     var infoWindow = new BMap.InfoWindow("地址：" + address, opts);  // 创建信息窗口对象
-                    marker.addEventListener("click", function(){
-                        map.openInfoWindow(infoWindow,new_point); //开启信息窗口
+                    marker.addEventListener("click", function () {
+                        map.openInfoWindow(infoWindow, new_point); //开启信息窗口
                     });
                 }
                 map.panTo(new_point);
             }
         }
 
-        initTree(tree, '#orgTree', "getOrgTree.json", JSON.stringify({"orgId": 1}) , clickOrg)
+        initTree(tree, '#orgTree', "getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
 
         function clickOrg(orgInfo) {
             tableReload(tableIns, {orgId: orgInfo.data.id})
@@ -531,7 +681,7 @@
             if (orgInfo.data.level === 3) {
                 map.clearOverlays();
                 $("#maintainInfoDetails").show();
-                $("#maintainMomeDiv").show();
+                // $("#maintainMomeDiv").show();
                 $("#maintainMapInfo").css("min-width", "65%");
                 $("#garageTable").show();
                 $("#deviceContent").hide();
@@ -554,7 +704,19 @@
                 $("#editMaintainForm").hide();
                 $("#showMaintain").show()
             } else if (obj.event === 'garageMemo') {
+                $("#maintainMomeDiv").show();
                 tableReload(momeTableIns, {garageId: data.garageId})
+            }
+        });
+
+        //监听设备详情中选项卡
+        element.on('tab(deviceDetails)', function (data) {
+            if (data.index === 1) {
+                noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
+            }else if(data.index === 2){
+                tableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+            }else if (data.index === 3){
+                noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
             }
         });
 
@@ -575,13 +737,13 @@
                     };
                     saveGarageMemoBtn(content);
                 });
-            }else if (obj.event === 'delete'){
+            } else if (obj.event === 'delete') {
                 var data = {memoId: data.memoId};
                 layer.confirm('真的删除行么', function (index) {
 
                     sendAjaxRequest("POST", "garageMemoDelete.json", "json", JSON.stringify(data), function (res) {
                         if (res.resFlag === 'N') {
-                            tableReload(momeTableIns,{garageId: maintainInfo.garageId})
+                            tableReload(momeTableIns, {garageId: maintainInfo.garageId})
                             layer.msg("删除成功");
                         } else {
                             layer.msg("删除失败");

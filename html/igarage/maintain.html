@@ -361,9 +361,7 @@
 
 
         var garageListCols = [[
-            {
-                field: 'userId', title: '序号', width: 60, toolbar: '#tableNo', sort: false, fixed: 'center'
-            },
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
             {
                 field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
             },
@@ -391,7 +389,7 @@
             return {
                 code: 0,
                 msg: "",
-                count: res.rows.length,
+                count: res.records,
                 data: res.rows
             };
         }
