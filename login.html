@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +11,26 @@
   <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+  <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+  <link rel="stylesheet" href="./css/login.css">
   <link rel="shortcut icon" href="img/favicon.ico">
 </head>
 
 <body>
+
   <div class="page login-page">
+
     <div class="container d-flex align-items-center">
       <div class="form-holder has-shadow">
+        <div id="danger-block" class="alert alert-danger hide" style="text-align: center;display: none;">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>警告！</strong>您的网络连接有问题。
+        </div>
+        <div id="warning-block" class="alert alert-warning hide" style="text-align: center;display: none;">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>警告！</strong>用户名或者密码不正确。
+        </div>
         <div class="row">
           <div class="col-lg-6">
             <div class="info d-flex align-items-center">
@@ -32,22 +46,44 @@
           <div class="col-lg-6 bg-white">
             <div class="form d-flex align-items-center">
               <div class="content">
-                <form method="post" class="form-validate">
+                <!-- <form method="post" class="form-validate">
                   <div class="form-group">
-                    <input id="login-username" type="text" name="loginUsername" required data-msg="请输入你的姓名" class="input-material">
+                    <input id="login-username" type="text" name="loginUsername" required data-msg="请输入你的姓名"
+                      class="input-material">
                     <label for="login-username" class="label-material">用户姓名</label>
                   </div>
                   <div class="form-group">
-                    <input id="login-password" type="password" name="loginPassword" required data-msg="请输入你的密码" class="input-material">
+                    <input id="login-password" type="password" name="loginPassword" required data-msg="请输入你的密码"
+                      class="input-material">
                     <label for="login-password" class="label-material">用户密码</label>
-                  </div>
-                  <!-- 这里有个提交按钮，测试时，使用下方a代替了，需要发交易时可放开。 -->
-                  <!-- <div class="form-group">
-                    <button type="submit" name="registerSubmit" class="btn btn-primary">登录</button>
                   </div> -->
-                  <a id="login" href="index.html" class="btn btn-primary">登录</a>
-                </form>
-                <a href="#" class="forgot-pass">忘记密码？</a><br><small>还没有账户？</small><a href="register.html" class="signup">注册</a>
+                <!-- 这里有个提交按钮，测试时，使用下方a代替了，需要发交易时可放开。 -->
+                <!-- <div class="form-group">
+                    <button type="submit" id="submit" class="btn btn-primary">登录</button>
+                  </div> -->
+                <!-- <a id="login" href="index.html" class="btn btn-primary">登录</a> -->
+                <!-- </form> -->
+                <!-- <a href="#" class="forgot-pass">忘记密码？</a><br><small>还没有账户？</small><a href="register.html" class="signup">注册</a> -->
+                <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                  <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                      <label class="layadmin-user-login-icon layui-icon layui-icon-username"
+                        for="LAY-user-login-username"></label>
+                      <input type="text" name="username" id="LAY-user-login-username" lay-verify="required"
+                        placeholder="用户名" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                      <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                        for="LAY-user-login-password"></label>
+                      <input type="password" name="password" id="LAY-user-login-password" lay-verify="required"
+                        placeholder="密码" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                      <button class="layui-btn layui-btn-fluid" lay-submit=""
+                        lay-filter="LAY-user-login-submit">登录</button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -63,9 +99,118 @@
   <script src="vendor/popper.js/umd/popper.min.js"> </script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../../vendor/layui/layui.js"></script>
+  <!-- md5插件 -->
+  <script src="../../vendor/md5/md5.js"></script>
   <!-- 主题切换 -->
   <script src="js/login-theme.js"></script>
 
+  <script>
+    layui.use(['form', 'layer'], function () {
+      var layer = layui.layer;
+
+      var baseUrl = "/hqigservice";
+      var $ = layui.$
+        , setter = layui.setter
+        , form = layui.form
+        , router = layui.router()
+        , search = router.search;
+
+      form.render();
+      //提交
+      form.on('submit(LAY-user-login-submit)', function (data) {
+        $.ajax({
+          url: baseUrl + '/login.json',
+          type: 'post',
+          dataType: 'JSON',
+          contentType: "application/json",
+          data: JSON.stringify({
+            loginId: data.field.username,
+            password: $.md5(data.field.password),
+          }),
+          success: function (res) {
+            if (res.resFlag == "N") {
+              // 登入成功的提示与跳转
+              layer.msg('登陆成功', {
+                offset: '15px'
+                , icon: 1
+                , time: 1000
+              }, function () {
+                //设置userInfoCaChe缓存
+                layui.sessionData('userInfoStorage', {
+                  key: 'userInfo',
+                  value: [
+                    {
+                      key: 'email',
+                      value: res.userInfo.email
+                    },
+                    {
+                      key: 'enable',
+                      value: res.userInfo.enable
+                    },
+                    {
+                      key: 'loginId',
+                      value: res.userInfo.loginId
+                    },
+                    {
+                      key: 'mobile',
+                      value: res.userInfo.mobile
+                    },
+                    {
+                      key: 'orgId',
+                      value: res.userInfo.orgId
+                    },
+                    {
+                      key: 'password',
+                      value: res.userInfo.password
+                    },
+                    {
+                      key: 'reserve',
+                      value: res.userInfo.reserve
+                    },
+                    {
+                      key: 'roleId',
+                      value: res.userInfo.roleId
+                    },
+                    {
+                      key: 'sessionId',
+                      value: res.userInfo.sessionId
+                    },
+                    {
+                      key: 'telephone',
+                      value: res.userInfo.telephone
+                    },
+                    {
+                      key: 'userId',
+                      value: res.userInfo.userId
+                    },
+                    {
+                      key: 'userName',
+                      value: res.userInfo.userName
+                    }
+                  ]
+                });
+                location.href = "./index.html";
+              });
+            } else {
+              // layer.msg('登陆失败',{icon: 5});
+              $("#warning-block").show();
+              setTimeout(function () {
+                $("#warning-block").hide();
+              }, 2000);
+            }
+          },
+          error: function () {
+            $("#danger-block").show();
+            setTimeout(function () {
+              $("#danger-block").hide();
+            }, 2000);
+          }
+        });
+        return false;
+      });
+    });
+  </script>
 </body>
 
 </html>

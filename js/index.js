@@ -1,19 +1,38 @@
-layui.use(["element", "layer"], function() {
+layui.use(["element", "layer"], function () {
+  var layer = layui.layer;
+  /**
+   * 页面加载时检查是否登陆
+   */
+  layer.ready(function () {
+    var userInfoStorage = layui.sessionData('userInfoStorage').userInfo;
+    if (userInfoStorage == null || userInfoStorage == undefined || userInfoStorage == "") {
+      location.href = "./login.html";
+    }else{
+      location.href = "#";
+    }
+  });
+  /**
+   *退出
+   */
+  $("#logout").on("click", function () {
+    layui.sessionData('userInfoStorage', null); //删除userInfoStorage
+    location.href = "../login.html";
+  });
   // ------------------------------------------------------- //
   // Search Box
   // ------------------------------------------------------ //
-  $("#search").on("click", function(e) {
+  $("#search").on("click", function (e) {
     e.preventDefault();
     $(".search-box").fadeIn();
   });
-  $(".dismiss").on("click", function() {
+  $(".dismiss").on("click", function () {
     $(".search-box").fadeOut();
   });
 
   // ------------------------------------------------------- //
   // Card Close
   // ------------------------------------------------------ //
-  $(".card-close a.remove").on("click", function(e) {
+  $(".card-close a.remove").on("click", function (e) {
     e.preventDefault();
     $(this)
       .parents(".card")
@@ -28,14 +47,14 @@ layui.use(["element", "layer"], function() {
   // ------------------------------------------------------- //
   // Adding fade effect to dropdowns
   // ------------------------------------------------------ //
-  $(".dropdown").on("show.bs.dropdown", function() {
+  $(".dropdown").on("show.bs.dropdown", function () {
     $(this)
       .find(".dropdown-menu")
       .first()
       .stop(true, true)
       .fadeIn();
   });
-  $(".dropdown").on("hide.bs.dropdown", function() {
+  $(".dropdown").on("hide.bs.dropdown", function () {
     $(this)
       .find(".dropdown-menu")
       .first()
@@ -46,7 +65,7 @@ layui.use(["element", "layer"], function() {
   // ------------------------------------------------------- //
   // Sidebar Functionality
   // ------------------------------------------------------ //
-  $("#toggle-btn").on("click", function(e) {
+  $("#toggle-btn").on("click", function (e) {
     e.preventDefault();
     $(this).toggleClass("active");
 
@@ -72,14 +91,13 @@ layui.use(["element", "layer"], function() {
   // ------------------------------------------------------- //
   // Universal Form Validation
   // ------------------------------------------------------ //
-  $(".form-validate").each(function() {
+  $(".form-validate").each(function () {
     $(this).validate({
       errorElement: "div",
       errorClass: "is-invalid",
       validClass: "is-valid",
-      ignore:
-        ":hidden:not(.summernote, .checkbox-template, .form-control-custom),.note-editable.card-block",
-      errorPlacement: function(error, element) {
+      ignore: ":hidden:not(.summernote, .checkbox-template, .form-control-custom),.note-editable.card-block",
+      errorPlacement: function (error, element) {
         // Add the `invalid-feedback` class to the error element
         error.addClass("invalid-feedback");
         console.log(element);
@@ -99,21 +117,21 @@ layui.use(["element", "layer"], function() {
 
   // activate labels for prefilled values
   materialInputs
-    .filter(function() {
+    .filter(function () {
       return $(this).val() !== "";
     })
     .siblings(".label-material")
     .addClass("active");
 
   // move label on focus
-  materialInputs.on("focus", function() {
+  materialInputs.on("focus", function () {
     $(this)
       .siblings(".label-material")
       .addClass("active");
   });
 
   // remove/keep label on blur
-  materialInputs.on("blur", function() {
+  materialInputs.on("blur", function () {
     $(this)
       .siblings(".label-material")
       .removeClass("active");
@@ -133,12 +151,13 @@ layui.use(["element", "layer"], function() {
   // Footer
   // ------------------------------------------------------ //
   var contentInner = $(".content-inner");
-  $(document).on("sidebarChanged", function() {
+  $(document).on("sidebarChanged", function () {
     adjustFooter();
   });
-  $(window).on("resize", function() {
+  $(window).on("resize", function () {
     adjustFooter();
   });
+
   function adjustFooter() {
     var footerBlockHeight = $(".main-footer").outerHeight();
     contentInner.css("padding-bottom", footerBlockHeight + "px");
@@ -149,7 +168,7 @@ layui.use(["element", "layer"], function() {
   // ------------------------------------------------------ //
   var timerTitShow;
   var timerTitHide;
-  $("#personalPopverA").on("click", function() {
+  $("#personalPopverA").on("click", function () {
     if (!$("#personalPopverList").hasClass("show")) {
       if (timerTitShow) {
         clearTimeout(timerTitShow);
@@ -169,14 +188,14 @@ layui.use(["element", "layer"], function() {
         $(".managerTit").hasClass("managerTitHide") &&
         !$(".side-navbar").hasClass("shrinked")
       ) {
-        timerTitShow = setTimeout(function() {
+        timerTitShow = setTimeout(function () {
           $(".managerTit").removeClass("managerTitHide");
           $(".managerTit").show();
         }, 200);
       }
     }
   });
-  $("#personalPopverLists").on("hide.bs.dropdown", function() {
+  $("#personalPopverLists").on("hide.bs.dropdown", function () {
     if (timerTitShow) {
       clearTimeout(timerTitShow);
     }
@@ -184,13 +203,13 @@ layui.use(["element", "layer"], function() {
       $(".managerTit").hasClass("managerTitHide") &&
       !$(".side-navbar").hasClass("shrinked")
     ) {
-      timerTitHide = setTimeout(function() {
+      timerTitHide = setTimeout(function () {
         $(".managerTit").removeClass("managerTitHide");
         $(".managerTit").show();
       }, 200);
     }
   });
-  $("#_slideMenuToggle_ #toggle-btn").on("click", function() {
+  $("#_slideMenuToggle_ #toggle-btn").on("click", function () {
     //console.log($(".side-navbar").hasClass("shrinked"))
     if ($(".side-navbar").hasClass("shrinked")) {
       //侧边栏合并
@@ -218,20 +237,20 @@ layui.use(["element", "layer"], function() {
   // ------------------------------------------------------ //
   var stylesheet = $("link#theme-stylesheet");
   if (getCookie("theme_csspath")) {
-    stylesheet.attr("href","css/style." +  getCookie("theme_csspath") + ".css");
+    stylesheet.attr("href", "css/style." + getCookie("theme_csspath") + ".css");
   }
-  $("#selfDefiningTheme ul li").on("click", function() {
+  $("#selfDefiningTheme ul li").on("click", function () {
     if ($(this).attr("data-settheme") !== "") {
       var theme_csspath = "css/style." + $(this).attr("data-settheme") + ".css";
       stylesheet.attr("href", theme_csspath);
       setCookie("theme_csspath", $(this).attr("data-settheme"), 365);
       //动态为iframe设置主题色
-      for(var i = 0; i < $(".layui-tab-item").length; i++){
+      for (var i = 0; i < $(".layui-tab-item").length; i++) {
         var aChildWindow = $(".layui-tab-item")[i].children[0];
-        if(aChildWindow){
-          if(aChildWindow.tagName === "IFRAME"){
+        if (aChildWindow) {
+          if (aChildWindow.tagName === "IFRAME") {
             aChildWindow.contentWindow.setThemeSetCss();
-          } 
+          }
         }
       }
     }
@@ -243,26 +262,27 @@ layui.use(["element", "layer"], function() {
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
-  function getCookie(cname){
+
+  function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
-    if(decodedCookie){
+    if (decodedCookie) {
       var ca = decodedCookie.split(";");
-      for(var i = 0; i < ca.length; i++){
+      for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        if(c.trim().indexOf(name) === 0){
+        if (c.trim().indexOf(name) === 0) {
           return c.trim().substring(name.length, c.length);
         }
       }
-    }    
+    }
     return "";
-  } 
+  }
 
   // ------------------------------------------------------ //
   // 每隔60s发送ajax交易获取设备预警和站内信
   // ------------------------------------------------------ //
-  var getTopBarMessageData = function() {
-    $.getJSON("mock/alert-mail-data.json", function(res) {
+  var getTopBarMessageData = function () {
+    $.getJSON("mock/alert-mail-data.json", function (res) {
       if (res.resFlag === "N") {
         console.log("局部刷新设备预警和站内信");
         var topbarData = res;
@@ -317,11 +337,11 @@ layui.use(["element", "layer"], function() {
   var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
   //触发事件
   var active = {
-    tabAdd: function(e) {
+    tabAdd: function (e) {
       var siderBarName = e[0].innerHTML;
-      siderBarName = /<[^>]+>/g.test(siderBarName)
-        ? e[0].getAttribute("data-name")
-        : siderBarName;
+      siderBarName = /<[^>]+>/g.test(siderBarName) ?
+        e[0].getAttribute("data-name") :
+        siderBarName;
       var siderBarID = e[0].getAttribute("lay-href");
       //新增一个Tab项
       element.tabAdd("_tab_iframe_", {
@@ -332,7 +352,7 @@ layui.use(["element", "layer"], function() {
       //每次新增Tab项，就重新对Tab栏每个tab项绑定，对应侧边栏对应标题改变颜色的方法
       changeSlideMenuColor();
     },
-    tabChange: function(e) {
+    tabChange: function (e) {
       var siderBarID = e[0].getAttribute("lay-href");
       //切换到指定Tab项
       element.tabChange("_tab_iframe_", siderBarID);
@@ -340,15 +360,15 @@ layui.use(["element", "layer"], function() {
   };
 
   // 侧边栏 添加 与 切换
-  $("#hx-slideMenu").on("click", ".hx-sidebar-active", function(e) {
+  $("#hx-slideMenu").on("click", ".hx-sidebar-active", function (e) {
     _add_ifram_tab_.call(this, null);
   });
 
   // 头部 站内信 警告信息 添加与切换
-  $("#_topbar_alert_").on("click", "#_readall_alert_", function() {
+  $("#_topbar_alert_").on("click", "#_readall_alert_", function () {
     _add_ifram_tab_.call(this, "alert");
   });
-  $("#_topbar_mail_").on("click", "#_readall_mail_", function() {
+  $("#_topbar_mail_").on("click", "#_readall_mail_", function () {
     _add_ifram_tab_.call(this, "mail");
   });
   // type: null 侧边栏点击 alert 警告信息点击 mail 站内信点击
@@ -376,8 +396,8 @@ layui.use(["element", "layer"], function() {
         } else {
           $(navMenuBar[j]).addClass("active");
           var toggleA = $(navMenuBar[j])
-          .parents("ul")
-          .siblings("a");
+            .parents("ul")
+            .siblings("a");
           $(toggleA).attr("aria-expanded", "true");
           $(toggleA).attr("class", "");
           var toggleUl = $(navMenuBar[j]).parents("ul");
@@ -394,7 +414,7 @@ layui.use(["element", "layer"], function() {
   }
 
   // 动态添加iframe
-  var createFrame = function(url) {
+  var createFrame = function (url) {
     var iframe =
       '<iframe scrolling="auto" frameborder="0" src="' +
       url +
@@ -406,8 +426,8 @@ layui.use(["element", "layer"], function() {
   function changeSlideMenuColor() {
     var layUiTabTits = $(".layui-tab-title li");
     for (var i = 0; i < layUiTabTits.length; i++) {
-      layUiTabTits[i].onclick = (function() {
-        return function(e) {
+      layUiTabTits[i].onclick = (function () {
+        return function (e) {
           console.log($(e.target).attr("lay-id"));
 
           if (!$(e.target).is(".layui-tab-close")) {
@@ -420,8 +440,8 @@ layui.use(["element", "layer"], function() {
                 //此标题变色，菜单展开
                 $(navMenuBar[j]).addClass("active");
                 var toggleA = $(navMenuBar[j])
-                .parents("ul")
-                .siblings("a");
+                  .parents("ul")
+                  .siblings("a");
                 $(toggleA).attr("aria-expanded", "true");
                 $(toggleA).attr("class", "");
                 var toggleUl = $(navMenuBar[j]).parents("ul");
@@ -440,7 +460,7 @@ layui.use(["element", "layer"], function() {
   }
 
   //内容区域tab标题栏 删除 更改对应的slidMenu 颜色
-  $(".layui-tab").on("click", function(e) {
+  $(".layui-tab").on("click", function (e) {
     var navMenuBar = $("#hx-slideMenu .list-unstyled li");
     if ($(e.target).is(".layui-tab-close")) {
       var targetLayId = $(".layui-tab-title .layui-this").attr("lay-id");
@@ -452,8 +472,8 @@ layui.use(["element", "layer"], function() {
             // console.log(navMenuBar[j]);
             $(navMenuBar[j]).addClass("active");
             var toggleA = $(navMenuBar[j])
-            .parents("ul")
-            .siblings("a");
+              .parents("ul")
+              .siblings("a");
             $(toggleA).attr("aria-expanded", "true");
             $(toggleA).attr("class", "");
             var toggleUl = $(navMenuBar[j]).parents("ul");
@@ -474,23 +494,23 @@ layui.use(["element", "layer"], function() {
   // ------------------------------------------------------ //
   var layer = layui.layer;
   // 多窗口模式，层叠置顶
-  var setTop = function(offsetModal) {
+  var setTop = function (offsetModal) {
     layer.open(offsetModal);
   };
   // 配置一个透明的询问框
-  var confirmTrans = function(message, confirmTransModal) {
+  var confirmTrans = function (message, confirmTransModal) {
     layer.msg(message, confirmTransModal);
   };
   // 示范一个公告层
-  var notice = function(noticeModal) {
+  var notice = function (noticeModal) {
     layer.open(noticeModal);
   };
   // 上下左右弹出
-  var offset = function(offsetModal) {
+  var offset = function (offsetModal) {
     layer.open(offsetModal);
   };
   // layui.closeAll
-  var closeAll = function() {
+  var closeAll = function () {
     layer.closeAll();
   };
   // layui.setTop

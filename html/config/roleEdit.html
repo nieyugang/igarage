@@ -108,9 +108,6 @@
 
         formData.roleId = parseInt(formData.roleId);
         formData.minOrgLevel = parseInt(formData.minOrgLevel);
-        console.log('====================================');
-        console.log(formData);
-        console.log('====================================');
         // 提交
         $.ajax({
           url: baseUrl + '/roleUpdate.json',
