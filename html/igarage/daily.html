@@ -192,13 +192,13 @@
                                         <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
                                     </div>
                                     <div style="text-align: center; margin-top: 10px">
-                                        <button type="button" class="layui-btn" title="增加车位"><i class="fa fa-car"
+                                        <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i class="fa fa-car"
                                                                                                 aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="layui-btn" title="增加充电站"><i class="fa fa-bolt"
+                                        <button type="button" class="layui-btn" title="增加充电站" id="garageChargerPageBtn"><i class="fa fa-bolt"
                                                                                                  aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="layui-btn" title="增加门禁"><i class="fa fa-unlock-alt"
+                                        <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i class="fa fa-unlock-alt"
                                                                                                 aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="layui-btn" title="增加监控" id="cameraAddPageBtn"><i
@@ -403,7 +403,176 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="formSubmit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="cameraFormSubmit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="accessControllerEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>新增门禁</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="accessControllerEditPageForm" action="" lay-filter="access_controller-edit">
+                <input type="hidden" id="acId" name="acId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">控制器类型</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="acType" autocomplete="off" id="acType"
+                               placeholder="控制器类型"
+                               lay-reqtext="控制器类型不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品序列号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="acSn" autocomplete="off" id="acSn"
+                               placeholder="产品序列号"
+                               lay-reqtext="产品序列号不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">IP地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="acIp" autocomplete="off" id="acIp" placeholder="IP地址"
+                               lay-reqtext="IP地址不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">端口</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="acPort" autocomplete="off" id="acPort"
+                               placeholder="端口"
+                               lay-reqtext="端口不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">mac地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="acMac" autocomplete="off" id="acMac"
+                               placeholder="mac地址"
+                               lay-reqtext="mac地址不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">子网掩码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mask" autocomplete="off" id="mask"
+                               placeholder="子网掩码"
+                               lay-reqtext="子网掩码不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网关</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="gateway" autocomplete="off" id="gateway"
+                               placeholder="网关"
+                               lay-reqtext="网关不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">说明</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="remark" autocomplete="off" id="remark"
+                               placeholder="网关"
+                               lay-reqtext="网关不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="acFormSubmit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="carEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>新增车位</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="carPageForm" action="" lay-filter="car-edit">
+                <input type="hidden" id="spaceId" name="spaceId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车库类型</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="spaceType" autocomplete="off" id="spaceType"
+                               placeholder="车库类型"
+                               lay-reqtext="车库类型不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">添加数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="addCount" autocomplete="off" id="addCount"
+                               placeholder="添加数量"
+                               lay-reqtext="添加数量不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="carFormSubmit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="garageChargerEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>新增门禁</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="garageChargerPageForm" action="" lay-filter="garage-charger-edit">
+                <input type="hidden" id="chargerId" name="chargerId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="chargerName" autocomplete="off" id="chargerName"
+                               placeholder="充电站名称"
+                               lay-reqtext="充电站名称不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">序列号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="gcSn" autocomplete="off" id="gcSn"
+                               placeholder="序列号"
+                               lay-reqtext="产品序列号不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">三方支付</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="thirdPay" autocomplete="off" id="thirdPay"
+                               placeholder="三方支付"
+                               lay-reqtext="三方支付" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">当前版本</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="currentVersion" autocomplete="off" id="currentVersion"
+                               placeholder="当前版本"
+                               lay-reqtext="当前版本不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="garageChargerFormSubmit">立即提交</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -465,8 +634,7 @@
         });
 
         //监听提交
-        form.on('submit(formSubmit)', function () {
-            return;
+        form.on('submit(cameraFormSubmit)', function () {
             var data = $("#cameraEditPageFrom").serializeObject();
             var url = "cameraAdd.json";
             if (data.id) {
@@ -490,13 +658,128 @@
             return false;
         });
 
+        //监听提交
+        form.on('submit(acFormSubmit)', function () {
+            var data = $("#accessControllerEditPageForm").serializeObject();
+            var url = "accessControllerAdd.json";
+            if (data.id) {
+                data.id = parseInt(data.id)
+                url = "accessControllerUpdate.json";
+            }
+            data.port = parseInt(data.acPort);
+            data.acType = parseInt(data.acType);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            data.sn = data.acSn;
+            data.ip = data.acIp;
+            data.mac = data.acMac;
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+        //监听提交
+        form.on('submit(carFormSubmit)', function () {
+            var data = $("#carPageForm").serializeObject();
+            var url = "parkingSpaceAdd.json";
+            if (data.id) {
+                data.id = parseInt(data.id)
+                url = "parkingSpaceUpdate.json";
+            }
+            data.spaceType = parseInt(data.spaceType);
+            data.addCount = parseInt(data.addCount);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+        //监听提交
+        form.on('submit(garageChargerFormSubmit)', function () {
+            var data = $("#carPageForm").serializeObject();
+            var url = "garageChargerAdd.json";
+            if (data.id) {
+                data.id = parseInt(data.id)
+                url = "garageChargerUpdate.json";
+            }
+            data.currentVersion = parseInt(data.currentVersion);
+            data.thirdPay = parseInt(data.thirdPay);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+
+
+
         $("#cameraAddPageBtn").click(function (event) {
             layer.open({
                  type: 1
                 , title: false //不显示标题栏
                 , area: ['500px', '600px']
-                , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                , id: 'lay-cameraAddPageBtn' //设定一个id，防止重复弹出
                 , content: $("#cameraEditPage").html()
+            });
+        });
+
+        $("#acAddPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '650px']
+                , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#accessControllerEditPage").html()
+            });
+        });
+
+        $("#carPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                , content: $("#carEditPage").html()
+            });
+        });
+
+        $("#garageChargerPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '500px']
+                , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
+                , content: $("#garageChargerEditPage").html()
             });
         });
 
