@@ -120,11 +120,7 @@
       //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
       type: 'POST',
       data: JSON.stringify({
-        "userInfo": {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        },
+        "userInfo": userInfo,
         "orgId": 1
       }),
       contentType: "application/json",
@@ -158,11 +154,7 @@
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify({
-        "userInfo": {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        },
+        "userInfo": userInfo,
       }),
       success: function (res) {
         var roleList = res.roleList;
@@ -234,11 +226,6 @@
       //监听提交
       form.on('submit(formSubmit)', function (data) {
         var formData = data.field;// JSON.stringify(data.field);
-        var userInfo = {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        };
         formData.userInfo = userInfo;
         formData.userId = parseInt(formData.userId);
         formData.roleId = parseInt(formData.roleId);

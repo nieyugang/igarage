@@ -21,7 +21,8 @@
         <!-- ===================================================== -->
         <div class="layui-row layui-col-space30" style="background-color: white;">
             <div class="layui-row ">
-                <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: calc(90vh - 24px); overflow-y: auto;">
+                <div class="layui-col-md2"
+                    style="border-right:2px solid #f2f2f2;height: calc(90vh - 24px); overflow-y: auto;">
                     <div>
                         <div id="menuTree"></div>
                     </div>
@@ -83,11 +84,7 @@
                 url: baseUrl + '/getMenuList.json',
                 type: 'POST',
                 data: JSON.stringify({
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
+                    "userInfo": userInfo,
                 }),
                 contentType: "application/json",
                 dataType: 'json',
@@ -137,7 +134,11 @@
                                     area: ['800px', '500px'],
                                     content: './menuAdd.html?parent_id=' + node_id,
                                     end: function () {
-                                        location.reload();
+                                        tableIns.reload({
+                                            where: {
+                                                menuId: menuId
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -152,11 +153,7 @@
                         contentType: 'application/json',
                         url: baseUrl + '/getMenuList.json',
                         where: {
-                            "userInfo": {
-                                "userId": 1,
-                                "userName": "许明",
-                                "sessionId": "123456"
-                            },
+                            "userInfo": userInfo,
                             "menuId": menuId
                         },
                         parseData: function (res) {
@@ -247,11 +244,7 @@
                                     url: baseUrl + '/menuDelete.json',
                                     type: 'POST',
                                     data: JSON.stringify({
-                                        "userInfo": {
-                                            "userId": 1,
-                                            "userName": "许明",
-                                            "sessionId": "123456"
-                                        },
+                                        "userInfo": userInfo,
                                         "menuId": node_id
                                     }),
                                     contentType: "application/json",

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
   <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
+
 <body>
   <div class="container">
     <div class="layui-form">
@@ -25,7 +26,7 @@
             <input type="text" name="menuName" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
           </div>
         </div>
-        <div class="layui-form-item" style="display: none"　>
+        <div class="layui-form-item" style="display: none" 　>
           <label class="layui-form-label">菜单ID</label>
           <div class="layui-input-block">
             <input type="text" name="menuId" placeholder="请输入菜单ID" autocomplete="off" class="layui-input">
@@ -80,11 +81,7 @@
         url: baseUrl + '/getMenuList.json',
         type: 'POST',
         data: JSON.stringify({
-          "userInfo": {
-            "userId": 1,
-            "userName": "许明",
-            "sessionId": "123456"
-          },
+          "userInfo": userInfo,
           "menuId": parseInt(parent_id)
         }),
         contentType: "application/json",
@@ -127,11 +124,7 @@
       //监听提交
       form.on('submit(formSubmit)', function (data) {
         var formData = data.field;
-        var userInfo = {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        };
+        var userInfo = userInfo;
         formData.userInfo = userInfo;
         //TODO  省市由于数据不全，暂时无法处理
         formData.menuId = parseInt(formData.menuId);

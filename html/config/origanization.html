@@ -81,11 +81,7 @@
             //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
             type: 'POST',
             data: JSON.stringify({
-                "userInfo": {
-                    "userId": 1,
-                    "userName": "许明",
-                    "sessionId": "123456"
-                },
+                "userInfo": userInfo,
                 "orgId": orgId
             }),
             contentType: "application/json",
@@ -122,11 +118,7 @@
 
                             tableIns.reload({
                                 where: {
-                                    "userInfo": {
-                                        "userId": 1,
-                                        "userName": "许明",
-                                        "sessionId": "123456"
-                                    },
+                                    "userInfo": userInfo,
                                     "orgId": orgId
                                 },
                                 page: {
@@ -148,7 +140,7 @@
                                     area: ['800px', '500px'],
                                     content: './organizationAdd.html?parent_id=' + node_id,
                                     end: function () {
-                                        location.reload();
+                                        table.reload('t-organization');
                                     }
                                 });
                             } else if (type === 'update') {
@@ -168,11 +160,7 @@
                         limit: 30,
                         url: baseUrl + '/getOrgTree.json',
                         where: {
-                            "userInfo": {
-                                "userId": 1,
-                                "userName": "许明",
-                                "sessionId": "123456"
-                            },
+                            "userInfo": userInfo,
                             "pageNo": 1,
                             "pageSize": 20,
                             "orgId": orgId
@@ -234,11 +222,7 @@
                                 url: baseUrl + '/orgDelete.json',
                                 type: 'POST',
                                 data: JSON.stringify({
-                                    "userInfo": {
-                                        "userId": 1,
-                                        "userName": "许明",
-                                        "sessionId": "123456"
-                                    },
+                                    "userInfo": userInfo,
                                     "orgId": node_id
                                 }),
                                 contentType: "application/json",
@@ -248,7 +232,7 @@
                                     if (res.resFlag == "N") {
                                         layer.msg('操作成功', { icon: 1 });
                                         setTimeout(function () {
-                                            table.reload('role');
+                                            table.reload('t-organization');
                                         }, 2000);
 
                                     } else {
@@ -270,7 +254,7 @@
                             area: ['800px', '500px'],
                             content: './organizationEdit.html?parent_id=' + node_id,
                             end: function () {
-                                location.reload();
+                                table.reload('t-organization');
                             }
                         });
                     };

@@ -192,11 +192,7 @@
                                     url: baseUrl + '/accessControllerDelete.json',
                                     type: 'POST',
                                     data: JSON.stringify({
-                                        "userInfo": {
-                                            "userId": 1,
-                                            "userName": "许明",
-                                            "sessionId": "123456"
-                                        },
+                                 "userInfo": userInfo,
                                         "acId": data[0].acId
                                     }),
                                     contentType: "application/json",

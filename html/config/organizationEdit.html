@@ -118,11 +118,7 @@
         url: baseUrl + '/getOrgTree.json',
         type: 'POST',
         data: JSON.stringify({
-          "userInfo": {
-            "userId": 1,
-            "userName": "许明",
-            "sessionId": "123456"
-          },
+          "userInfo": userInfo,
           "orgId": parseInt(parent_id)
         }),
         contentType: "application/json",
@@ -173,11 +169,6 @@
       //监听提交
       form.on('submit(formSubmit)', function (data) {
         var formData = data.field;
-        var userInfo = {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        };
         formData.userInfo = userInfo;
         //TODO  省市由于数据不全，暂时无法处理
         formData.cityId = 320400;

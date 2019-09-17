@@ -133,11 +133,7 @@
       //监听提交
       form.on('submit(formSubmit)', function (data) {
         var formData = data.field;
-        var userInfo = {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        };
+        var userInfo = userInfo;
         formData.userInfo = userInfo;
         //TODO  省市由于数据不全，暂时无法处理
         formData.parentMenuId = parseInt(formData.parentMenuId);

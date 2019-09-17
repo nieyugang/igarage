@@ -81,11 +81,6 @@
       //监听提交
       form.on('submit(formSubmit)', function (data) {
         var formData = data.field;// JSON.stringify(data.field);
-        var userInfo = {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        };
         formData.userInfo = userInfo;
 
         formData.minOrgLevel = parseInt(formData.minOrgLevel);

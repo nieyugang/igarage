@@ -2,16 +2,17 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="robots" content="all,follow">
+  <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+  <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 
 </head>
+
 <body>
   <div class="container">
     <div class="layui-form">
@@ -63,11 +64,7 @@
       //url: 'http://192.168.1.196:8088/hqigservice//getmenuTree.json',
       type: 'POST',
       data: JSON.stringify({
-        "userInfo": {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        },
+        "userInfo": userInfo,
       }),
       contentType: "application/json",
       dataType: 'json',
@@ -118,11 +115,7 @@
             dataType: 'json',
             async: true,
             data: JSON.stringify({
-              "userInfo": {
-                "userId": 1,
-                "userName": "许明",
-                "sessionId": "123456"
-              },
+              "userInfo":userInfo,
               "roleId": parseInt(roleId)
             }),
             success: function (res) {
@@ -189,11 +182,6 @@
           form.on('submit(formSubmit)', function (data) {
 
             var formData = data.field;// JSON.stringify(data.field);
-            var userInfo = {
-              "userId": 1,
-              "userName": "许明",
-              "sessionId": "123456"
-            };
             formData.userInfo = userInfo;
 
             //获得选中的节点

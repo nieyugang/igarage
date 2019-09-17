@@ -70,11 +70,7 @@
                 contentType: 'application/json',
                 url: baseUrl + '/getRoleList.json',
                 where: {
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
+                    "userInfo": userInfo,
                     "pageNo": 1,
                     "pageSize": 20
                 },
@@ -150,11 +146,7 @@
                                     url: baseUrl + '/roleDelete.json',
                                     type: 'POST',
                                     data: JSON.stringify({
-                                        "userInfo": {
-                                            "userId": 1,
-                                            "userName": "许明",
-                                            "sessionId": "123456"
-                                        },
+                                        "userInfo": userInfo,
                                         "roleId": roleId
                                     }),
                                     contentType: "application/json",
@@ -192,7 +184,7 @@
                             title: false,
                             anim: 1,
                             area: ['800px', '400px'],
-                            content: './roleAuthorization.html?roleId=' + data.roleId+"&roleName="+ encodeURIComponent(data.roleName),
+                            content: './roleAuthorization.html?roleId=' + data.roleId + "&roleName=" + encodeURIComponent(data.roleName),
                             end: function () {
                                 table.reload('role');
                             }

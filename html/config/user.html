@@ -88,11 +88,7 @@
                 url: baseUrl + '/getOrgTree.json',
                 type: 'POST',
                 data: JSON.stringify({
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
+                    "userInfo": userInfo,
                     "orgId": 1
                 }),
                 contentType: "application/json",
@@ -122,11 +118,7 @@
 
                             tableIns.reload({
                                 where: {
-                                    "userInfo": {
-                                        "userId": 1,
-                                        "userName": "许明",
-                                        "sessionId": "123456"
-                                    },
+                                    "userInfo": userInfo,
                                     "orgId": orgId
                                 },
                                 page: {
@@ -151,11 +143,7 @@
                 url: baseUrl + '/getUserList.json',
                 page: true,
                 where: {
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
+                    "userInfo": userInfo,
                     "orgId": 1
                 },
                 parseData: function (res) {
@@ -232,11 +220,7 @@
                                     url: baseUrl + '/userDelete.json',
                                     type: 'POST',
                                     data: JSON.stringify({
-                                        "userInfo": {
-                                            "userId": 1,
-                                            "userName": "许明",
-                                            "sessionId": "123456"
-                                        },
+                                        "userInfo": userInfo,
                                         "userId": userId
                                     }),
                                     contentType: "application/json",
@@ -260,8 +244,8 @@
                             });
                         }
                         break;
-                        };
-                });
+                };
+            });
         });
         // js 递归返回的组织树
         function getTreeJson(childrens) {

@@ -30,11 +30,7 @@
       //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
       type: 'POST',
       data: JSON.stringify({
-        "userInfo": {
-          "userId": 1,
-          "userName": "许明",
-          "sessionId": "123456"
-        },
+        "userInfo": userInfo,
         "orgId": 1
       }),
       contentType: "application/json",
@@ -63,47 +59,43 @@
     });
 
 
-      //获取角色data
-      $.ajax({
-        url: baseUrl + '/getRoleList.json',
-        type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-          "userInfo": {
-            "userId": 1,
-            "userName": "许明",
-            "sessionId": "123456"
-          },
-        }),
-        success: function (res) {
-          var roleList = res.roleList;
-          var data = [];
-          for (var i in roleList) {
-            if (roleList.hasOwnProperty(i)) {
-              var element = roleList[i];
-              var name = element.roleName;
-              var value = element.roleId;
-              var selected = "";
-              var disabled = "";
-              var role = {
-                "name": name,
-                "value": value,
-                "selected": selected,
-                "disabled": disabled
-              };
-              data.push(role);
-            }
+    //获取角色data
+    $.ajax({
+      url: baseUrl + '/getRoleList.json',
+      type: 'POST',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        "userInfo": userInfo,
+      }),
+      success: function (res) {
+        var roleList = res.roleList;
+        var data = [];
+        for (var i in roleList) {
+          if (roleList.hasOwnProperty(i)) {
+            var element = roleList[i];
+            var name = element.roleName;
+            var value = element.roleId;
+            var selected = "";
+            var disabled = "";
+            var role = {
+              "name": name,
+              "value": value,
+              "selected": selected,
+              "disabled": disabled
+            };
+            data.push(role);
           }
-          // 设置select_role 的值  formSelects.value('select_role', [2, 4]);  获取：formSelects.value('select_role'); // [{"name":"上海","val":"2"},{"name":"深圳","val":"4"}]
-          layui.formSelects.data('select_role', 'local', {
-            arr: data
-          });
-        },
-        error: function () {
-          layer.msg("与服务器通信异常！");
         }
-      });
+        // 设置select_role 的值  formSelects.value('select_role', [2, 4]);  获取：formSelects.value('select_role'); // [{"name":"上海","val":"2"},{"name":"深圳","val":"4"}]
+        layui.formSelects.data('select_role', 'local', {
+          arr: data
+        });
+      },
+      error: function () {
+        layer.msg("与服务器通信异常！");
+      }
+    });
 
     // js 递归返回的组织树
     function getTreeJson(childrens) {
