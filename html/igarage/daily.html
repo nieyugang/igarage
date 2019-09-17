@@ -349,7 +349,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">监控名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cameraName" autocomplete="off" id="cameraName" lay-verify="cameraName"
+                        <input type="text" name="cameraName" autocomplete="off" id="cameraName"
                                placeholder="监控名称"
                                lay-reqtext="监控名称不能为空" lay-verify="required" class="layui-input">
                     </div>
@@ -357,22 +357,22 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">监控类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cameraType" autocomplete="off" id="cameraType" lay-verify="cameraType"
+                        <input type="text" name="cameraType" autocomplete="off" id="cameraType"
                                placeholder="监控类型"
-                               lay-reqtext="监控类型不能为空" lay-verify="required" class="layui-input" value="1">
+                                   lay-reqtext="监控类型不能为空" lay-verify="required" class="layui-input" value="1">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">监控ip</label>
                     <div class="layui-input-block">
-                        <input type="text" name="ip" autocomplete="off" id="ip" lay-verify="ip" placeholder="监控ip"
+                        <input type="text" name="ip" autocomplete="off" id="ip" placeholder="监控ip"
                                lay-reqtext="监控ip不能为空" lay-verify="required" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">监控端口</label>
                     <div class="layui-input-block">
-                        <input type="text" name="port" autocomplete="off" id="port" lay-verify="port"
+                        <input type="text" name="port" autocomplete="off" id="port"
                                placeholder="监控端口"
                                lay-reqtext="监控端口不能为空" lay-verify="required" class="layui-input">
                     </div>
@@ -381,14 +381,14 @@
                     <label class="layui-form-label">登录账号</label>
                     <div class="layui-input-block">
                         <input type="text" name="loginAccount" autocomplete="off" id="loginAccount"
-                               lay-verify="loginAccount" placeholder="登录账号"
+                               placeholder="登录账号"
                                lay-reqtext="登录账号不能为空" lay-verify="required" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">登录密码</label>
                     <div class="layui-input-block">
-                        <input type="text" name="password" autocomplete="off" id="password" lay-verify="password"
+                        <input type="text" name="password" autocomplete="off" id="password"
                                placeholder="登录密码"
                                lay-reqtext="登录密码不能为空" lay-verify="required" class="layui-input">
                     </div>
@@ -397,13 +397,13 @@
                     <label class="layui-form-label">安装地址</label>
                     <div class="layui-input-block">
                         <input type="text" name="installAddress" autocomplete="off" id="installAddress"
-                               lay-verify="installAddress" placeholder="安装地址"
+                               placeholder="安装地址"
                                lay-reqtext="安装地址不能为空" lay-verify="required" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="add">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="formSubmit">立即提交</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -466,6 +466,7 @@
 
         //监听提交
         form.on('submit(formSubmit)', function () {
+            return;
             var data = $("#cameraEditPageFrom").serializeObject();
             var url = "cameraAdd.json";
             if (data.id) {
