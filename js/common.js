@@ -19,11 +19,7 @@ function ajaxSend(event, jqXHR, options) {
     } else {
         data = JSON.parse(options.data);
     }
-    data.userInfo = {
-        "userId": 1,
-        "userName": "许明",
-        "sessionId": "123456"
-    };
+    data.userInfo = userInfo;
     options.data = JSON.stringify(data);
 }
 
