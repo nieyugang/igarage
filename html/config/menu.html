@@ -73,15 +73,15 @@
     <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+    <script src="../../js/common.js"></script>
     <!-- js funcitons -->
     <script>
         //获取组织机构数据nodes:[{},{}]
-        var baseUrl = "/hqigservice";
         var nodes = [];
         var menuId;
         layui.use(['tree', 'element', 'form', 'table'], function () {
             $.ajax({
-                url: baseUrl + '/getMenuList.json',
+                url: backServiceUrl + '/getMenuList.json',
                 type: 'POST',
                 data: JSON.stringify({
                     "userInfo": userInfo,
@@ -144,61 +144,40 @@
                             }
                         }
                     });
+                    var cols = [[
+                        { type: 'radio', fixed: 'left' },
+                        { type: 'numbers', title: '序号', align: 'center' },
+                        { field: 'menuId', title: '菜单ID', sort: false, hide: true },
+                        { field: 'menuName', title: '菜单名称', sort: false, align: 'center' },
+                        {
+                            field: 'menuType', title: '菜单类型', sort: true, align: 'center', templet: function (item) {
+                                if (item.menuType == 'D') {
+                                    return "目录";
+                                } else {
+                                    return "功能";
+                                }
+                            }
+                        },
+                        {
+                            field: 'reserve', title: '是否有效', sort: true, align: 'center', templet: function (item) {
+                                if (item.reserve == 'OFF') {
+                                    return "无效";
+                                } else {
+                                    return "有效"
+                                }
+                            }
+                        },
+                    ]];
+                    function parseData(res) {
+                        return {
+                            code: 0,
+                            msg: "",
+                            count: res.menuInfo.subMenuList.length,
+                            data: res.menuInfo.subMenuList //只加载它的直属子节点
+                        };
+                    };
                     // 表格初始化
-                    var tableIns = table.render({
-                        title: '基础-用户信息表',
-                        elem: '#t-menu',
-                        height: 'full-200',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        url: baseUrl + '/getMenuList.json',
-                        where: {
-                            "userInfo": userInfo,
-                            "menuId": menuId
-                        },
-                        parseData: function (res) {
-                            return {
-                                code: 0,
-                                msg: "",
-                                count: res.menuInfo.subMenuList.length,
-                                data: res.menuInfo.subMenuList //只加载它的直属子节点
-                            };
-                        },
-                        toolbar: '#toolbar',
-                        page: true,
-                        cols: [[
-                            { type: 'radio', fixed: 'left' },
-                            { type: 'numbers', title: '序号', align: 'center' },
-                            { field: 'menuId', title: '菜单ID', sort: false, hide: true },
-                            { field: 'menuName', title: '菜单名称', sort: false, align: 'center' },
-                            {
-                                field: 'menuType', title: '菜单类型', sort: true, align: 'center', templet: function (item) {
-                                    if (item.menuType == 'D') {
-                                        return "目录";
-                                    } else {
-                                        return "功能";
-                                    }
-                                }
-                            },
-                            {
-                                field: 'reserve', title: '是否有效', sort: true, align: 'center', templet: function (item) {
-                                    if (item.reserve == 'OFF') {
-                                        return "无效";
-                                    } else {
-                                        return "有效"
-                                    }
-                                }
-                            },
-                        ]]
-                    })
-
-                    //监听提交
-                    form.on('submit(formDemo)', function (data) {
-                        layer.msg(JSON.stringify(data.field));
-                        return false;
-                    });
-
-
+                    var tableIns = initTable(table, "菜单管理", "t-menu", 20, "/getMenuList.json", { "userInfo": userInfo, "menuId": menuId }, parseData, cols, "#toolbar", "");
                     // 监听头部工具栏事件
                     table.on('toolbar(t-menu)', function (obj) {
                         var checkStatus = table.checkStatus(obj.config.id);
@@ -222,8 +201,7 @@
                                 } else {
                                     for (var i in checkStatus.data) {
                                         if (checkStatus.data.hasOwnProperty(i)) {
-                                            var element = checkStatus.data[i];
-                                            var node_id = element.menuId;
+                                            var node_id = checkStatus.data[i].menuId;
                                             del(node_id);
                                         }
                                     }
@@ -232,44 +210,13 @@
                                 break;
                         };
                     });
-
                     // 删除
                     function del(node_id) {
                         if (node_id == '0') {
                             layer.msg("根节点无法删除", function () { });
                             return false;
                         } else {
-                            layer.confirm('确定删除吗？', function (index) {
-                                $.ajax({
-                                    url: baseUrl + '/menuDelete.json',
-                                    type: 'POST',
-                                    data: JSON.stringify({
-                                        "userInfo": userInfo,
-                                        "menuId": node_id
-                                    }),
-                                    contentType: "application/json",
-                                    dataType: 'json',
-                                    async: true,
-                                    success: function (res) {
-                                        if (res.resFlag == "N") {
-                                            layer.msg('操作成功', { icon: 1 });
-                                            setTimeout(function () {
-                                                tableIns.reload({
-                                                    where: {
-                                                        menuId: menuId
-                                                    }
-                                                });
-                                            }, 2000);
-
-                                        } else {
-                                            layer.msg(res.resFlag, { icon: 2 });
-                                        }
-                                    },
-                                    error: function () {
-                                        layer.msg(res.resFlag, { icon: 2 });
-                                    }
-                                });
-                            });
+                            sendDelRequest("/menuDelete.json", JSON.stringify({ "userInfo": userInfo, "menuId": node_id }), tableIns);
                         }
                     };
                     //编辑

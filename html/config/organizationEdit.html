@@ -96,6 +96,7 @@
   <script src="../../vendor/jquery/jquery.js"></script>
   <script src="../../vendor/layui/layui.js"></script>
   <script src="../../js/front.js"></script>
+  <script src="../../js/common.js"></script>
 
   <script>
     //配置插件目录
@@ -103,8 +104,6 @@
       base: '../../vendor/layui/lay/modules/'
       , version: '1.0'
     });
-
-    var baseUrl = "/hqigservice";
     //加载模块
     layui.use(['form', 'layedit', 'layarea'], function () {
       var form = layui.form;
@@ -115,7 +114,7 @@
       //表单初始赋值
       var parent_id = RequestParameter()["parent_id"];
       $.ajax({
-        url: baseUrl + '/getOrgTree.json',
+        url: backServiceUrl + '/getOrgTree.json',
         type: 'POST',
         data: JSON.stringify({
           "userInfo": userInfo,
@@ -175,27 +174,7 @@
         formData.provinceId = 320200;
         formData.orgId = parseInt(formData.orgId);
         //提交
-        $.ajax({
-          url: baseUrl + '/orgUpdate.json',
-          type: 'POST',
-          contentType: 'application/json',
-          dataType: 'json',
-          data: JSON.stringify(formData),
-          success: function (res) {
-            if (res.resFlag == "N") {
-              layer.msg('操作成功', { icon: 1 });
-              setTimeout(function () {
-                window.parent.layer.closeAll();//关闭弹窗
-              }, 3000);
-            } else {
-              layer.msg('通信异常', { icon: 2 });
-            }
-          },
-          error: function () {
-            layer.msg('通信异常', { icon: 2 });
-          }
-
-        });
+        sendSubmitRequest("/orgUpdate.json", JSON.stringify(formData));
         return false;
       });
     });

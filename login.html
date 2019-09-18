@@ -99,9 +99,9 @@
   <script src="vendor/popper.js/umd/popper.min.js"> </script>
   <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-  <script src="../../vendor/layui/layui.js"></script>
+  <script src="vendor/layui/layui.js"></script>
   <!-- md5插件 -->
-  <script src="../../vendor/md5/md5.js"></script>
+  <script src="vendor/md5/md5.js"></script>
   <!-- 主题切换 -->
   <script src="js/login-theme.js"></script>
 
@@ -109,7 +109,7 @@
     layui.use(['form', 'layer'], function () {
       var layer = layui.layer;
 
-      var baseUrl = "/hqigservice";
+      var backServiceUrl = "/hqigservice";
       var $ = layui.$
         , setter = layui.setter
         , form = layui.form
@@ -120,7 +120,7 @@
       //提交
       form.on('submit(LAY-user-login-submit)', function (data) {
         $.ajax({
-          url: baseUrl + '/login.json',
+          url: backServiceUrl + '/login.json',
           type: 'post',
           dataType: 'JSON',
           contentType: "application/json",
@@ -189,6 +189,10 @@
                       value: res.userInfo.userName
                     }
                   ]
+                });
+                layui.sessionData('menuInfoStorage', {
+                  key: 'menuInfo',
+                  value: JSON.stringify(res.menuList)
                 });
                 location.href = "./index.html";
               });

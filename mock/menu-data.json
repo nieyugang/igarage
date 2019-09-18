@@ -1,16 +1,14 @@
 {
   "resFlag": "N",
-  "menuInfoList": [
-    {
+  "menuInfoList": [{
       "menuId": 1,
       "menuName": "基础信息管理",
       "parentMenuId": 0,
       "menuType": "D",
-     "menuFunc": "config",
+      "menuFunc": "config",
       "reserve": null,
       "enable": true,
-      "subMenuList": [
-        {
+      "subMenuList": [{
           "menuId": 11,
           "menuName": "用户管理",
           "parentMenuId": 1,
@@ -70,8 +68,7 @@
       "menuFunc": "work",
       "reserve": null,
       "enable": true,
-      "subMenuList": [
-        {
+      "subMenuList": [{
           "menuId": 21,
           "menuName": "设备预警",
           "parentMenuId": 1,
@@ -131,8 +128,7 @@
       "menuFunc": "monitor",
       "reserve": null,
       "enable": true,
-      "subMenuList": [
-        {
+      "subMenuList": [{
           "menuId": 31,
           "menuName": "地图展示",
           "parentMenuId": 1,
@@ -147,7 +143,7 @@
           "menuName": "大数据监控",
           "parentMenuId": 1,
           "menuType": "F",
-          "menuFunc": "monitor/bigdata.html",  
+          "menuFunc": "monitor/bigdata.html",
           "reserve": null,
           "enable": false,
           "subMenuList": []
@@ -162,8 +158,7 @@
       "menuFunc": "cpzx",
       "reserve": null,
       "enable": true,
-      "subMenuList": [
-        {
+      "subMenuList": [{
           "menuId": 41,
           "menuName": "电瓶车充电站",
           "parentMenuId": 3,
@@ -171,8 +166,7 @@
           "menuFunc": "ebike",
           "reserve": null,
           "enable": true,
-          "subMenuList": [
-            {
+          "subMenuList": [{
               "menuId": 411,
               "menuName": "管理",
               "parentMenuId": 1,
@@ -232,8 +226,7 @@
           "menuFunc": "charge",
           "reserve": null,
           "enable": true,
-          "subMenuList": [
-            {
+          "subMenuList": [{
               "menuId": 421,
               "menuName": "管理",
               "parentMenuId": 1,
@@ -291,8 +284,7 @@
           "menuFunc": "igarage",
           "reserve": null,
           "enable": true,
-          "subMenuList": [
-            {
+          "subMenuList": [{
               "menuId": 431,
               "menuName": "车库维护",
               "parentMenuId": 1,
@@ -453,19 +445,45 @@
   },
   "alert": {
     "total": 12,
-    "info": [
-      { "type": "a1", "time": 1, "msg": "a1111" },
-      { "type": "a2", "time": 2, "msg": "a2222" },
-      { "type": "a3", "time": 3, "msg": "a3333" },
-      { "type": "a4", "time": 4, "msg": "a4444" }
+    "info": [{
+        "type": "a1",
+        "time": 1,
+        "msg": "a1111"
+      },
+      {
+        "type": "a2",
+        "time": 2,
+        "msg": "a2222"
+      },
+      {
+        "type": "a3",
+        "time": 3,
+        "msg": "a3333"
+      },
+      {
+        "type": "a4",
+        "time": 4,
+        "msg": "a4444"
+      }
     ]
   },
   "mail": {
     "total": 10,
-    "info": [
-      { "type": "m1", "time": 1, "msg": "m1111" },
-      { "type": "m2", "time": 2, "msg": "m2222" },
-      { "type": "m3", "time": 3, "msg": "m3333" }
+    "info": [{
+        "type": "m1",
+        "time": 1,
+        "msg": "m1111"
+      },
+      {
+        "type": "m2",
+        "time": 2,
+        "msg": "m2222"
+      },
+      {
+        "type": "m3",
+        "time": 3,
+        "msg": "m3333"
+      }
     ]
   }
 }

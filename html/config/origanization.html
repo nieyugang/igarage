@@ -70,41 +70,41 @@
     <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+    <script src="../../js/common.js"></script>
     <!-- js funcitons -->
     <script>
         //获取组织机构数据nodes:[{},{}]
-        var baseUrl = "/hqigservice";
-        var orgId = 1;
-        var nodes = [];
-        $.ajax({
-            url: baseUrl + '/getOrgTree.json',
-            //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
-            type: 'POST',
-            data: JSON.stringify({
-                "userInfo": userInfo,
-                "orgId": orgId
-            }),
-            contentType: "application/json",
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                var orgTrees = res.orgTreeInfo;
-                //处理返回数据
-                var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+        layui.use(['tree', 'table'], function () {
+            var orgId = 1;
+            var nodes = [];
+            var tree = layui.tree;
+            var table = layui.table;
+            $.ajax({
+                url: backServiceUrl + '/getOrgTree.json',
+                type: 'POST',
+                data: JSON.stringify({
+                    "userInfo": userInfo,
+                    "orgId": orgId
+                }),
+                contentType: "application/json",
+                dataType: 'json',
+                async: true,
+                success: function (res) {
+                    var orgTrees = res.orgTreeInfo;
+                    //处理返回数据
+                    var orgTreeInfo = res.orgTreeInfo;// 顶层节点
 
-                var childrens;
-                childrens = getTreeJson(orgTreeInfo.childOrgList);
-                var root_node = {
-                    "id": orgTreeInfo.orgId,
-                    "title": orgTreeInfo.orgName,
-                    "spread": true,
-                    "children": childrens
-                };// 存放tree数据
-                nodes.push(root_node);
+                    var childrens;
+                    childrens = getTreeJson(orgTreeInfo.childOrgList);
+                    var root_node = {
+                        "id": orgTreeInfo.orgId,
+                        "title": orgTreeInfo.orgName,
+                        "spread": true,
+                        "children": childrens
+                    };// 存放tree数据
+                    nodes.push(root_node);
 
-                layui.use(['tree', 'table'], function () {
-                    var tree = layui.tree;
-                    var table = layui.table;
+
                     //渲染tree
                     tree.render({
                         elem: '#orgTree',
@@ -151,42 +151,26 @@
                         },
                     });
                     // 表格初始化
-                    var tableIns = table.render({
-                        title: '基础-用户信息表',
-                        elem: '#t-organization',
-                        height: 'full-200',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        limit: 30,
-                        url: baseUrl + '/getOrgTree.json',
-                        where: {
-                            "userInfo": userInfo,
-                            "pageNo": 1,
-                            "pageSize": 20,
-                            "orgId": orgId
-                        },
-                        parseData: function (res) {
-                            return {
-                                code: 0,
-                                msg: "",
-                                count: res.orgTreeInfo.childOrgList.length,
-                                data: res.orgTreeInfo.childOrgList //只加载它的直属子节点
-                            };
-                        },
-                        toolbar: '#toolbar',
-                        page: true,
-                        cols: [[
-                            { type: 'radio', fixed: 'left' },
-                            { type: 'numbers', title: '序号', align: 'center' },
-                            { field: 'orgId', title: '机构ID', sort: false, hide: true },
-                            { field: 'orgName', title: '机构名称', sort: false, align: 'center' },
-                            { field: 'principal', title: '负责人', sort: true, align: 'center' },
-                            { field: 'mobile', title: '联系方式', sort: true, align: 'center' },
-                            { field: 'provinceId', title: '所在省', sort: true, align: 'center' },
-                            { field: 'cityId', title: '所在市', sort: true, align: 'center' },
-                        ]]
-                    })
-
+                    var cols = [[
+                        { type: 'radio', fixed: 'left' },
+                        { type: 'numbers', title: '序号', align: 'center' },
+                        { field: 'orgId', title: '机构ID', sort: false, hide: true },
+                        { field: 'orgName', title: '机构名称', sort: false, align: 'center' },
+                        { field: 'principal', title: '负责人', sort: true, align: 'center' },
+                        { field: 'mobile', title: '联系方式', sort: true, align: 'center' },
+                        { field: 'provinceId', title: '所在省', sort: true, align: 'center' },
+                        { field: 'cityId', title: '所在市', sort: true, align: 'center' },
+                    ]];
+                    function parseData(res) {
+                        return {
+                            code: 0,
+                            msg: "",
+                            count: res.orgTreeInfo.childOrgList.length,
+                            data: res.orgTreeInfo.childOrgList //只加载它的直属子节点
+                        };
+                    };
+                    // 表格初始化
+                    var tableIns = initTable(table, "基础-机构管理", "t-organization", 20, "/getOrgTree.json", { "userInfo": userInfo, "orgId": orgId }, parseData, cols, "#toolbar", "");
                     // 监听头部工具栏事件
                     table.on('toolbar(t-organization)', function (obj) {
                         var checkStatus = table.checkStatus(obj.config.id);
@@ -217,33 +201,7 @@
 
                     // 删除
                     function del(node_id) {
-                        layer.confirm('确定删除吗？', function (index) {
-                            $.ajax({
-                                url: baseUrl + '/orgDelete.json',
-                                type: 'POST',
-                                data: JSON.stringify({
-                                    "userInfo": userInfo,
-                                    "orgId": node_id
-                                }),
-                                contentType: "application/json",
-                                dataType: 'json',
-                                async: true,
-                                success: function (res) {
-                                    if (res.resFlag == "N") {
-                                        layer.msg('操作成功', { icon: 1 });
-                                        setTimeout(function () {
-                                            table.reload('t-organization');
-                                        }, 2000);
-
-                                    } else {
-                                        layer.msg(res.resFlag, { icon: 2 });
-                                    }
-                                },
-                                error: function () {
-                                    layer.msg(res.resFlag, { icon: 2 });
-                                }
-                            });
-                        });
+                        sendDelRequest("/userDelete.json", JSON.stringify({ "userInfo": userInfo, "orgId": node_id }), tableIns);
                     };
                     //编辑
                     function edit(node_id) {
@@ -254,35 +212,37 @@
                             area: ['800px', '500px'],
                             content: './organizationEdit.html?parent_id=' + node_id,
                             end: function () {
-                                table.reload('t-organization');
+                                tableReload(tableIns);
                             }
                         });
                     };
 
-                });
-            },
-            error: function () {
-                layer.msg("操作失败");
+
+                },
+                error: function () {
+                    layer.msg("操作失败");
+                }
+            });
+
+            // js 递归返回的组织树
+            function getTreeJson(childrens) {
+                var child_node = [];
+                for (var i in childrens) {
+                    var node = {
+                        "id": childrens[i].orgId,
+                        "title": childrens[i].orgName,
+                        // "spread": true,
+                    };// 存放tree数据
+                    var childrens_node = childrens[i].childOrgList;
+                    if (childrens_node != 0) {
+                        var son = getTreeJson(childrens_node);
+                        node.children = son;
+                    }
+                    child_node.push(node);
+                }
+                return child_node;
             }
         });
-        // js 递归返回的组织树
-        function getTreeJson(childrens) {
-            var child_node = [];
-            for (var i in childrens) {
-                var node = {
-                    "id": childrens[i].orgId,
-                    "title": childrens[i].orgName,
-                    // "spread": true,
-                };// 存放tree数据
-                var childrens_node = childrens[i].childOrgList;
-                if (childrens_node != 0) {
-                    var son = getTreeJson(childrens_node);
-                    node.children = son;
-                }
-                child_node.push(node);
-            }
-            return child_node;
-        }
     </script>
 </body>
 

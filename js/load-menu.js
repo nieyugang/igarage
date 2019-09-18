@@ -1,6 +1,6 @@
 //菜单与图标对照表
 //请勿修改或删除
- var _menuSlideIcon_=[  
+ var _menuSlideIcon_=[
   {
     "menuId": 1,
     "icon": "address-card-o"
@@ -31,15 +31,13 @@
  * 获取菜单数据，在异步回调中渲染侧边栏数据，并对二级菜单绑定监听事件（高亮、伸展）
 */
 ;(function() {
-  $.getJSON("mock/menu-data.json", function(res){
-      if(res.resFlag === "N"){
-        // 侧边栏菜单数据动态渲染 
+        // 侧边栏菜单数据动态渲染
         var hxConfigCenter = [];
         var hxPrdCenter = [];
         //侧边栏数据
-        var menuInfoList = res.menuInfoList;  
+        var menuInfoList =JSON.parse(layui.sessionData('menuInfoStorage').menuInfo);
         //侧边栏图标数据
-        var _menuSlideIcon_ = window._menuSlideIcon_;  
+        var _menuSlideIcon_ = window._menuSlideIcon_;
         //产品中心分割数据，分别进行配置中心、产品中心数据渲染
         for (var i = 0; i < menuInfoList.length; i++) {
           if (menuInfoList[i].menuName === "产品中心") {
@@ -48,14 +46,14 @@
             hxConfigCenter.push(menuInfoList[i]);
           }
         }
-        var sSubmenu = "";    
+        var sSubmenu = "";
         sSubmenu += '<span class="heading" id="hx-config-center">配置中心</span>';
         submenuListFn(hxConfigCenter);
         sSubmenu += '<span class="heading" id="hx-prd-center">产品中心</span>';
-        var hxPrdCenterList = hxPrdCenter[0].subMenuList;
+        var hxPrdCenterList =hxPrdCenter.length==0?"":hxPrdCenter[0].subMenuList;
         submenuListFn(hxPrdCenterList)
         $("#hx-slideMenu").html(sSubmenu);
-  
+
         //侧边栏数据递归，加入图标
         function submenuListFn(subMenu, selectAttr) {
           if (!subMenu) return;
@@ -78,7 +76,7 @@
                   if(_menuSlideIcon_[j].menuId === subMenu[i].menuId){
                     menuTitIcon = _menuSlideIcon_[j].icon;
                     break;
-                  }           
+                  }
                 }
                 sSubmenu += '<li data-type="'+ menuType +'" attr="' + menuFunc + '"> <a href="#' + selectAttr + '" aria-expanded="false" data-toggle="collapse"><i class="fa fa-' + menuTitIcon + '"></i>' + menuTit + '</a>';
                 submenuListFn(subMenuList, selectAttr)
@@ -90,7 +88,7 @@
             sSubmenu += '</ul>';
           }
         }
-        
+
         //侧边栏菜单遍历添加点击 高亮、伸展 事件
         var navMenuBar = $("#hx-slideMenu .list-unstyled li");
         for (var i = 0; i < navMenuBar.length; i++) {
@@ -116,7 +114,7 @@
             }()
           }
         }
-  
+
       // ------------------------------------------------------ //
       // 设置自定义滚动条
       // ------------------------------------------------------ //
@@ -158,16 +156,30 @@
         }, 400);
       }
       // ------------------------------------------------------ //
-    }
+
     window.hx_onScroll = hx_onScroll
     window.hx_setScrollHeight = hx_setScrollHeight
-  })
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      if (decodedCookie) {
+        var ca = decodedCookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          if (c.trim().indexOf(name) === 0) {
+            return c.trim().substring(name.length, c.length);
+          }
+        }
+      }
+      return "";
+    }
 })()
 
 
 
 
- 
+
 
 
 

@@ -17,7 +17,7 @@
   <div class="container">
     <div class="layui-form">
       <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>组织机构编辑</legend>
+        <legend>菜单新增</legend>
       </fieldset>
       <form class="layui-form layui-form-pane" action="" lay-filter="menu-detail">
         <div class="layui-form-item">
@@ -67,6 +67,7 @@
   <script src="../../vendor/jquery/jquery.js"></script>
   <script src="../../vendor/layui/layui.js"></script>
   <script src="../../js/front.js"></script>
+  <script src="../../js/common.js"></script>
 
   <script>
     //配置插件目录
@@ -75,7 +76,7 @@
       , version: '1.0'
     });
 
-    var baseUrl = "/hqigservice";
+    var backServiceUrl = "/hqigservice";
     //加载模块
     layui.use(['form', 'layedit', 'layarea'], function () {
       var form = layui.form;
@@ -137,28 +138,8 @@
         formData.userInfo = userInfo;
         //TODO  省市由于数据不全，暂时无法处理
         formData.parentMenuId = parseInt(formData.parentMenuId);
-        //提交
-        $.ajax({
-          url: baseUrl + '/menuAdd.json',
-          type: 'POST',
-          contentType: 'application/json',
-          dataType: 'json',
-          data: JSON.stringify(formData),
-          success: function (res) {
-            if (res.resFlag == "N") {
-              layer.msg('操作成功', { icon: 1 });
-              setTimeout(function () {
-                window.parent.layer.closeAll();//关闭弹窗
-              }, 2000);
-            } else {
-              layer.msg('通信异常', { icon: 2 });
-            }
-          },
-          error: function () {
-            layer.msg('通信异常', { icon: 2 });
-          }
-
-        });
+        // 提交
+        sendSubmitRequest("/menuAdd.json", JSON.stringify(formData));
         return false;
       });
     });

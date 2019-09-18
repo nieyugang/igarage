@@ -110,14 +110,13 @@
   <!-- md5插件 -->
   <script src="../../vendor/md5/md5.js"></script>
   <script src="../../js/front.js"></script>
+  <script src="../../js/common.js"></script>
 
   <script>
-    var baseUrl = "/hqigservice";
     //加载组织树
     var nodes = [];
     $.ajax({
-      url: baseUrl + '/getOrgTree.json',
-      //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
+      url: backServiceUrl + '/getOrgTree.json',
       type: 'POST',
       data: JSON.stringify({
         "userInfo": userInfo,
@@ -149,7 +148,7 @@
     });
     //获取角色data
     $.ajax({
-      url: baseUrl + '/getRoleList.json',
+      url: backServiceUrl + '/getRoleList.json',
       type: 'POST',
       contentType: 'application/json',
       dataType: 'json',
@@ -231,27 +230,7 @@
         formData.roleId = parseInt(formData.roleId);
         formData.orgId = parseInt(formData.orgId);
         // 提交
-        $.ajax({
-          url: baseUrl + '/userUpdate.json',
-          type: 'POST',
-          contentType: 'application/json',
-          dataType: 'json',
-          data: JSON.stringify(formData),
-          success: function (res) {
-            if (res.resFlag == "N") {
-              layer.msg('操作成功', { icon: 1 });
-              setTimeout(function () {
-                window.parent.layer.closeAll();//关闭弹窗
-              }, 3000);
-            } else {
-              layer.msg(res.resFlag, { icon: 2 });
-            }
-          },
-          error: function (res) {
-            layer.msg(res.resFlag, { icon: 2 });
-          }
-
-        });
+        sendSubmitRequest("/userUpdate.json", JSON.stringify(formData));
         return false;
       });
     });
