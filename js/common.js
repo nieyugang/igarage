@@ -1,4 +1,4 @@
-var backServiceUrl = "/hqigservice";
+var backServiceUrl = "/hqigservice/";
 /**
  * 所有通过ajax请求的处理
  */
@@ -10,7 +10,8 @@ jQuery(document).ajaxStart(ajaxStart)
 /**
  * 显示loading
  */
-function ajaxStart() {};
+function ajaxStart() {
+};
 
 function ajaxSend(event, jqXHR, options) {
     var data;
@@ -24,9 +25,38 @@ function ajaxSend(event, jqXHR, options) {
 };
 
 /**
- * 隐藏loading
+ * ajax结束后的处理
  */
-function ajaxComplete(event, xhr, settings) {};
+function ajaxComplete(event, xhr, settings) {
+    if (xhr) {
+        if (xhr.responseJSON) {
+            if (xhr.responseJSON.resFlag === "E") {
+                if (xhr.responseJSON.resCode === "USER0002") { //用户会话超时，请重新登录
+                    layer.open({
+                        title: '异常警告',
+                        closeBtn: 0,
+                        icon: 5,
+                        anim: 6,
+                        content: xhr.responseJSON.resMsg,
+                        yes: function (layero) {
+                            layui.sessionData('userInfoStorage', null); //删除userInfoStorage
+                            layui.sessionData('menuInfoStorage', null);
+                            parent.location.href = window.location.origin + "/login.html";
+                        }
+                    });
+                } else {
+                    layer.open({
+                        title: '异常警告',
+                        closeBtn: 0,
+                        icon: 5,
+                        anim: 6,
+                        content: xhr.responseJSON.resMsg,
+                    });
+                }
+            }
+        }
+    }
+};
 
 /**
  * ajax错误处理
@@ -54,26 +84,20 @@ function ajaxError(e, jqxhr, settings, exception) {
         }
     }
     if (!response) {
-        $.gritter.add({
-            text: "请将浏览器刷新后重试，如出现重复错误请联系管理员",
-            class_name: "gritter-warning gritter-light"
+        layer.open({
+            title: '异常警告',
+            closeBtn: 0,
+            icon: 5,
+            anim: 6,
+            content: "请将浏览器刷新后重试，如出现重复错误请联系管理员",
+            yes: function (layero) {
+                layer.closeAll();
+            }
         });
-    } else {}
-};
-
-/**
- *获取系统的baseurl
- * @returns baseurl
- */
-function getBaseUrl() {
-    if (window.baseUrl) {
-        return window.baseUrl;
-    } else if (parent.window.baseUrl) {
-        return parent.window.baseUrl;
-    } else if (parent.parent.window.baseUrl) {
-        return parent.parent.window.baseUrl;
+    } else {
     }
 };
+
 /**
  *
  *
@@ -121,7 +145,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols) {
         where: where,
         contentType: 'application/json',
         cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            ,
+        ,
         parseData: parseData,
         cols: cols,
         page: false
@@ -137,7 +161,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols) {
 function tableReload(table, where) {
     table.reload({
         where: where //设定异步数据接口的额外参数
-            ,
+        ,
         page: {
             curr: 1 //重新从第 1 页开始
         }
@@ -150,7 +174,7 @@ function noPageTableReload(table, where) {
     });
 };
 
-function initTree(ztree, elem, url, where, clickOrg,operateOrg) {
+function initTree(ztree, elem, url, where, clickOrg, operateOrg) {
     var nodes = [];
     sendAjaxRequest("POST", url, "json", where, getOrgTreeSuccess, getOrgTreeError);
 
@@ -174,32 +198,8 @@ function initTree(ztree, elem, url, where, clickOrg,operateOrg) {
                 showLine: false, //是否开启连接线
                 onlyIconControl: true, //是否仅允许节点左侧图标控制展开收缩
                 click: clickOrg,
-                operate:operateOrg
+                operate: operateOrg
             });
-        } else if (res.resFlag == "E") {
-            if (res.resCode == "USER0002") { //用户会话超时，请重新登录
-                layer.open({
-                    title: '异常警告',
-                    closeBtn: 0,
-                    icon: 5,
-                    anim: 6,
-                    content: res.resMsg,
-                    yes: function (layero) {
-                        //删除缓存
-                        layui.sessionData('userInfoStorage', null);
-                        layui.sessionData('menuInfoStorage', null);
-                        parent.location.href = window.location.origin + "/login.html";
-                    }
-                });
-            } else {
-                layer.open({
-                    title: '异常警告',
-                    closeBtn: 0,
-                    icon: 5,
-                    anim: 6,
-                    content: res.resMsg,
-                });
-            }
         }
     };
 
@@ -255,6 +255,7 @@ function sendAjaxRequest(type, url, dataType, data, successCallback, errorCallba
         error: errorCallback
     })
 };
+
 /**
  *
  *通用删除方法
@@ -280,29 +281,6 @@ function sendDelRequest(url, data, tableIns) {
                         tableReload(tableIns)
                     }, 2000);
 
-                } else if (res.resFlag == "E") {
-                    if (res.resCode == "USER0002") { //用户会话超时，请重新登录
-                        layer.open({
-                            title: '异常警告',
-                            closeBtn: 0,
-                            icon: 5,
-                            anim: 6,
-                            content: res.resMsg,
-                            yes: function (layero) {
-                                layui.sessionData('userInfoStorage', null); //删除userInfoStorage
-                                layui.sessionData('menuInfoStorage', null);
-                                parent.location.href = window.location.origin + "/login.html";
-                            }
-                        });
-                    } else {
-                        layer.open({
-                            title: '异常警告',
-                            closeBtn: 0,
-                            icon: 5,
-                            anim: 6,
-                            content: res.resMsg,
-                        });
-                    }
                 }
             },
             error: function () {
@@ -313,13 +291,15 @@ function sendDelRequest(url, data, tableIns) {
         });
     });
 };
+
 /**
  *通用form提交方法 默认post 提交
  * @param {*} url 请求url
  * @param {*} data form表单数据
  */
-function sendSubmitRequest(url,data ){
+function sendSubmitRequest(url, data) {
     sendAjaxRequest("POST", url, "json", data, successCallback, errorCallback);
+
     function successCallback(res) {
         if (res.resFlag == "N") {
             layer.msg('操作成功', {
@@ -328,31 +308,9 @@ function sendSubmitRequest(url,data ){
             setTimeout(function () {
                 window.parent.layer.closeAll(); //关闭弹窗
             }, 3000);
-        } else if (res.resFlag == "E") {
-            if (res.resCode == "USER0002") { //用户会话超时，请重新登录
-                layer.open({
-                    title: '异常警告',
-                    closeBtn: 0,
-                    icon: 5,
-                    anim: 6,
-                    content: res.resMsg,
-                    yes: function (layero) {
-                        layui.sessionData('userInfoStorage', null); //删除userInfoStorage
-                        layui.sessionData('menuInfoStorage', null);
-                        parent.location.href = window.location.origin + "/login.html";
-                    }
-                });
-            } else {
-                layer.open({
-                    title: '异常警告',
-                    closeBtn: 0,
-                    icon: 5,
-                    anim: 6,
-                    content: res.resMsg,
-                });
-            }
         }
     };
+
     function errorCallback() {
         layer.msg('通信异常', {
             icon: 2

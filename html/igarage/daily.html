@@ -6,7 +6,6 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
@@ -241,7 +240,7 @@
                 <div class="layui-col-md12" id="garageTable"
                      style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
                     <div class="" style="background-color: #848d92">车库列表</div>
-                    <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
+                    <table style="margin: 10px" class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
                 </div>
 
                 <div class="layui-col-md12" id="maintainMomeDiv"
@@ -816,16 +815,16 @@
         });
 
 
-        sendAjaxRequest("POST", "getParkingSpaceTypeList.json", "json", {}, function (res) {
-            if (res.resFlag === 'N') {
-                layer.msg("保存成功");
-                tableReload(momeTableIns, {garageId: maintainInfo.garageId})
-            } else {
-                layer.msg("保存失败");
-            }
-        }, function () {
-            layer.msg("操作失败");
-        });
+        // sendAjaxRequest("POST", "getParkingSpaceTypeList.json", "json", {}, function (res) {
+        //     if (res.resFlag === 'N') {
+        //         layer.msg("保存成功");
+        //         tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+        //     } else {
+        //         layer.msg("保存失败");
+        //     }
+        // }, function () {
+        //     layer.msg("操作失败");
+        // });
 
         //增加备忘录
         function saveGarageMemoBtn(content) {
@@ -904,7 +903,7 @@
             }
         }
 
-        var tableIns = initTable(table, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, garageListdone);
+        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
 
 
         var maintainMomeCols = [[
@@ -926,7 +925,7 @@
             }
         ]];
 
-        var momeTableIns = initTable(table, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null);
+        var momeTableIns = initTable(table, null, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null, null);
 
 
         function accessRes(res) {
@@ -978,7 +977,7 @@
                 field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
             }
         ]];
-        var parkingSpaceTableIns = initTable(table, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null);
+        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, null);
 
 
         function garageChargerRes(res) {
@@ -1016,7 +1015,7 @@
                 field: 'spaceName', title: '创建时间', sort: false, fixed: 'center'
             },
         ]];
-        var garageChargerTableIns = initTable(table, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null);
+        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, null);
 
         var cameraCols = [[
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
@@ -1094,6 +1093,7 @@
         initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
 
         function clickOrg(orgInfo) {
+            debugger
             tableReload(tableIns, {orgId: orgInfo.data.id})
 
             if (orgInfo.data.level === 3) {
