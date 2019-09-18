@@ -185,7 +185,9 @@ function initTree(ztree, elem, url, where, clickOrg,operateOrg) {
                     anim: 6,
                     content: res.resMsg,
                     yes: function (layero) {
-                        layui.sessionData('userInfoStorage', null); //删除userInfoStorage
+                        //删除缓存
+                        layui.sessionData('userInfoStorage', null);
+                        layui.sessionData('menuInfoStorage', null);
                         parent.location.href = window.location.origin + "/login.html";
                     }
                 });
