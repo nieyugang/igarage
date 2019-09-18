@@ -7,7 +7,7 @@ layui.use(["element", "layer"], function () {
     var userInfoStorage = layui.sessionData('userInfoStorage').userInfo;
     if (userInfoStorage == null || userInfoStorage == undefined || userInfoStorage == "") {
       location.href = "./login.html";
-    }else{
+    } else {
       location.href = "#";
     }
   });
@@ -15,7 +15,9 @@ layui.use(["element", "layer"], function () {
    *退出
    */
   $("#logout").on("click", function () {
-    layui.sessionData('userInfoStorage', null); //删除userInfoStorage
+    //删除userInfoStorage
+    layui.sessionData('userInfoStorage', null);
+    layui.sessionData('menuInfoStorage', null);
     location.href = "../login.html";
   });
   // ------------------------------------------------------- //
@@ -256,27 +258,7 @@ layui.use(["element", "layer"], function () {
     }
   });
 
-  function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + exdays * 24 * 3600 * 1000);
-    var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
 
-  function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    if (decodedCookie) {
-      var ca = decodedCookie.split(";");
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        if (c.trim().indexOf(name) === 0) {
-          return c.trim().substring(name.length, c.length);
-        }
-      }
-    }
-    return "";
-  }
 
   // ------------------------------------------------------ //
   // 每隔60s发送ajax交易获取设备预警和站内信
@@ -526,3 +508,33 @@ layui.use(["element", "layer"], function () {
   window.closeAll = closeAll;
   window.hx_setTop = hx_setTop;
 });
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + exdays * 24 * 3600 * 1000);
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  if (decodedCookie) {
+    var ca = decodedCookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      if (c.trim().indexOf(name) === 0) {
+        return c.trim().substring(name.length, c.length);
+      }
+    }
+  }
+  return "";
+}
+//删除cookies
+function delCookie(name) {
+  var exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  var cval = getCookie(name);
+  if (cval != null)
+    document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
