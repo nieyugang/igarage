@@ -271,7 +271,7 @@
                             <li>充电站</li>
                             <li>监控</li>
                         </ul>
-                        <div class="layui-tab-content" id="parkingInfo">
+                        <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <table class="layui-hide" id="parkingSpaceTable" lay-filter="parkingSpaceTable"></table>
                             </div>
@@ -349,6 +349,11 @@
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
+<script type="text/html" id="editBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
 <script type="text/html" id="cameraEditPage">
     <div class="container" style="width: 98%">
         <div class="layui-form">
@@ -368,9 +373,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">监控类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cameraType" autocomplete="off" id="cameraType"
-                               placeholder="监控类型"
-                               lay-reqtext="监控类型不能为空" lay-verify="required" class="layui-input" value="1">
+                        <select name="cameraType" id="cameraType" lay-reqtext="监控类型不能为空" lay-verify="required">
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -492,8 +496,7 @@
                     <label class="layui-form-label">说明</label>
                     <div class="layui-input-block">
                         <input type="text" name="remark" autocomplete="off" id="remark"
-                               placeholder="网关"
-                               lay-reqtext="网关不能为空" lay-verify="required" class="layui-input">
+                               placeholder="说明" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -518,7 +521,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">车库类型</label>
                     <div class="layui-input-block">
-                        <select name="thirdPay" id="spaceType" lay-verify="spaceType">
+                        <select name="thirdPay" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空" >
                         </select>
                     </div>
                 </div>
@@ -614,20 +617,12 @@
             , table = layui.table
             , element = layui.element
             , $ = layui.jquery
-            , form = layui.form
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
+            , form = layui.form;
 
-        // 百度地图API功能
-        var map = new BMap.Map("allmap");
-        var point = new BMap.Point(119.98186101, 31.77139674);
-        map.centerAndZoom(point, 15);
-        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-        var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
-        map.addOverlay(marker);
-
-        var spaceTypeList;
-
+        // -----------------------------------页面初始化做的操作----------------------------------
+        var spaceTypeList; //车位类型
+        var cameraTypeList;//监控类型
+        //查询车位类型
         sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
             if (res.resFlag === 'N') {
                 if (res.parkingSpaceTypeList) {
@@ -640,170 +635,21 @@
             layer.msg("查询失败");
         });
 
-        //列表搜索按钮
-        $("#searchMaintainBtn").click(function (event) {
-            tableReload(tableIns);
-        });
-
-        //监控新增监听提交
-        form.on('submit(cameraFormSubmit)', function () {
-            var data = $("#cameraEditPageFrom").serializeObject();
-            var url = "/cameraAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "/cameraUpdate.json";
-            }
-            data.port = parseInt(data.port);
-            data.cameraType = parseInt(data.cameraType);
-            data.garageId = parseInt(maintainInfo.garageId);
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
+        //查询车位类型
+        sendAjaxRequest("POST", "/getSysCodesAndName.json", "json", JSON.stringify({"typeList": [{"type": "cameraType"}]}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.cameraTypeList) {
+                    cameraTypeList = res.cameraTypeList;
                 }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-        //新增门禁监听提交
-        form.on('submit(acFormSubmit)', function () {
-            var data = $("#accessControllerEditPageForm").serializeObject();
-            var url = "accessControllerAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "accessControllerUpdate.json";
+            } else {
+                layer.msg("查询失败");
             }
-            data.port = parseInt(data.acPort);
-            data.acType = parseInt(data.acType);
-            data.garageId = parseInt(maintainInfo.garageId);
-
-            data.sn = data.acSn;
-            data.ip = data.acIp;
-            data.mac = data.acMac;
-
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
+        }, function () {
+            layer.msg("查询失败");
         });
 
-        //车位监听提交
-        form.on('submit(carFormSubmit)', function () {
-            var data = $("#carPageForm").serializeObject();
-            var url = "parkingSpaceAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "parkingSpaceUpdate.json";
-            }
-            data.spaceType = parseInt(data.spaceType);
-            data.addCount = parseInt(data.addCount);
-            data.garageId = parseInt(maintainInfo.garageId);
 
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-        //新增充电站监听提交
-        form.on('submit(garageChargerFormSubmit)', function () {
-            var data = $("#garageChargerPageForm").serializeObject();
-            var url = "garageChargerAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "garageChargerUpdate.json";
-            }
-            data.currentVersion = parseInt(data.currentVersion);
-            data.thirdPay = parseInt(data.thirdPay);
-            data.garageId = parseInt(maintainInfo.garageId);
-            data.chargerId = parseInt(data.chargerId);
-            data.sn = data.gcSn;
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-        //监控页面
-        $("#cameraAddPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '600px']
-                , id: 'lay-cameraAddPageBtn' //设定一个id，防止重复弹出
-                , content: $("#cameraEditPage").html()
-            });
-            form.render();
-        });
-
-        //门禁页面
-        $("#acAddPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '650px']
-                , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
-                , content: $("#accessControllerEditPage").html()
-            });
-            form.render();
-        });
-
-        ////车位页面
-        $("#carPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '300px']
-                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
-                , content: $("#carEditPage").html()
-            });
-            for (var i = 0; i < spaceTypeList.length; i++) {
-                var spaceType = spaceTypeList[i];
-                $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
-            }
-            form.render();
-        });
-
-        //充电桩页面
-        $("#garageChargerPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '500px']
-                , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
-                , content: $("#garageChargerEditPage").html()
-            });
-            form.render();
-        });
+        // -------------------页面中的一般click事件--------------------
 
         //关闭设备信息，显示车库信息
         $("#closeDeviceContent").click(function (event) {
@@ -818,45 +664,39 @@
             $("#deviceContent").show();
             tableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId})
         });
+// -----------------------------------地图操作----------------------------------
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(119.98186101, 31.77139674);
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
+        map.addOverlay(marker);
 
-        $("#parkingInfo li").click(function () {
-            $("#parkingInfo li").removeClass("active");
-            $(this).addClass("active");
-        });
-
-        $("#garageMemoAddPageBtn").click(function (event) {
-            layer.prompt({title: '增加车库备忘录', formType: 2}, function (text, index) {
-                layer.close(index);
-                saveGarageMemoBtn({
-                    "garageId": maintainInfo.garageId,
-                    "content": text,
-                    "orgId": maintainInfo.orgId
-                });
-            });
-        });
-
-
-        //增加备忘录
-        function saveGarageMemoBtn(content) {
-            if (content) {
-                var url = "/garageMemoAdd.json";
-                if (content.id) {
-                    url = "/garageMemoUpdate.json";
-                }
-                sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
-                    if (res.resFlag === 'N') {
-                        layer.msg("保存成功");
-                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
-                    } else {
-                        layer.msg("保存失败");
+        // 用经纬度设置地图中心点
+        function theLocation(longitude, latitude, addFlag, name, address) {
+            if (longitude != "" && latitude != "") {
+                var new_point = new BMap.Point(longitude, latitude);
+                map.centerAndZoom(new_point, 15);
+                var marker = new BMap.Marker(new_point);  // 创建标注
+                if (addFlag) {
+                    map.addOverlay(marker);              // 将标注添加到地图中
+                    var opts = {
+                        width: 200,     // 信息窗口宽度
+                        height: 100,     // 信息窗口高度
+                        title: name // 信息窗口标题
                     }
-                }, function () {
-                    layer.msg("操作失败");
-                });
-            } else {
-                layer.msg("请填写备注")
+                    var infoWindow = new BMap.InfoWindow("地址：" + address, opts);  // 创建信息窗口对象
+                    marker.addEventListener("click", function () {
+                        map.openInfoWindow(infoWindow, new_point); //开启信息窗口
+                    });
+                }
+                map.panTo(new_point);
             }
         }
+
+// -----------------------------------功能性操作----------------------------------
+//         ---------------------------车库-------------------------
 
         var garageListCols = [[
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
@@ -915,6 +755,78 @@
 
         var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
 
+        //监听行工具事件
+        table.on('tool(maintainTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                maintainInfo = data;
+                showMaintain(data, true)
+                $("#editMaintainForm").hide();
+                $("#showMaintain").show()
+            } else if (obj.event === 'garageMemo') {
+                $("#maintainMomeDiv").show();
+                tableReload(momeTableIns, {garageId: data.garageId})
+            }
+        });
+
+        //车库列表搜索按钮
+        $("#searchMaintainBtn").click(function (event) {
+            tableReload(tableIns);
+        });
+
+        //显示车库的详细信息
+        function showMaintain(maintainInfo, locationFlag) {
+            $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
+            $("#orgIdLabel").html(maintainInfo.orgId);//所属机构id
+            $("#inglatLabel").html(maintainInfo.ing + "--" + maintainInfo.lat);//经度
+            $("#addressLabel").html(maintainInfo.address);//地址
+            $("#adminLabel").html(maintainInfo.admin);//车库管理员
+            $("#mobileLabel").html(maintainInfo.mobile);//联系方式
+            $("#wxUserNum").html("微信用户数量");//微信用户数量
+            $("#createTime").html(maintainInfo.createTime);//创建时间
+            $("#accessControlNum").html("门禁数量");//门禁数量
+            if (locationFlag) {
+                theLocation(maintainInfo.ing, maintainInfo.lat, false, maintainInfo.garageName, maintainInfo.address);
+            }
+            $("#maintainInfoDetails").show();
+            $("#maintainMapInfo").css("min-width", "65%");
+        }
+
+
+//         ---------------------------备忘录-------------------------
+        //打开增加备忘录页面
+        $("#garageMemoAddPageBtn").click(function (event) {
+            layer.prompt({title: '增加车库备忘录', formType: 2}, function (text, index) {
+                layer.close(index);
+                saveGarageMemoBtn({
+                    "garageId": maintainInfo.garageId,
+                    "content": text,
+                    "orgId": maintainInfo.orgId
+                });
+            });
+        });
+
+        //增加备忘录
+        function saveGarageMemoBtn(content) {
+            if (content) {
+                var url = "/garageMemoAdd.json";
+                if (content.id) {
+                    url = "/garageMemoUpdate.json";
+                }
+                sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
+                    if (res.resFlag === 'N') {
+                        layer.msg("保存成功");
+                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                    } else {
+                        layer.msg("保存失败");
+                    }
+                }, function () {
+                    layer.msg("操作失败");
+                });
+            } else {
+                layer.msg("请填写备注")
+            }
+        }
 
         var maintainMomeCols = [[
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
@@ -936,217 +848,6 @@
         ]];
 
         var momeTableIns = initTable(table, null, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null, null);
-
-
-        function accessRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.accessControllerInfoList
-            };
-        }
-
-        var accessCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-            {
-                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
-            },
-            {
-                field: 'ip', title: 'IP地址', sort: false, fixed: 'center'
-            },
-            {
-                field: 'port', title: '端口', sort: false, fixed: 'center'
-            }
-        ]];
-
-        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
-
-
-        function parkingSpaceRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.rows
-            };
-        }
-
-        var parkingSpaceCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-            {
-                field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'spaceTypeName', title: '车位类别', sort: false, fixed: 'center'
-            },
-            {
-                field: 'status', title: '车位状态', toolbar: "#parkingSpaceStatus", sort: false, fixed: 'center'
-            },
-            {
-                field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
-            }
-        ]];
-        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, null);
-
-
-        function garageChargerRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.garageChargerInfoList
-            };
-        }
-
-        var garageChargerCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-
-            {
-                field: 'chargerName', title: '充电站名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
-            },
-            {
-                field: 'status', title: '设备状态', toolbar: "#garageChargerStatus", sort: false, fixed: 'center'
-            },
-            {
-                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
-            },
-            {
-                field: 'thirdPay',
-                title: '是否支持第三方支付',
-                toolbar: "#garageChargerThirdPayToolbar",
-                sort: false,
-                fixed: 'center'
-            },
-            {
-                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
-            },
-        ]];
-        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, null);
-
-        var cameraCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-
-            {
-                field: 'cameraName', title: '监控名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'cameraType', title: '监控类型', sort: false, fixed: 'center'
-            },
-            {
-                field: 'ip', title: '监控ip', sort: false, fixed: 'center'
-            },
-            {
-                field: 'loginAccount', title: '登录账号', sort: false, fixed: 'center'
-            },
-            {
-                field: 'installAddress', title: '安装地址描述', sort: false, fixed: 'center'
-            },
-            {
-                field: 'status', title: '状态', sort: false, fixed: 'center'
-            },
-        ]];
-
-        function cameraRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                data: res.cameraInfoList
-            };
-        }
-
-        var cameraTableIns = initNotPageTable(table, "cameraTable", "/getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
-
-
-        function showMaintain(maintainInfo, locationFlag) {
-            $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
-            $("#orgIdLabel").html(maintainInfo.orgId);//所属机构id
-            $("#inglatLabel").html(maintainInfo.ing + "--" + maintainInfo.lat);//经度
-            $("#addressLabel").html(maintainInfo.address);//地址
-            $("#adminLabel").html(maintainInfo.admin);//车库管理员
-            $("#mobileLabel").html(maintainInfo.mobile);//联系方式
-            $("#wxUserNum").html("微信用户数量");//微信用户数量
-            $("#createTime").html(maintainInfo.createTime);//创建时间
-            $("#accessControlNum").html("门禁数量");//门禁数量
-            if (locationFlag) {
-                theLocation(maintainInfo.ing, maintainInfo.lat, false, maintainInfo.garageName, maintainInfo.address);
-            }
-            $("#maintainInfoDetails").show();
-            $("#maintainMapInfo").css("min-width", "65%");
-        }
-
-        // 用经纬度设置地图中心点
-        function theLocation(longitude, latitude, addFlag, name, address) {
-            if (longitude != "" && latitude != "") {
-                var new_point = new BMap.Point(longitude, latitude);
-                map.centerAndZoom(new_point, 15);
-                var marker = new BMap.Marker(new_point);  // 创建标注
-                if (addFlag) {
-                    map.addOverlay(marker);              // 将标注添加到地图中
-                    var opts = {
-                        width: 200,     // 信息窗口宽度
-                        height: 100,     // 信息窗口高度
-                        title: name // 信息窗口标题
-                    }
-                    var infoWindow = new BMap.InfoWindow("地址：" + address, opts);  // 创建信息窗口对象
-                    marker.addEventListener("click", function () {
-                        map.openInfoWindow(infoWindow, new_point); //开启信息窗口
-                    });
-                }
-                map.panTo(new_point);
-            }
-        }
-
-        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
-
-        function clickOrg(orgInfo) {
-            tableReload(tableIns, {orgId: orgInfo.data.id})
-
-            if (orgInfo.data.level === 3) {
-                map.clearOverlays();
-                $("#maintainInfoDetails").show();
-                // $("#maintainMomeDiv").show();
-                $("#maintainMapInfo").css("min-width", "65%");
-                $("#garageTable").show();
-                $("#deviceContent").hide();
-            } else {
-                map.clearOverlays();
-                $("#maintainInfoDetails").hide();
-                $("#maintainMomeDiv").hide();
-                $("#garageTable").show();
-                $("#deviceContent").hide();
-                $("#maintainMapInfo").css("min-width", "97%");
-            }
-        }
-
-        //监听行工具事件
-        table.on('tool(maintainTable)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'detail') {
-                maintainInfo = data;
-                showMaintain(data, true)
-                $("#editMaintainForm").hide();
-                $("#showMaintain").show()
-            } else if (obj.event === 'garageMemo') {
-                $("#maintainMomeDiv").show();
-                tableReload(momeTableIns, {garageId: data.garageId})
-            }
-        });
-
-        //监听设备详情中选项卡
-        element.on('tab(deviceDetails)', function (data) {
-            if (data.index === 1) {
-                noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
-            } else if (data.index === 2) {
-                tableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
-            } else if (data.index === 3) {
-                noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
-            }
-        });
-
 
         //监听行工具事件
         table.on('tool(maintainMomeTable)', function (obj) {
@@ -1182,6 +883,417 @@
                 });
             }
         });
+
+//         ---------------------------监控-------------------------
+
+        var cameraCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'cameraName', title: '监控名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'cameraTypeName', title: '监控类型', sort: false, fixed: 'center'
+            },
+            {
+                field: 'ip', title: '监控ip', sort: false, fixed: 'center'
+            },
+            {
+                field: 'loginAccount', title: '登录账号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'installAddress', title: '安装地址描述', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '状态', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        function cameraRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                data: res.cameraInfoList
+            };
+        }
+
+        var cameraTableIns = initNotPageTable(table, "cameraTable", "/getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
+
+        //监听监控行工具事件
+        table.on('tool(cameraTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                openCameraEditPage();
+                setCamera(data);
+                form.render();
+            } else if (obj.event === 'delete') {
+                sendDelRequest("cameraDelete.json", JSON.stringify({cameraId: data.cameraId}), cameraTableIns);
+            }
+        });
+
+        function setCamera(data){
+            $("#cameraId").val(data.cameraId)
+            $("#cameraName").val(data.cameraName);
+            $("#cameraType").val(data.cameraType);
+            $("#ip").val(data.ip);
+            $("#port").val(data.port);
+            $("#loginAccount").val(data.loginAccount);
+            $("#password").val(data.password);
+            $("#installAddress").val(data.installAddress);
+        }
+
+        function clearCamera(){
+            $("#cameraId").val("")
+            $("#cameraName").val("");
+            $("#cameraType").val("");
+            $("#ip").val("");
+            $("#port").val("");
+            $("#loginAccount").val("");
+            $("#password").val("");
+            $("#installAddress").val("");
+        }
+
+        function openCameraEditPage(){
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '600px']
+                , id: 'lay-cameraAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#cameraEditPage").html()
+            });
+            clearCamera();
+            $("#cameraType").html("");
+            for (var i = 0; i < cameraTypeList.length; i++) {
+                var cameraType = cameraTypeList[i];
+                $("#cameraType").append("<option value=" + cameraType.code + ">" + cameraType.name + "</option>")
+            }
+            form.render();
+        }
+
+        //打开增加修改监控页面
+        $("#cameraAddPageBtn").click(function (event) {
+            openCameraEditPage();
+        });
+
+        //监控新增监听提交
+        form.on('submit(cameraFormSubmit)', function () {
+            var data = $("#cameraEditPageFrom").serializeObject();
+            var url = "/cameraAdd.json";
+            if (data.cameraId) {
+                data.cameraId = parseInt(data.cameraId)
+                url = "/cameraUpdate.json";
+            }
+            data.port = parseInt(data.port);
+            data.cameraType = parseInt(data.cameraType);
+            data.garageId = parseInt(maintainInfo.garageId);
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------门禁-------------------------
+
+
+        function accessRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.accessControllerInfoList
+            };
+        }
+
+        var accessCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'ip', title: 'IP地址', sort: false, fixed: 'center'
+            },
+            {
+                field: 'port', title: '端口', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
+
+        //监听监控行工具事件
+        table.on('tool(accessTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+            } else if (obj.event === 'delete') {
+                sendDelRequest("accessControllerDelete.json", JSON.stringify({acId: data.acId}), accessTableIns);
+            }
+        });
+
+        //打开增加修改门禁页面
+        $("#acAddPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '650px']
+                , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#accessControllerEditPage").html()
+            });
+            form.render();
+        });
+
+        //新增门禁监听提交
+        form.on('submit(acFormSubmit)', function () {
+            var data = $("#accessControllerEditPageForm").serializeObject();
+            var url = "accessControllerAdd.json";
+            if (data.acId) {
+                data.acId = parseInt(data.id)
+                url = "accessControllerUpdate.json";
+            }
+            data.port = parseInt(data.acPort);
+            data.acType = parseInt(data.acType);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            data.sn = data.acSn;
+            data.ip = data.acIp;
+            data.mac = data.acMac;
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------车位-------------------------
+
+
+        function parkingSpaceRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        var parkingSpaceCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'spaceTypeName', title: '车位类别', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '车位状态', toolbar: "#parkingSpaceStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, null);
+
+        //监听车位行工具事件
+        table.on('tool(parkingSpaceTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+            } else if (obj.event === 'delete') {
+                sendDelRequest("parkingSpaceDelete.json", JSON.stringify({spaceId: data.spaceId}), parkingSpaceTableIns);
+            }
+        });
+
+        //打开增加修改车位页面
+        $("#carPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                , content: $("#carEditPage").html()
+            });
+            $("#spaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            form.render();
+        });
+
+        //车位监听提交
+        form.on('submit(carFormSubmit)', function () {
+            var data = $("#carPageForm").serializeObject();
+            var url = "parkingSpaceAdd.json";
+            if (data.spaceId) {
+                data.spaceId = parseInt(data.spaceId)
+                url = "parkingSpaceUpdate.json";
+            }
+            data.spaceType = parseInt(data.spaceType);
+            data.addCount = parseInt(data.addCount);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------充电站-------------------------
+
+        function garageChargerRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.garageChargerInfoList
+            };
+        }
+
+        var garageChargerCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'chargerName', title: '充电站名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '设备状态', toolbar: "#garageChargerStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
+            },
+            {
+                field: 'thirdPay',
+                title: '是否支持第三方支付',
+                toolbar: "#garageChargerThirdPayToolbar",
+                sort: false,
+                fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, null);
+
+        //监听监控行工具事件
+        table.on('tool(garageChargerTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+            } else if (obj.event === 'delete') {
+                sendDelRequest("garageChargerDelete.json", JSON.stringify({chargerId: data.chargerId}), garageChargerTableIns);
+            }
+        });
+
+        //打开增加修改充电桩页面
+        $("#garageChargerPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '500px']
+                , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
+                , content: $("#garageChargerEditPage").html()
+            });
+            form.render();
+        });
+
+        //新增充电站监听提交
+        form.on('submit(garageChargerFormSubmit)', function () {
+            var data = $("#garageChargerPageForm").serializeObject();
+            var url = "garageChargerAdd.json";
+            if (data.chargerId) {
+                data.chargerId = parseInt(data.chargerId)
+                url = "garageChargerUpdate.json";
+            }
+            data.currentVersion = parseInt(data.currentVersion);
+            data.thirdPay = parseInt(data.thirdPay);
+            data.garageId = parseInt(maintainInfo.garageId);
+            data.chargerId = parseInt(data.chargerId);
+            data.sn = data.gcSn;
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+// ----------------------------机构数-----------------------------
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+
+        function clickOrg(orgInfo) {
+            tableReload(tableIns, {orgId: orgInfo.data.id})
+
+            if (orgInfo.data.level === 3) {
+                map.clearOverlays();
+                $("#maintainInfoDetails").show();
+                // $("#maintainMomeDiv").show();
+                $("#maintainMapInfo").css("min-width", "65%");
+                $("#garageTable").show();
+                $("#deviceContent").hide();
+            } else {
+                map.clearOverlays();
+                $("#maintainInfoDetails").hide();
+                $("#maintainMomeDiv").hide();
+                $("#garageTable").show();
+                $("#deviceContent").hide();
+                $("#maintainMapInfo").css("min-width", "97%");
+            }
+        }
+
+// --------------------------监听选项卡------------------------
+        //监听设备详情中选项卡
+        element.on('tab(deviceDetails)', function (data) {
+            if (data.index === 1) {
+                noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
+            } else if (data.index === 2) {
+                tableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+            } else if (data.index === 3) {
+                noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+            }
+        });
+
+
     });
 </script>
 </body>
