@@ -505,9 +505,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">车库类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="spaceType" autocomplete="off" id="spaceType"
-                               placeholder="车库类型"
-                               lay-reqtext="车库类型不能为空" lay-verify="required" class="layui-input">
+
+                        <select name="thirdPay" id="spaceType" lay-verify="spaceType">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -557,9 +559,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">三方支付</label>
                     <div class="layui-input-block">
-                        <input type="text" name="thirdPay" autocomplete="off" id="thirdPay"
-                               placeholder="三方支付"
-                               lay-reqtext="三方支付" lay-verify="required" class="layui-input">
+                        <select name="thirdPay" id="thirdPay" lay-verify="required">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -809,6 +812,18 @@
                     "orgId": maintainInfo.orgId
                 });
             });
+        });
+
+
+        sendAjaxRequest("POST", "getParkingSpaceTypeList.json", "json", {}, function (res) {
+            if (res.resFlag === 'N') {
+                layer.msg("保存成功");
+                tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+            } else {
+                layer.msg("保存失败");
+            }
+        }, function () {
+            layer.msg("操作失败");
         });
 
         //增加备忘录

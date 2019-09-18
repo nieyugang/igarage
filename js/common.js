@@ -24,9 +24,14 @@ function ajaxSend(event, jqXHR, options) {
 }
 
 /**
- * 隐藏loading
+ * ajax完成后的操作
  */
 function ajaxComplete(event, xhr, settings) {
+    if (xhr) {
+        if (xhr.responseJSON) {
+
+        }
+    }
 }
 
 /**
@@ -103,7 +108,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols) {
         , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
         , parseData: parseData
         , cols: cols
-        ,page: false
+        , page: false
     });
 }
 
@@ -130,21 +135,23 @@ function initTree(ztree, elem, url, where, clickOrg) {
         //处理返回数据
         var orgTreeInfo = res.orgTreeInfo;// 顶层节点
         var childrens;
-        childrens = getTreeJson(orgTreeInfo.childOrgList);
-        var root_node = {
-            "id": orgTreeInfo.orgId,
-            "title": orgTreeInfo.orgName,
-            "spread": true,
-            "children": childrens
-        };// 存放tree数据
-        nodes.push(root_node);
-        //渲染tree
-        ztree.render({
-            elem: elem
-            , data: nodes
-            , onlyIconControl: true  //是否仅允许节点左侧图标控制展开收缩
-            , click: clickOrg
-        });
+        if (orgTreeInfo) {
+            childrens = getTreeJson(orgTreeInfo.childOrgList);
+            var root_node = {
+                "id": orgTreeInfo.orgId,
+                "title": orgTreeInfo.orgName,
+                "spread": true,
+                "children": childrens
+            };// 存放tree数据
+            nodes.push(root_node);
+            //渲染tree
+            ztree.render({
+                elem: elem
+                , data: nodes
+                , onlyIconControl: true  //是否仅允许节点左侧图标控制展开收缩
+                , click: clickOrg
+            });
+        }
     }
 
     function getOrgTreeError() {
