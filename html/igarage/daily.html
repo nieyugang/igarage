@@ -645,12 +645,7 @@
             tableReload(tableIns);
         });
 
-        //点击查看微信用户详情
-        $("#wxUserNum").click(function (event) {
-
-        });
-
-        //监听提交
+        //监控新增监听提交
         form.on('submit(cameraFormSubmit)', function () {
             var data = $("#cameraEditPageFrom").serializeObject();
             var url = "/cameraAdd.json";
@@ -675,7 +670,7 @@
             return false;
         });
 
-        //监听提交
+        //新增门禁监听提交
         form.on('submit(acFormSubmit)', function () {
             var data = $("#accessControllerEditPageForm").serializeObject();
             var url = "accessControllerAdd.json";
@@ -705,7 +700,7 @@
             return false;
         });
 
-        //监听提交
+        //车位监听提交
         form.on('submit(carFormSubmit)', function () {
             var data = $("#carPageForm").serializeObject();
             var url = "parkingSpaceAdd.json";
@@ -731,7 +726,7 @@
             return false;
         });
 
-        //监听提交
+        //新增充电站监听提交
         form.on('submit(garageChargerFormSubmit)', function () {
             var data = $("#garageChargerPageForm").serializeObject();
             var url = "garageChargerAdd.json";
@@ -758,7 +753,7 @@
             return false;
         });
 
-
+        //监控页面
         $("#cameraAddPageBtn").click(function (event) {
             layer.open({
                 type: 1
@@ -770,6 +765,7 @@
             form.render();
         });
 
+        //门禁页面
         $("#acAddPageBtn").click(function (event) {
             layer.open({
                 type: 1
@@ -781,6 +777,7 @@
             form.render();
         });
 
+        ////车位页面
         $("#carPageBtn").click(function (event) {
             layer.open({
                 type: 1
@@ -796,6 +793,7 @@
             form.render();
         });
 
+        //充电桩页面
         $("#garageChargerPageBtn").click(function (event) {
             layer.open({
                 type: 1
@@ -807,11 +805,13 @@
             form.render();
         });
 
+        //关闭设备信息，显示车库信息
         $("#closeDeviceContent").click(function (event) {
             $("#deviceContent").hide();
             $("#garageTable").show();
         })
 
+        //关闭车库信息,显示设备信息
         $("#deviceBtn").click(function (event) {
             $("#garageTable").hide();
             $("#maintainMomeDiv").hide();
