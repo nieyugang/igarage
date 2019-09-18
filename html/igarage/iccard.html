@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+</head>
+
+<body>
+    <form class="layui-form" action="">
+
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <select name="igarageId" id="igarageId">
+                    <option value="">请选车库</option>
+                    <option value="1">丽华新村1号车库</option>
+                    <option value="2">丽华新村2号车库</option>
+                    <option value="3">丽华新村3号车库</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <label class="layui-form-label" style="width:25%;">从：</label>
+                <input type="text" name="begDate" id="begDate" lay-verify="date" autocomplete="off" class="layui-input" style="width:75%;">
+            </div>
+            <div class="layui-input-inline">
+                <label class="layui-form-label" style="width:25%;">到：</label>
+                <input type="text" name="endDate" id="endDate" lay-verify="date" autocomplete="off" class="layui-input" style="width:75%;">
+            </div>
+            <div class="layui-input-inline">
+                <label class="layui-form-label"  style="width:45%;">姓名：</label>
+                <input type="text" name="userName" lay-verify="userName" autocomplete="off" class="layui-input" style="width:55%;">
+            </div>
+            <div class="layui-input-inline">
+                <label class="layui-form-label"  style="width:45%;">卡号：</label>
+                <input type="text" name="cardNum" lay-verify="cardNum" autocomplete="off" class="layui-input" style="width:55%;">
+            </div>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn">查询</button>
+            </div>
+        </div>
+
+        <table id="table_iccard" lay-filter="table_iccard"></table>
+
+        <script type="text/html" id="toolbarCard">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm" lay-event="icImport">IC卡用户导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="userEdit">编辑用户</button>
+                <button class="layui-btn layui-btn-sm" lay-event="userLoss">挂失</button>
+            </div>
+        </script>
+
+    </form>
+
+    <script src="../../vendor/jquery/jquery.js"></script>
+    <script src="../../vendor/layui/layui.js"></script>
+    <script src="../../js/front.js"></script>
+    <script>
+        var baseUrl = "/hqigservice";
+        layui.use(['table','laydate','form','element'], function () {
+            var table = layui.table
+                ,laydate = layui.laydate
+                ,element = layui.element
+                ,form = layui.form;
+
+            //日期
+            laydate.render({
+                elem: '#begDate'
+            });
+            laydate.render({
+                elem: '#endDate'
+            });
+
+            // 表格初始化
+            table.render({
+                title: '车库用户IC卡信息表',
+                elem: '#table_iccard',
+                height: 'full-140',
+                method: 'POST',
+                contentType: 'application/json',
+                limit: 30,
+                url: baseUrl + '/getAccessControllerList.json',
+                where: {
+                    "userInfo": userInfo,
+                    "garageId": 3
+                },
+                parseData: function (res) {
+                    return {
+                        code: 0,
+                        msg: "",
+                        count:  res.accessControllerInfoList ? res.accessControllerInfoList.length : 0,
+                        data: res.accessControllerInfoList
+                    };
+                },
+                toolbar:'#toolbarCard',
+                page: true,
+                cols: [[
+                    { type: 'radio', fixed: 'left'},
+                    { type: 'numbers', title: '序号', align: 'center' },
+                    {field:'sn', title:'用户编号'},
+                    {field:'sn', title:'用户名'},
+                    {field:'ip', title:'卡号'},
+                    {field:'port', title:'联系方式'},
+                    {field:'remark', title:'地址'},
+                    {field:'mac', title:'车库名称'},
+                    {field:'mac', title:'车位名称'},
+                    {field:'mac', title:'入库时间'},
+                    {field:'mac', title:'状态'}
+                ]]
+            });
+
+            layer.ready(function(){
+                var igarageId = RequestParameter()["igarageId"];
+                $("#igarageId").val(igarageId);
+                form.render('select');
+            });
+
+            //头工具栏事件
+            table.on('toolbar(table_iccard)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+                var data = checkStatus.data;  //获取选中行数据
+
+                switch(obj.event){
+                    case 'userEdit':
+                        layer.msg("Edit");
+                        break;
+                    case 'userLoss':
+                        layer.msg("Loss");
+                        break;
+                    case 'icImport':
+                        layer.msg("IcImport");
+                        break;
+                };
+            });
+        });
+
+        function RequestParameter() {
+            var url = window.location.search;
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                var strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+                }
+            }
+            return theRequest
+        }
+
+    </script>
+
+    <!-- js插件 -->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
