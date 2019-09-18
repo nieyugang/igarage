@@ -103,14 +103,13 @@
   <!-- md5插件 -->
   <script src="../../vendor/md5/md5.js"></script>
   <script src="../../js/front.js"></script>
+  <script src="../../js/common.js"></script>
 
   <script>
-    var baseUrl = "/hqigservice";
     //加载组织树
     var nodes = [];
     $.ajax({
-      url: baseUrl + '/getOrgTree.json',
-      //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
+      url: backServiceUrl + '/getOrgTree.json',
       type: 'POST',
       data: JSON.stringify({
         "userInfo": userInfo,
@@ -140,9 +139,10 @@
         layer.msg("操作失败");
       }
     });
+
     //获取角色data
     $.ajax({
-      url: baseUrl + '/getRoleList.json',
+      url: backServiceUrl + '/getRoleList.json',
       type: 'POST',
       contentType: 'application/json',
       dataType: 'json',
@@ -209,27 +209,7 @@
         // 密码加密
         formData.password = $.md5(formData.password);
         // 提交
-        $.ajax({
-          url: baseUrl + '/userAdd.json',
-          type: 'POST',
-          contentType: 'application/json',
-          dataType: 'json',
-          data: JSON.stringify(formData),
-          success: function (res) {
-            if (res.resFlag == "N") {
-              layer.msg('操作成功', { icon: 1 });
-              setTimeout(function () {
-                window.parent.layer.closeAll();//关闭弹窗
-              }, 3000);
-            } else {
-              layer.msg('通信异常', { icon: 2 });
-            }
-          },
-          error: function () {
-            layer.msg('通信异常', { icon: 2 });
-          }
-
-        });
+        sendSubmitRequest("/userAdd.json", JSON.stringify(formData));
         return false;
       });
     });

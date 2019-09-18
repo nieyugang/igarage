@@ -22,11 +22,11 @@
   <script src="../../vendor/layui/layui.js"></script>
   <script src="../../vendor/layui/lay/modules/formSelects-v4.js"></script>
   <script>
-    var baseUrl = "/hqigservice";
+    var backServiceUrl = "/hqigservice";
     //加载组织树
     var nodes = [];
     $.ajax({
-      url: baseUrl + '/getOrgTree.json',
+      url: backServiceUrl + '/getOrgTree.json',
       //url: 'http://192.168.1.196:8088/hqigservice//getOrgTree.json',
       type: 'POST',
       data: JSON.stringify({
@@ -61,7 +61,7 @@
 
     //获取角色data
     $.ajax({
-      url: baseUrl + '/getRoleList.json',
+      url: backServiceUrl + '/getRoleList.json',
       type: 'POST',
       contentType: 'application/json',
       dataType: 'json',
