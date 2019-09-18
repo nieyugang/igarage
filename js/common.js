@@ -290,6 +290,7 @@ function sendDelRequest(url, data, tableIns) {
                             content: res.resMsg,
                             yes: function (layero) {
                                 layui.sessionData('userInfoStorage', null); //删除userInfoStorage
+                                layui.sessionData('menuInfoStorage', null);
                                 parent.location.href = window.location.origin + "/login.html";
                             }
                         });
@@ -337,6 +338,7 @@ function sendSubmitRequest(url,data ){
                     content: res.resMsg,
                     yes: function (layero) {
                         layui.sessionData('userInfoStorage', null); //删除userInfoStorage
+                        layui.sessionData('menuInfoStorage', null);
                         parent.location.href = window.location.origin + "/login.html";
                     }
                 });
