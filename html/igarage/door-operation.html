@@ -121,11 +121,7 @@
                 url: backServiceUrl + '/getOrgTree.json',
                 type: 'POST',
                 data: JSON.stringify({
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
+                    "userInfo": userInfo,
                     "orgId": 1
                 }),
                 contentType: "application/json",
