@@ -117,7 +117,7 @@
             var garageId = parent.$("#igarageId").val();
             formData.garageId = parseInt(garageId);
 
-            var baseUrl = "/hqigservice";
+            var backServiceUrl = "/hqigservice";
             var jsonAction = "/accessControllerAdd.json";
             if (formData.acId != "") {
                 jsonAction = "/accessControllerUpdate.json";
@@ -128,7 +128,7 @@
             formData.port = parseInt(formData.port);
             // 提交
             $.ajax({
-                url: baseUrl + jsonAction,
+                url: backServiceUrl + jsonAction,
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',

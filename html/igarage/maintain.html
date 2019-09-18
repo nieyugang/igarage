@@ -244,11 +244,11 @@
 <script src="../../vendor/popper.js/umd/popper.min.js"></script>
 <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="../../vendor/layui/layui.js"></script>
 <!-- js公共代码 -->
-<script src="../../js/slide-menu-data.js"></script>
 <script src="../../js/front.js"></script>
 <script src="../../js/common.js"></script>
-<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+
 
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
@@ -333,9 +333,9 @@
             data.userInfo = {userId: 1, sessionId: "123456"}
             var url;
             if (data.garageId) {
-                url = "garageUpdate.json";
+                url = "/garageUpdate.json";
             } else {
-                url = "garageAdd.json";
+                url = "/garageAdd.json";
             }
 
             sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
@@ -408,7 +408,7 @@
             }
         }
 
-        var tableIns = initTable(table, "maintainTable", 20, "getGarageList.json", {orgId: 0}, res, garageListCols, garageListdone);
+        var tableIns = initTable(table,"", "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols,"", garageListdone);
 
 
         function setMaintain(maintainInfo) {
@@ -484,7 +484,7 @@
             }
         }
 
-        initTree(tree, '#orgTree', "getOrgTree.json", JSON.stringify({"orgId": 1}) , clickOrg)
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}) , clickOrg)
 
         function clickOrg(orgInfo) {
             map.clearOverlays();
@@ -505,7 +505,7 @@
                 var data = {userInfo: {userId: 1, sessionId: "123456"}, garageId: data.garageId};
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
-                        url: "http://localhost:8088/hqigservice/garageDelete.json",
+                        url: backServiceUrl +"/garageDelete.json",
                         type: 'POST',
                         data: JSON.stringify(data),
                         contentType: "application/json;charset=utf-8",

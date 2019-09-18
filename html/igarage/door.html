@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -57,15 +58,15 @@
         </script>
 
         <!--<div class="layui-form-item">-->
-            <!--<div  class="layui-input-inline">-->
-                <!--<button type="button" class="layui-btn"  id="btn_edit">门禁编辑</button>-->
-            <!--</div>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<button type="button" class="layui-btn">门禁新增</button>-->
-            <!--</div>-->
-            <!--<div class="layui-input-inline">-->
-                <!--<button type="button" class="layui-btn">门禁删除</button>-->
-            <!--</div>-->
+        <!--<div  class="layui-input-inline">-->
+        <!--<button type="button" class="layui-btn"  id="btn_edit">门禁编辑</button>-->
+        <!--</div>-->
+        <!--<div class="layui-input-inline">-->
+        <!--<button type="button" class="layui-btn">门禁新增</button>-->
+        <!--</div>-->
+        <!--<div class="layui-input-inline">-->
+        <!--<button type="button" class="layui-btn">门禁删除</button>-->
+        <!--</div>-->
         <!--</div>-->
 
         <div class="layui-form-item">
@@ -91,16 +92,16 @@
                 <a href="door-operation.html" class="layui-btn">门禁操作</a>
             </div>
         </div>
-        <input id="accessId" value="aa" type="hidden"/>
+        <input id="accessId" value="aa" type="hidden" />
 
     </form>
 
     <script src="../../vendor/layui/layui.js"></script>
     <script>
-        var baseUrl = "/hqigservice";
-        layui.use(['table','form'], function () {
+        var backServiceUrl = "/hqigservice";
+        layui.use(['table', 'form'], function () {
             var table = layui.table
-                ,form = layui.form;
+                , form = layui.form;
 
             // 表格初始化
             table.render({
@@ -110,13 +111,9 @@
                 method: 'POST',
                 contentType: 'application/json',
                 limit: 30,
-                url: baseUrl + '/getAccessControllerList.json',
+                url: backServiceUrl + '/getAccessControllerList.json',
                 where: {
-                    "userInfo": {
-                        "userId": 1,
-                        "userName": "许明",
-                        "sessionId": "123456"
-                    },
+                    "userInfo": userInfo,
                     "garageId": parseInt($("#igarageId").val())
                 },
                 parseData: function (res) {
@@ -130,16 +127,18 @@
                 toolbar: 'default',
                 page: true,
                 cols: [[
-                    { type: 'radio', fixed: 'left'},
+                    { type: 'radio', fixed: 'left' },
                     { type: 'numbers', title: '序号', align: 'center' },
-                    {field:'acType', title:'控制器类型',templet: function(x){
-                            return x.acType>1 ? '四门单向控制器': '单门双向控制器';
-                        }},
-                    {field:'sn', title:'产品序列号'},
-                    {field:'ip', title:'IP'},
-                    {field:'port', title:'PORT'},
-                    {field:'remark', title:'所在区域'},
-                    {field:'mac', title:'所控制的门'}
+                    {
+                        field: 'acType', title: '控制器类型', templet: function (x) {
+                            return x.acType > 1 ? '四门单向控制器' : '单门双向控制器';
+                        }
+                    },
+                    { field: 'sn', title: '产品序列号' },
+                    { field: 'ip', title: 'IP' },
+                    { field: 'port', title: 'PORT' },
+                    { field: 'remark', title: '所在区域' },
+                    { field: 'mac', title: '所控制的门' }
                 ]]
             });
 
@@ -150,7 +149,7 @@
                 var layEvet = obj.event;
                 switch (layEvet) {
                     case 'add':
-                        $("#accessId").attr("value","");
+                        $("#accessId").attr("value", "");
                         layer.open({
                             type: 2,
                             title: false,
@@ -168,7 +167,7 @@
                         } else if (data.length > 1) {
                             layer.msg('只能同时编辑一个', function () { });
                         } else {
-                            $("#accessId").attr("value",JSON.stringify(data[0]));
+                            $("#accessId").attr("value", JSON.stringify(data[0]));
                             // layer.msg($("#accessId").val());
                             layer.open({
                                 type: 2,
@@ -189,10 +188,10 @@
                         } else {
                             layer.confirm('确定删除吗？', function (index) {
                                 $.ajax({
-                                    url: baseUrl + '/accessControllerDelete.json',
+                                    url: backServiceUrl + '/accessControllerDelete.json',
                                     type: 'POST',
                                     data: JSON.stringify({
-                                 "userInfo": userInfo,
+                                        "userInfo": userInfo,
                                         "acId": data[0].acId
                                     }),
                                     contentType: "application/json",
@@ -218,9 +217,9 @@
                 };
             });
 
-            form.on('select(igarageId)', function(data){
+            form.on('select(igarageId)', function (data) {
                 // layer.msg($("#igarageId").val());
-                table.reload('table_door',{
+                table.reload('table_door', {
                     where: {
                         "userInfo": {
                             "userId": 1,

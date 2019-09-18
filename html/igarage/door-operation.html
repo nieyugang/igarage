@@ -115,10 +115,10 @@
             var tree = layui.tree;
             var table = layui.table;
             //获取组织机构数据nodes:[{},{}]
-            var baseUrl = "/hqigservice";
+            var backServiceUrl = "/hqigservice";
             var nodes = [];
             $.ajax({
-                url: baseUrl + '/getOrgTree.json',
+                url: backServiceUrl + '/getOrgTree.json',
                 type: 'POST',
                 data: JSON.stringify({
                     "userInfo": {
