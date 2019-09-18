@@ -417,10 +417,11 @@
 <script src="../../vendor/popper.js/umd/popper.min.js"></script>
 <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
 <!-- js公共代码 -->
 <script src="../../js/common.js"></script>
 <script src="../../js/front.js"></script>
-<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
 <script>
@@ -444,7 +445,7 @@
         var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
         map.addOverlay(marker);
 
-        sendAjaxRequest("POST", "getParkingSpaceTypeList.json", "json", {}, function (res) {
+        sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
             if (res.resFlag === 'N') {
 
             } else {
@@ -467,10 +468,10 @@
         //监听提交
         form.on('submit(formSubmit)', function () {
             var data = $("#cameraEditPageFrom").serializeObject();
-            var url = "cameraAdd.json";
+            var url = "/cameraAdd.json";
             if (data.id) {
                 data.id = parseInt(data.id)
-                url = "cameraUpdate.json";
+                url = "/cameraUpdate.json";
             }
             data.port = parseInt(data.port);
             data.cameraType = parseInt(data.cameraType);
@@ -530,9 +531,9 @@
         //增加备忘录
         function saveGarageMemoBtn(content) {
             if (content) {
-                var url = "garageMemoAdd.json";
+                var url = "/garageMemoAdd.json";
                 if (content.id) {
-                    url = "garageMemoUpdate.json";
+                    url = "/garageMemoUpdate.json";
                 }
                 sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
                     if (res.resFlag === 'N') {
@@ -604,7 +605,7 @@
             }
         }
 
-        var tableIns = initTable(table, "maintainTable", 20, "getGarageList.json", {orgId: 0}, res, garageListCols, garageListdone);
+        var tableIns = initTable(table, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, garageListdone);
 
 
         var maintainMomeCols = [[
@@ -626,7 +627,7 @@
             }
         ]];
 
-        var momeTableIns = initTable(table, "maintainMomeTable", 20, "getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null);
+        var momeTableIns = initTable(table, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null);
 
 
         function accessRes(res) {
@@ -651,7 +652,7 @@
             }
         ]];
 
-        var accessTableIns = initNotPageTable(table, "accessTable", "getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
+        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
 
 
         function parkingSpaceRes(res) {
@@ -678,7 +679,7 @@
                 field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
             }
         ]];
-        var parkingSpaceTableIns = initTable(table, "parkingSpaceTable", 20, "getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null);
+        var parkingSpaceTableIns = initTable(table, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null);
 
 
         function garageChargerRes(res) {
@@ -716,7 +717,7 @@
                 field: 'spaceName', title: '创建时间', sort: false, fixed: 'center'
             },
         ]];
-        var garageChargerTableIns = initTable(table, "garageChargerTable", 20, "getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null);
+        var garageChargerTableIns = initTable(table, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null);
 
         var cameraCols = [[
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
@@ -749,7 +750,7 @@
             };
         }
 
-        var cameraTableIns = initNotPageTable(table, "cameraTable", "getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
+        var cameraTableIns = initNotPageTable(table, "cameraTable", "/getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
 
 
         function showMaintain(maintainInfo, locationFlag) {
@@ -791,7 +792,7 @@
             }
         }
 
-        initTree(tree, '#orgTree', "getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
 
         function clickOrg(orgInfo) {
             tableReload(tableIns, {orgId: orgInfo.data.id})
@@ -859,7 +860,7 @@
                 var data = {memoId: data.memoId};
                 layer.confirm('真的删除行么', function (index) {
 
-                    sendAjaxRequest("POST", "garageMemoDelete.json", "json", JSON.stringify(data), function (res) {
+                    sendAjaxRequest("POST", "/garageMemoDelete.json", "json", JSON.stringify(data), function (res) {
                         if (res.resFlag === 'N') {
                             tableReload(momeTableIns, {garageId: maintainInfo.garageId})
                             layer.msg("删除成功");
