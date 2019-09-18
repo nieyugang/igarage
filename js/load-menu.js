@@ -50,7 +50,7 @@
         sSubmenu += '<span class="heading" id="hx-config-center">配置中心</span>';
         submenuListFn(hxConfigCenter);
         sSubmenu += '<span class="heading" id="hx-prd-center">产品中心</span>';
-        var hxPrdCenterList =hxPrdCenter[0].subMenuList;
+        var hxPrdCenterList =hxPrdCenter.length==0?"":hxPrdCenter[0].subMenuList;
         submenuListFn(hxPrdCenterList)
         $("#hx-slideMenu").html(sSubmenu);
 
