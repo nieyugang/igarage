@@ -10,8 +10,7 @@ jQuery(document).ajaxStart(ajaxStart)
 /**
  * 显示loading
  */
-function ajaxStart() {
-};
+function ajaxStart() {};
 
 function ajaxSend(event, jqXHR, options) {
     var data;
@@ -94,8 +93,7 @@ function ajaxError(e, jqxhr, settings, exception) {
                 layer.closeAll();
             }
         });
-    } else {
-    }
+    } else {}
 };
 
 /**
@@ -145,7 +143,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols) {
         where: where,
         contentType: 'application/json',
         cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-        ,
+            ,
         parseData: parseData,
         cols: cols,
         page: false
@@ -161,7 +159,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols) {
 function tableReload(table, where) {
     table.reload({
         where: where //设定异步数据接口的额外参数
-        ,
+            ,
         page: {
             curr: 1 //重新从第 1 页开始
         }
@@ -265,30 +263,23 @@ function sendAjaxRequest(type, url, dataType, data, successCallback, errorCallba
  */
 function sendDelRequest(url, data, tableIns) {
     layer.confirm('确定删除吗？', function (index) {
-        $.ajax({
-            url: backServiceUrl + url,
-            type: 'POST',
-            data: data,
-            contentType: "application/json",
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                if (res.resFlag == "N") {
-                    layer.msg('操作成功', {
-                        icon: 1
-                    });
-                    setTimeout(function () {
-                        tableReload(tableIns)
-                    }, 2000);
-
-                }
-            },
-            error: function () {
-                layer.msg("网络通信异常", {
-                    icon: 2
+        sendAjaxRequest("POST", url, "json", data, getOrgTreeSuccess, getOrgTreeError);
+        function getOrgTreeSuccess(res) {
+            if (res.resFlag == "N") {
+                layer.msg('操作成功', {
+                    icon: 1
                 });
+                setTimeout(function () {
+                    tableReload(tableIns)
+                }, 2000);
+
             }
-        });
+        };
+        function getOrgTreeError() {
+            layer.msg("网络通信异常", {
+                icon: 2
+            });
+        };
     });
 };
 
@@ -299,7 +290,6 @@ function sendDelRequest(url, data, tableIns) {
  */
 function sendSubmitRequest(url, data) {
     sendAjaxRequest("POST", url, "json", data, successCallback, errorCallback);
-
     function successCallback(res) {
         if (res.resFlag == "N") {
             layer.msg('操作成功', {
@@ -310,7 +300,6 @@ function sendSubmitRequest(url, data) {
             }, 3000);
         }
     };
-
     function errorCallback() {
         layer.msg('通信异常', {
             icon: 2
