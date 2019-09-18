@@ -119,31 +119,7 @@
             success: function (res) {
               if (res.resFlag == "N") {
                 var tree_Initialization_code = new Array();
-                for (var i in res.roleMenuList) {
-                  if (res.roleMenuList.hasOwnProperty(i)) {
-                    var parent_element = res.roleMenuList[i];
-                    var parent_menuId = parent_element.menuId;
-                    var parent_enable = parent_element.enable;
-                    if (parent_enable) {
-                      var parent_menuId = parent_menuId;
-                      // tree_Initialization_code = [...tree_Initialization_code, parent_menuId];
-                      tree_Initialization_code.push(parent_menuId);
-                    }
-                    //遍历子节点
-                    var subMenuList = parent_element.subMenuList;
-                    for (var j in subMenuList) {
-                      if (subMenuList.hasOwnProperty(j)) {
-                        var element = subMenuList[j];
-                        var menuId = element.menuId;
-                        var enable = element.enable;
-                        if (enable) {
-                          // tree_Initialization_code = [...tree_Initialization_code, menuId];
-                          tree_Initialization_code.push(menuId);
-                        }
-                      }
-                    }
-                  }
-                }
+                initTreeChecked(res.roleMenuList,tree_Initialization_code);
                 form.val('roleInfo-detail', {
                   "roleId": roleId,
                   "roleName": roleName,
@@ -185,21 +161,8 @@
             //获得选中的节点
             var checkData = tree.getChecked('menuTree');
             var menuIdList = [];
-            // 遍历checked的菜单:是一个数组
-            for (var i in checkData) {
-              if (checkData.hasOwnProperty(i)) {
-                var elements = checkData[i];
-                for (var j in checkData[i].children) {
-                  if (checkData[i].children.hasOwnProperty(j)) {
-                    var element = checkData[i].children[j];
-                    var menu = {
-                      "menuId": element.id
-                    };
-                    menuIdList.push(menu);
-                  }
-                }
-              }
-            }
+            menuIdList = getCheckedMenuId(checkData, menuIdList)
+
             formData.roleId = parseInt(formData.roleId);
             formData.menuIdList = menuIdList;
             // 提交
@@ -238,7 +201,7 @@
             "id": subMenuElement.menuId,
             "title": subMenuElement.menuName,
             // "spread": true,
-          };// 存放tree数据
+          };
           var childrens_node = subMenuElement.subMenuList;
           if (childrens_node != 0) {
             var son = getTreeJson(childrens_node);
@@ -248,6 +211,41 @@
         }
       }
       return child_node;
+    }
+
+    //递归重组选中的节点
+    function getCheckedMenuId(checkData, menuIdList) {
+      for (var i in checkData) {
+        if (checkData.hasOwnProperty(i)) {
+          var element = checkData[i];
+          var menu = { "menuId": element.id };
+          menuIdList.push(menu);
+
+          if (checkData[i].children != undefined) {
+            getCheckedMenuId(checkData[i].children, menuIdList);
+          }
+        }
+      }
+      return menuIdList;
+    }
+
+    //递归重组选中的节点
+    function initTreeChecked(roleMenuList,tree_Initialization_code) {
+      for (var i in roleMenuList) {
+        if (roleMenuList.hasOwnProperty(i)) {
+          var parent_element = roleMenuList[i];
+          var parent_menuId = parent_element.menuId;
+          var parent_enable = parent_element.enable;
+          if (parent_enable) {
+            var parent_menuId = parent_menuId;
+            // tree_Initialization_code = [...tree_Initialization_code, parent_menuId];
+            tree_Initialization_code.push(parent_menuId);
+          }
+          if(parent_element.subMenuList.length!=0){
+              initTreeChecked(parent_element.subMenuList,tree_Initialization_code);
+          }
+        }
+      }
     }
 
   </script>
