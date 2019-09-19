@@ -6,10 +6,9 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
@@ -27,16 +26,12 @@
     </fieldset>
 </div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
-    <script src="../../js/common.js"></script>
-
-<script type="text/html" id="tableNo">
-    {{d.LAY_TABLE_INDEX + 1}}
-</script>
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
 
 <script id="toolbar" type="text/html">
     <div class="layui-btn-group">
@@ -52,8 +47,8 @@
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
                 <legend>新增车位类型</legend>
             </fieldset>
-            <form class="layui-form layui-form-pane" id="carPageForm" action="" lay-filter="parkIngType-edit">
-                <input type="hidden" id="id" name="id">
+            <form class="layui-form layui-form-pane" id="parkIngTypeEditForm" action="" lay-filter="parkIngType-edit">
+                <input type="hidden" id="typeId" name="typeId">
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型名称</label>
                     <div class="layui-input-block">
@@ -75,22 +70,31 @@
     </div>
 </script>
 
+<script type="text/html" id="editBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+
 <script type="application/javascript">
     layui.use('table', function () {
-        var table = layui.table;
+        var table = layui.table
+            , layer = layui.layer
+            , form = layui.form;
 
         var parkingSpaceTypeListCols = [[
-            {
-                field: 'id', title: '序号', toolbar: '#tableNo', sort: false, fixed: 'center'
-            },
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
             {
                 field: 'name', title: '类型名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'id', title: '操作', width: 160, toolbar: "#editBar", sort: false, fixed: 'center'
             }
         ]];
 
         function res(res) {
             var count = 0;
-            if(res.parkingSpaceTypeList){
+            if (res.parkingSpaceTypeList) {
                 count = res.parkingSpaceTypeList.length;
             }
             return {
@@ -107,16 +111,69 @@
             var layEvet = obj.event;
             switch (layEvet) {
                 case 'add':
-
-                    layer.open({
-                        type: 1,
-                        title: false,
-                        anim: 1,
-                        area: ['500px', '300px'],
-                        content: $("#parkIngTypeEditPage").html()
-                    });
+                    openParkIngTypeEditPage();
                     break;
-            };
+            }
+            ;
+        });
+
+        function openParkIngTypeEditPage(){
+            clearParkingType();
+            layer.open({
+                type: 1,
+                title: false,
+                anim: 1,
+                area: ['500px', '300px'],
+                content: $("#parkIngTypeEditPage").html()
+            });
+        }
+
+        //监听监控行工具事件
+        table.on('tool(parkingTypeTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                openParkIngTypeEditPage();
+                setParkingType(data);
+            } else if (obj.event === 'delete') {
+                var delData = {typeId: data.id};
+                sendDelRequest("parkingSpaceTypeDelete.json", JSON.stringify(delData), tableIns);
+            }
+        });
+
+        function setParkingType(data) {
+            debugger
+            $("#typeId").val(data.id);
+            $("#name").val(data.name);
+            form.render();
+        }
+
+        function clearParkingType() {
+            $("#typeId").val("");
+            $("#typeName").val("");
+            form.render();
+        }
+
+        //车位监听提交
+        form.on('submit(garageChargerFormSubmit)', function () {
+            var data = $("#parkIngTypeEditForm").serializeObject();
+            var url = "parkingSpaceTypeAdd.json";
+            if (data.typeId) {
+                data.typeId = parseInt(data.typeId)
+                url = "parkingSpaceTypeUpdate.json";
+            }
+            data.typeName = data.name;
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(tableIns, {});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
         });
     });
 </script>

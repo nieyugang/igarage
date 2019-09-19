@@ -134,7 +134,7 @@ function initTable(table, title, elem, limit, url, where, parseData, cols, toolb
     });
 };
 
-function initNotPageTable(table, elem, url, where, parseData, cols) {
+function initNotPageTable(table, elem, url, where, parseData, cols, done) {
     return table.render({
         elem: '#' + elem,
         height: 'full-300',
@@ -146,7 +146,8 @@ function initNotPageTable(table, elem, url, where, parseData, cols) {
             ,
         parseData: parseData,
         cols: cols,
-        page: false
+        page: false,
+        done: done
     });
 };
 
