@@ -51,16 +51,16 @@
 
     <div class="layui-form-item">
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn">设置网络</button>
+            <button type="button" class="layui-btn" id="setNet">设置网络</button>
         </div>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn">清除权限</button>
+            <button type="button" class="layui-btn" id="clearAuth">清除权限</button>
         </div>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn">设置时间</button>
+            <button type="button" class="layui-btn" id="setTime">设置时间</button>
         </div>
         <div class="layui-input-inline">
-            <button type="button" class="layui-btn">设置门</button>
+            <button type="button" class="layui-btn" id="setDoor">设置门</button>
         </div>
     </div>
 
@@ -257,6 +257,19 @@
             }
             form.render('select');
         })
+
+        $(document).on('click','#setNet',function(){
+            layer.msg("设置网络成功!");
+        });
+        $(document).on('click','#clearAuth',function(){
+            layer.msg("清除权限成功!");
+        });
+        $(document).on('click','#setTime',function(){
+            layer.msg("设置时间成功!");
+        });
+        $(document).on('click','#setDoor',function(){
+            layer.msg("设置门成功!");
+        });
 
         $(document).on('click','#access',function(){
             var elem = window.parent.layui.element;
