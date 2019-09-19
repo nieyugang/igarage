@@ -48,9 +48,6 @@
                                 <!-- 定义头部工具栏 -->
                                 <script id="toolbar" type="text/html">
                                 <div class="layui-btn-group">
-                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
-                                        <i class="layui-icon">&#xe654;</i>
-                                    </button>
                                     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="update">
                                         <i class="layui-icon">&#xe642;</i>
                                     </button>
@@ -90,7 +87,29 @@
                     "orgId": orgId
                 });
             };
-             initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({ "userInfo": userInfo, "orgId": 1 }), clickOrg)
+            // 操作节点回调
+            function operateOrg(obj) {
+                var type = obj.type;// 得到操作类型：add、edit、del
+                var data = obj.data;// 得到节点的数据
+                var node_id = obj.data.id;
+                var node_name = obj.data.title;
+                if (type === 'add') {
+                    layer.open({
+                        type: 2,
+                        title: false,
+                        anim: 1,
+                        area: ['700px', '650px'],
+                        content: './userAdd.html?orgId=' + node_id + "&orgName=" + encodeURIComponent(node_name),
+                        end: function () {
+                            tableReload(tableIns);
+                            tree.reload('#orgTree');
+                        }
+                    });
+                    return false;
+                }
+            }
+
+            initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({ "userInfo": userInfo, "orgId": 1 }), clickOrg, operateOrg, ['add'])
             //获取组织机构数据nodes:[{},{}]
             var cols = [[
                 { type: 'radio', fixed: 'left' },
@@ -159,7 +178,7 @@
                             layer.msg('请选择一行');
                         } else {
                             var userId = checkStatus.data[0].userId;
-                            sendDelRequest("/userDelete.json", JSON.stringify({ "userInfo": userInfo, "userId": userId }),tableIns);
+                            sendDelRequest("/userDelete.json", JSON.stringify({ "userInfo": userInfo, "userId": userId }), tableIns);
                         }
                         break;
                 };

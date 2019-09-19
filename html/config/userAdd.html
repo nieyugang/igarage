@@ -45,8 +45,8 @@
         <div class="layui-form-item">
           <label class="layui-form-label">组织机构</label>
           <div class="layui-input-block">
-            <select name="orgId" xm-select="select_orgId" lay-verify="required" xm-select-radio="">
-            </select>
+            <input type="text" name="orgId" autocomplete="off" lay-verify="email" class="layui-input"  style="display:none;">
+            <input type="text" name="orgName" autocomplete="off" lay-verify="email" class="layui-input" readonly=true>
           </div>
         </div>
         <div class="layui-form-item">
@@ -106,39 +106,39 @@
   <script src="../../js/common.js"></script>
 
   <script>
-    //加载组织树
-    var nodes = [];
-    $.ajax({
-      url: backServiceUrl + '/getOrgTree.json',
-      type: 'POST',
-      data: JSON.stringify({
-        "userInfo": userInfo,
-        "orgId": 1
-      }),
-      contentType: "application/json",
-      dataType: 'json',
-      async: true,
-      success: function (res) {
-        //处理返回数据
-        var orgTreeInfo = res.orgTreeInfo;// 顶层节点
-        var childrens;
-        childrens = getTreeJson(orgTreeInfo.childOrgList);
-        var root_node = {
-          "value": orgTreeInfo.orgId,
-          "name": orgTreeInfo.orgName,
-          "selected": "",
-          "disabled": "",
-          "children": childrens
-        };// 存放tree数据
-        nodes.push(root_node);
-        layui.formSelects.data('select_orgId', 'local', {
-          arr: nodes
-        });
-      },
-      error: function () {
-        layer.msg("操作失败");
-      }
-    });
+    // //加载组织树
+    // var nodes = [];
+    // $.ajax({
+    //   url: backServiceUrl + '/getOrgTree.json',
+    //   type: 'POST',
+    //   data: JSON.stringify({
+    //     "userInfo": userInfo,
+    //     "orgId": 1
+    //   }),
+    //   contentType: "application/json",
+    //   dataType: 'json',
+    //   async: true,
+    //   success: function (res) {
+    //     //处理返回数据
+    //     var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+    //     var childrens;
+    //     childrens = getTreeJson(orgTreeInfo.childOrgList);
+    //     var root_node = {
+    //       "value": orgTreeInfo.orgId,
+    //       "name": orgTreeInfo.orgName,
+    //       "selected": "",
+    //       "disabled": "",
+    //       "children": childrens
+    //     };// 存放tree数据
+    //     nodes.push(root_node);
+    //     layui.formSelects.data('select_orgId', 'local', {
+    //       arr: nodes
+    //     });
+    //   },
+    //   error: function () {
+    //     layer.msg("操作失败");
+    //   }
+    // });
 
     //获取角色data
     $.ajax({
@@ -183,6 +183,16 @@
       var form = layui.form;
       var layer = layui.layer;
       var layedit = layui.layedit;
+
+
+      var orgId = RequestParameter()["orgId"];
+      var orgName = decodeURIComponent(RequestParameter()["orgName"]);
+
+      form.val('userInfo-detail', {
+        "select_orgId": layui.formSelects.value('select_orgId', [12]),
+        "orgName": orgName,
+        "orgId": orgId
+      });
 
       // 表单验证
       form.verify({
