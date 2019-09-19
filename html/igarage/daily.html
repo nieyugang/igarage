@@ -440,9 +440,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">控制器类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="acType" autocomplete="off" id="acType"
-                               placeholder="控制器类型"
-                               lay-reqtext="控制器类型不能为空" lay-verify="required" class="layui-input">
+                        <select name="acType" id="acType" lay-verify="required" lay-reqtext="控制器类型不能为空">
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -499,6 +498,17 @@
                                placeholder="说明" class="layui-input">
                     </div>
                 </div>
+
+                <div class="layui-form-item" id="acEnableDiv" style="display: none">
+                    <label class="layui-form-label">启用</label>
+                    <div class="layui-input-block">
+                        <select name="enable" id="enable">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit="" type="button" lay-filter="acFormSubmit">立即提交</button>
@@ -521,7 +531,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">车库类型</label>
                     <div class="layui-input-block">
-                        <select name="thirdPay" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空" >
+                        <select name="thirdPay" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
                         </select>
                     </div>
                 </div>
@@ -622,6 +632,7 @@
         // -----------------------------------页面初始化做的操作----------------------------------
         var spaceTypeList; //车位类型
         var cameraTypeList;//监控类型
+        var accessTypeList;//门禁控制器类型
         //查询车位类型
         sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
             if (res.resFlag === 'N') {
@@ -640,6 +651,19 @@
             if (res.resFlag === 'N') {
                 if (res.cameraTypeList) {
                     cameraTypeList = res.cameraTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+        //查询车位类型
+        sendAjaxRequest("POST", "/getSysCodesAndName.json", "json", JSON.stringify({"typeList": [{"type": "acType"}]}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.acTypeList) {
+                    accessTypeList = res.acTypeList;
                 }
             } else {
                 layer.msg("查询失败");
@@ -934,7 +958,7 @@
             }
         });
 
-        function setCamera(data){
+        function setCamera(data) {
             $("#cameraId").val(data.cameraId)
             $("#cameraName").val(data.cameraName);
             $("#cameraType").val(data.cameraType);
@@ -945,7 +969,7 @@
             $("#installAddress").val(data.installAddress);
         }
 
-        function clearCamera(){
+        function clearCamera() {
             $("#cameraId").val("")
             $("#cameraName").val("");
             $("#cameraType").val("");
@@ -956,7 +980,7 @@
             $("#installAddress").val("");
         }
 
-        function openCameraEditPage(){
+        function openCameraEditPage() {
             layer.open({
                 type: 1
                 , title: false //不显示标题栏
@@ -1033,17 +1057,49 @@
 
         var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
 
+        function setAccess(data) {
+            debugger
+            $("#acId").val(data.acId);
+            $("#acType").val(data.acType);
+            $("#acSn").val(data.sn);
+            $("#acIp").val(data.ip);
+            $("#acPort").val(data.acId);
+            $("#acMac").val(data.acId);
+            $("#mask").val(data.mask);
+            $("#gateway").val(data.gateway);
+            $("#remark").val(data.remark);
+            $("#enable").val(data.enable);
+            $("#acEnableDiv").show();
+            form.render();
+        }
+
+        function clearAccess() {
+            $("#acId").val("");
+            $("#acType").val("");
+            $("#acSn").val("");
+            $("#acIp").val("");
+            $("#acPort").val("");
+            $("#acMac").val("");
+            $("#mask").val("");
+            $("#gateway").val("");
+            $("#remark").val("");
+            $("#enable").val("");
+            $("#acEnableDiv").hide();
+            form.render();
+        }
+
         //监听监控行工具事件
         table.on('tool(accessTable)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
+                openAcAddPage();
+                setAccess(data)
             } else if (obj.event === 'delete') {
                 sendDelRequest("accessControllerDelete.json", JSON.stringify({acId: data.acId}), accessTableIns);
             }
         });
 
-        //打开增加修改门禁页面
-        $("#acAddPageBtn").click(function (event) {
+        function openAcAddPage() {
             layer.open({
                 type: 1
                 , title: false //不显示标题栏
@@ -1051,7 +1107,18 @@
                 , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
                 , content: $("#accessControllerEditPage").html()
             });
+            clearAccess();
+            $("#acType").html("");
+            for (var i = 0; i < accessTypeList.length; i++) {
+                var acType = accessTypeList[i];
+                $("#acType").append("<option value=" + acType.code + ">" + acType.name + "</option>")
+            }
             form.render();
+        }
+
+        //打开增加修改门禁页面
+        $("#acAddPageBtn").click(function (event) {
+            openAcAddPage();
         });
 
         //新增门禁监听提交
@@ -1059,12 +1126,13 @@
             var data = $("#accessControllerEditPageForm").serializeObject();
             var url = "accessControllerAdd.json";
             if (data.acId) {
-                data.acId = parseInt(data.id)
+                data.acId = parseInt(data.acId)
                 url = "accessControllerUpdate.json";
             }
             data.port = parseInt(data.acPort);
             data.acType = parseInt(data.acType);
             data.garageId = parseInt(maintainInfo.garageId);
+            data.enable = parseInt(data.enable);
 
             data.sn = data.acSn;
             data.ip = data.acIp;
@@ -1195,6 +1263,9 @@
                 field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
             },
             {
+                field: 'updateVersion', title: '修改版本', sort: false, fixed: 'center'
+            },
+            {
                 field: 'thirdPay',
                 title: '是否支持第三方支付',
                 toolbar: "#garageChargerThirdPayToolbar",
@@ -1214,13 +1285,31 @@
         table.on('tool(garageChargerTable)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
+                openGarageChargerPage();
+                setGarageCharger(data);
             } else if (obj.event === 'delete') {
                 sendDelRequest("garageChargerDelete.json", JSON.stringify({chargerId: data.chargerId}), garageChargerTableIns);
             }
         });
 
-        //打开增加修改充电桩页面
-        $("#garageChargerPageBtn").click(function (event) {
+        function setGarageCharger(data) {
+            $("#chargerId").val(data.chargerId);
+            $("#chargerName").val(data.chargerName);
+            $("#gcSn").val(data.sn);
+            $("#thirdPay").val(data.thirdPay);
+            $("#currentVersion").val(data.currentVersion);
+            form.render();
+        }
+
+        function clearGarageCharger() {
+            $("#chargerId").val("");
+            $("#chargerName").val("");
+            $("#gcSn").val("");
+            $("#thirdPay").val("");
+            $("#currentVersion").val("");
+        }
+
+        function openGarageChargerPage(){
             layer.open({
                 type: 1
                 , title: false //不显示标题栏
@@ -1228,7 +1317,13 @@
                 , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
                 , content: $("#garageChargerEditPage").html()
             });
+            clearGarageCharger();
             form.render();
+        }
+
+        //打开增加修改充电桩页面
+        $("#garageChargerPageBtn").click(function (event) {
+            openGarageChargerPage();
         });
 
         //新增充电站监听提交
@@ -1237,6 +1332,7 @@
             var url = "garageChargerAdd.json";
             if (data.chargerId) {
                 data.chargerId = parseInt(data.chargerId)
+                data.updateVersion = parseInt(data.currentVersion);
                 url = "garageChargerUpdate.json";
             }
             data.currentVersion = parseInt(data.currentVersion);
