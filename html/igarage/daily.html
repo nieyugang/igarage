@@ -277,6 +277,7 @@
                             </div>
                             <div class="layui-tab-item">
                                 <table class="layui-hide" id="accessTable" lay-filter="accessTable"></table>
+                                <table class="layui-hide" id="accessDoorTable" lay-filter="accessDoorTable"></table>
                             </div>
                             <div class="layui-tab-item">
                                 <table class="layui-hide" id="garageChargerTable"
@@ -531,7 +532,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">车库类型</label>
                     <div class="layui-input-block">
-                        <select name="thirdPay" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
+                        <select name="spaceType" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
                         </select>
                     </div>
                 </div>
@@ -602,6 +603,68 @@
                         <button class="layui-btn" lay-submit="" type="button" lay-filter="garageChargerFormSubmit">
                             立即提交
                         </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="doorEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>编辑车位</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="doorPageForm" action="" lay-filter="door-edit">
+                <input type="hidden" id="doorId" name="doorId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">门名称</label>
+                    <div class="layui-input-block">
+                        <select name="doorName" id="doorName" lay-verify="required" lay-reqtext="车库类型不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">门编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="doorNo" autocomplete="off" id="doorNo"
+                               placeholder="门编号"
+                               lay-reqtext="门编号不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">操作模式</label>
+                    <div class="layui-input-block">
+                        <select name="operateMode" id="operateMode" lay-verify="required">
+                            <option value="3">在线</option>
+                            <option value="1">常开</option>
+                            <option value="2">常闭</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开门延迟</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="openDelay" autocomplete="off" id="openDelay"
+                               placeholder="门编号"
+                               lay-reqtext="门编号不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">启用</label>
+                    <div class="layui-input-block">
+                        <select name="doorEenable" id="doorEenable" lay-verify="required">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="doorFormSubmit">立即提交</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -1055,7 +1118,17 @@
             }
         ]];
 
-        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
+        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, accessListdone);
+
+        function accessListdone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    noPageTableReload(accessDoorTableIns, {acId: res.data[0].acId})
+                }
+            }
+        }
 
         function setAccess(data) {
             debugger
@@ -1151,6 +1224,65 @@
             });
             return false;
         });
+
+//         ---------------------------门禁下的门 先预留-------------------------
+
+        function accessDoorRes(res) {
+            var records = 0;
+            if(res.accessDoorInfoList){
+                records = res.accessDoorInfoList.length;
+            }
+            return {
+                code: 0,
+                msg: "",
+                count: records,
+                data: res.accessDoorInfoList
+            };
+        }
+
+        var accessDoorCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'doorName', title: '门名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'doorNo', title: '门编号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'operateMode', title: '操作模式', sort: false, fixed: 'center'
+            },
+            {
+                field: 'enable', title: '启用', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        var accessDoorTableIns = initNotPageTable(table, "accessDoorTable", "/getAccessDoorList.json", {acId: -1}, accessDoorRes, accessDoorCols, null);
+
+
+        function openAcAddPage() {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '650px']
+                , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#doorEditPage").html()
+            });
+            form.render();
+        }
+
+        //监听监控行工具事件
+        table.on('tool(accessDoorTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                openAcAddPage();
+            } else if (obj.event === 'delete') {
+                sendDelRequest("accessDoorDelete.json", JSON.stringify({doorId: data.doorId}), accessDoorTableIns);
+            }
+        });
+
 
 //         ---------------------------车位-------------------------
 
