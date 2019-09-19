@@ -108,6 +108,7 @@
                     var table = layui.table;
                     //渲染tree
                     tree.render({
+                        id:'#menuTree',
                         elem: '#menuTree',
                         showLine: false,
                         onlyIconControl: true,
@@ -139,6 +140,7 @@
                                                 menuId: menuId
                                             }
                                         });
+                                        tree.reload('#menuTree');
                                     }
                                 });
                             }

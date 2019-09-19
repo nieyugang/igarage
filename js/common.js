@@ -10,8 +10,7 @@ jQuery(document).ajaxStart(ajaxStart)
 /**
  * 显示loading
  */
-function ajaxStart() {
-};
+function ajaxStart() {};
 
 function ajaxSend(event, jqXHR, options) {
     var data;
@@ -94,8 +93,7 @@ function ajaxError(e, jqxhr, settings, exception) {
                 layer.closeAll();
             }
         });
-    } else {
-    }
+    } else {}
 };
 
 /**
@@ -145,7 +143,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols, done) {
         where: where,
         contentType: 'application/json',
         cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-        ,
+            ,
         parseData: parseData,
         cols: cols,
         page: false,
@@ -162,7 +160,7 @@ function initNotPageTable(table, elem, url, where, parseData, cols, done) {
 function tableReload(table, where) {
     table.reload({
         where: where //设定异步数据接口的额外参数
-        ,
+            ,
         page: {
             curr: 1 //重新从第 1 页开始
         }
@@ -175,7 +173,18 @@ function noPageTableReload(table, where) {
     });
 };
 
-function initTree(ztree, elem, url, where, clickOrg, operateOrg) {
+/**
+ *初始化Tree
+ * @param {*} ztree layui Tree组件
+ * @param {*} elem 指向容器选择器
+ * @param {*} url　请求url
+ * @param {*} where 数据源
+ * @param {*} clickOrg 节点被点击回调
+ * @param {*} operateOrg 操作节点回调
+ * @param {*} edit ['add','update','del']
+ * @returns
+ */
+function initTree(ztree, elem, url, where, clickOrg, operateOrg, edit) {
     var nodes = [];
     sendAjaxRequest("POST", url, "json", where, getOrgTreeSuccess, getOrgTreeError);
 
@@ -194,11 +203,13 @@ function initTree(ztree, elem, url, where, clickOrg, operateOrg) {
             nodes.push(root_node);
             //渲染tree
             ztree.render({
+                id:elem,
                 elem: elem,
                 data: nodes,
                 showLine: false, //是否开启连接线
                 onlyIconControl: true, //是否仅允许节点左侧图标控制展开收缩
                 click: clickOrg,
+                edit: edit,
                 operate: operateOrg
             });
         }
@@ -266,30 +277,25 @@ function sendAjaxRequest(type, url, dataType, data, successCallback, errorCallba
  */
 function sendDelRequest(url, data, tableIns) {
     layer.confirm('确定删除吗？', function (index) {
-        $.ajax({
-            url: backServiceUrl + url,
-            type: 'POST',
-            data: data,
-            contentType: "application/json",
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                if (res.resFlag == "N") {
-                    layer.msg('操作成功', {
-                        icon: 1
-                    });
-                    setTimeout(function () {
-                        tableReload(tableIns)
-                    }, 2000);
+        sendAjaxRequest("POST", url, "json", data, getOrgTreeSuccess, getOrgTreeError);
 
-                }
-            },
-            error: function () {
-                layer.msg("网络通信异常", {
-                    icon: 2
+        function getOrgTreeSuccess(res) {
+            if (res.resFlag == "N") {
+                layer.msg('操作成功', {
+                    icon: 1
                 });
+                setTimeout(function () {
+                    tableReload(tableIns)
+                }, 2000);
+
             }
-        });
+        };
+
+        function getOrgTreeError() {
+            layer.msg("网络通信异常", {
+                icon: 2
+            });
+        };
     });
 };
 
@@ -334,3 +340,16 @@ $.fn.serializeObject = function () {
     });
     return o;
 };
+//获取url中"?"符后的字串'./userAdd.html?orgId='+node_id,  例如：var orgId= RequestParameter()[orgId]
+function RequestParameter() {
+    var url = window.location.search;
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        var strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+        }
+    }
+    return theRequest
+}

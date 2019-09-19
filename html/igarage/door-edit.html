@@ -95,6 +95,7 @@
             var accessInfo = JSON.parse(parent.$("#accessId").val());
             form.val('access-detail', {
                 "acId": accessInfo.acId,
+                "acType": accessInfo.acType,
                 "sn": accessInfo.sn,
                 "ip": accessInfo.ip,
                 "port":accessInfo.port,
@@ -102,6 +103,7 @@
                 "mask":accessInfo.mask,
                 "remark":accessInfo.remark
             });
+            form.render('select');
         }
 
         //监听提交

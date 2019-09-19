@@ -108,6 +108,7 @@
                     //渲染tree
                     tree.render({
                         elem: '#orgTree',
+                        id: '#orgTree',
                         showLine: false,  //是否开启连接线
                         onlyIconControl: true,
                         data: nodes,
@@ -141,6 +142,7 @@
                                     content: './organizationAdd.html?parent_id=' + node_id,
                                     end: function () {
                                         table.reload('t-organization');
+                                        tree.reload('#orgTree');
                                     }
                                 });
                             } else if (type === 'update') {

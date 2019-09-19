@@ -74,16 +74,16 @@
                         <div class="layui-carousel layui-col-xs6">
                             <ul class="layui-row layui-col-space10">
                                 <li class="layui-col-xs3">
-                                    <button type="button" class="layui-btn">设置参数</button>
+                                    <button type="button" class="layui-btn" id="setParam">设置参数</button>
                                 </li>
                                 <li class="layui-col-xs3">
-                                    <button type="button" class="layui-btn">远程开门</button>
+                                    <button type="button" class="layui-btn" id="openDoor">远程开门</button>
                                 </li>
                                 <li class="layui-col-xs3">
-                                    <button type="button" class="layui-btn">远程读卡</button>
+                                    <button type="button" class="layui-btn" id="getCard">远程读卡</button>
                                 </li>
                                 <li class="layui-col-xs3">
-                                    <button type="button" class="layui-btn">卡授权信息</button>
+                                    <button type="button" class="layui-btn" id="cardInfo">卡授权信息</button>
                                 </li>
                             </ul>
                         </div>
@@ -209,6 +209,18 @@
             }
             return child_node;
         }
+
+        $(document).on('click','#setParam',function(){
+            layer.msg("设置参数成功!");
+        });
+
+        $(document).on('click','#openDoor',function(){
+            layer.msg("远程开门成功!");
+        });
+
+        $(document).on('click','#getCard',function(){
+            layer.msg("远程读卡成功!");
+        });
 
     </script>
 </body>
