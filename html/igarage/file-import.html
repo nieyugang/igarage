@@ -18,6 +18,9 @@
             <textarea name="infoArea" id="infoArea" class="layui-textarea" style="width:100%;height:100%;"></textarea>
         </div>
     </div>
+</form>
+</body>
+
 <script>
     //给input标签绑定change事件，一上传选中的.xls文件就会触发该函数
     $('#importFile').change(function(e) {
@@ -53,5 +56,4 @@
         fileReader.readAsBinaryString(files[0]);
     });
 </script>
-</body>
 </html>
