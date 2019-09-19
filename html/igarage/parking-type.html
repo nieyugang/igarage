@@ -37,6 +37,44 @@
 <script type="text/html" id="tableNo">
     {{d.LAY_TABLE_INDEX + 1}}
 </script>
+
+<script id="toolbar" type="text/html">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe654;</i>
+        </button>
+    </div>
+</script>
+
+<script type="text/html" id="parkIngTypeEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>新增车位类型</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="carPageForm" action="" lay-filter="parkIngType-edit">
+                <input type="hidden" id="id" name="id">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" autocomplete="off" id="name"
+                               placeholder="类型名称"
+                               lay-reqtext="类型名称不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="garageChargerFormSubmit">
+                            立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
 <script type="application/javascript">
     layui.use('table', function () {
         var table = layui.table;
@@ -63,28 +101,22 @@
             };
         }
 
-        return table.render({
-            title: '车位类型表',
-            elem: '#parkingTypeTable',
-            method: 'POST',
-            contentType: 'application/json',
-            limit: 20,
-            limits: [20, 50, 100],
-            url: getbackServiceUrl() + "getParkingSpaceTypeList.json",
-            where: {},
-            parseData: res,
-            request: {
-                pageName: 'pageNo' //页码的参数名称，默认：page
-                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
-            },
-            cols: parkingSpaceTypeListCols
-        });
+        var tableIns = initTable(table, '车位类型表', "parkingTypeTable", 20, "/getParkingSpaceTypeList.json", {}, res, parkingSpaceTypeListCols, "#toolbar", null);
 
-
-
-        // 监听头部工具栏事件
         table.on('toolbar(parkingTypeTable)', function (obj) {
+            var layEvet = obj.event;
+            switch (layEvet) {
+                case 'add':
 
+                    layer.open({
+                        type: 1,
+                        title: false,
+                        anim: 1,
+                        area: ['500px', '300px'],
+                        content: $("#parkIngTypeEditPage").html()
+                    });
+                    break;
+            };
         });
     });
 </script>

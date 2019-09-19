@@ -6,10 +6,9 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
     <style>
         #maintainInfoDetails div {
             font-size: 12px;
@@ -60,7 +59,7 @@
         <div class="layui-col-md10">
             <div style="margin-top: 2%;" class="row">
                 <div class="layui-col-md7" id="maintainMapInfo"
-                     style="border: 1px solid #848d92;min-height: 100px; min-width: 97%">
+                     style="border: 1px solid #848d92;min-height: 550px; min-width: 97%">
                     <div class="layui-tab layui-tab-brief">
                         <ul class="layui-tab-title">
                             <li class="layui-this">地图</li>
@@ -68,7 +67,7 @@
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
-                                <div id="allmap" style="height: 420px"></div>
+                                <div id="allmap" style="height: 450px"></div>
                             </div>
                             <div class="layui-tab-item">
                                 <div class="layui-form-item" style="text-align: center">
@@ -79,7 +78,7 @@
                     </div>
                 </div>
                 <div class="layui-col-md4" id="maintainInfoDetails"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-left: 2%; max-width: 30%; display: none">
+                     style="border: 1px solid #848d92;min-height: 550px; margin-left: 2%; max-width: 30%; display: none">
                     <div class="layui-tab layui-tab-brief" id="showMaintain">
                         <div class="layui-tab layui-tab-brief">
                             <ul class="layui-tab-title">
@@ -91,40 +90,40 @@
                             <div class="layui-tab-content">
                                 <div class="layui-tab-item layui-show" id="maintainInfo">
                                     <div class="layui-form-item" style="margin-top: 10px; margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">车库名称</label>
-                                        <label class="layui-form-label-left-col-6" id="garageNameLabel"></label>
+                                        <label class="layui-form-label-right-col-3">车库名称</label>
+                                        <label class="layui-form-label-left-col-5" id="garageNameLabel"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">车库地址</label>
-                                        <label class="layui-form-label-left-col-6"
+                                        <label class="layui-form-label-right-col-3">车库地址</label>
+                                        <label class="layui-form-label-left-col-5"
                                                id="addressLabel"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">经纬度</label>
-                                        <label class="layui-form-label-left-col-6" id="inglatLabel"></label>
+                                        <label class="layui-form-label-right-col-3">经纬度</label>
+                                        <label class="layui-form-label-left-col-5" id="inglatLabel"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">管理员</label>
-                                        <label class="layui-form-label-left-col-6" id="adminLabel"></label>
+                                        <label class="layui-form-label-right-col-3">管理员</label>
+                                        <label class="layui-form-label-left-col-5" id="adminLabel"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">联系电话</label>
-                                        <label class="layui-form-label-left-col-6" id="mobileLabel"></label>
+                                        <label class="layui-form-label-right-col-3">联系电话</label>
+                                        <label class="layui-form-label-left-col-5" id="mobileLabel"></label>
                                     </div>
 
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">微信绑定用户</label>
-                                        <label class="layui-form-label-left-col-6">
+                                        <label class="layui-form-label-right-col-3">微信绑定用户</label>
+                                        <label class="layui-form-label-left-col-5">
                                             <a href="#" class="menu-btn active" title="点击查看微信用户详情" id="wxUserNum"> </a>
                                         </label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">创建时间</label>
-                                        <label class="layui-form-label-left-col-6" id="createTime"></label>
+                                        <label class="layui-form-label-right-col-3">创建时间</label>
+                                        <label class="layui-form-label-left-col-5" id="createTime"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">门禁控制器数量</label>
-                                        <label class="layui-form-label-left-col-6">
+                                        <label class="layui-form-label-right-col-3">门禁控制器数量</label>
+                                        <label class="layui-form-label-left-col-5">
                                             <a href="#" class="menu-btn active" title="点击查看门禁详情"
                                                id="accessControlNum"> </a>
                                         </label>
@@ -135,71 +134,74 @@
                                 </div>
                                 <div class="layui-tab-item">
                                     <div class="layui-form-item" style="margin-top: 10px; margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">车位总数</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">车位总数</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">摩托车车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">摩托车车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">电动车车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">电动车车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">三轮车车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">三轮车车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">自行车车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">自行车车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">残疾车车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">残疾车车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">待定车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">待定车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">电动车车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">电动车车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">报警用户车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">报警用户车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                 </div>
                                 <div class="layui-tab-item">
                                     <div class="layui-form-item" style="margin-top: 10px; margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">车位</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">车位</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">充电站</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">充电站</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">门禁</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">门禁</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div class="layui-form-item" style="margin-bottom: 0px;">
-                                        <label class="layui-form-label-right-col-4">监控</label>
-                                        <label class="layui-form-label-left-col-6"></label>
+                                        <label class="layui-form-label-right-col-3">监控</label>
+                                        <label class="layui-form-label-left-col-5"></label>
                                     </div>
                                     <div style="text-align: center">
                                         <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
                                     </div>
                                     <div style="text-align: center; margin-top: 10px">
-                                        <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i class="fa fa-car"
-                                                                                                aria-hidden="true"></i>
+                                        <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i
+                                                class="fa fa-car"
+                                                aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="layui-btn" title="增加充电站" id="garageChargerPageBtn"><i class="fa fa-bolt"
-                                                                                                 aria-hidden="true"></i>
+                                        <button type="button" class="layui-btn" title="增加充电站" id="garageChargerPageBtn">
+                                            <i class="fa fa-bolt"
+                                               aria-hidden="true"></i>
                                         </button>
-                                        <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i class="fa fa-unlock-alt"
-                                                                                                aria-hidden="true"></i>
+                                        <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i
+                                                class="fa fa-unlock-alt"
+                                                aria-hidden="true"></i>
                                         </button>
                                         <button type="button" class="layui-btn" title="增加监控" id="cameraAddPageBtn"><i
                                                 class="fa fa-video-camera" aria-hidden="true"></i></button>
@@ -241,7 +243,8 @@
                 <div class="layui-col-md12" id="garageTable"
                      style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
                     <div class="" style="background-color: #848d92">车库列表</div>
-                    <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
+                    <table style="margin: 10px" class="layui-hide" id="maintainTable"
+                           lay-filter="maintainTable"></table>
                 </div>
 
                 <div class="layui-col-md12" id="maintainMomeDiv"
@@ -268,7 +271,7 @@
                             <li>充电站</li>
                             <li>监控</li>
                         </ul>
-                        <div class="layui-tab-content" id="parkingInfo">
+                        <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <table class="layui-hide" id="parkingSpaceTable" lay-filter="parkingSpaceTable"></table>
                             </div>
@@ -327,6 +330,14 @@
     {{#  } }}
 </script>
 
+<script type="text/html" id="garageChargerStatus">
+    {{#  if(d.status === 1){ }}
+    在线
+    {{#  } else { }}
+    离线
+    {{#  } }}
+</script>
+
 <script type="text/html" id="garageBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="garageMemo">备忘录</a>
@@ -335,6 +346,11 @@
 <script type="text/html" id="garageMomeBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>-->
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+<script type="text/html" id="editBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
@@ -357,9 +373,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">监控类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cameraType" autocomplete="off" id="cameraType"
-                               placeholder="监控类型"
-                                   lay-reqtext="监控类型不能为空" lay-verify="required" class="layui-input" value="1">
+                        <select name="cameraType" id="cameraType" lay-reqtext="监控类型不能为空" lay-verify="required">
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -403,7 +418,8 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="cameraFormSubmit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="cameraFormSubmit">立即提交
+                        </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -418,7 +434,8 @@
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
                 <legend>新增门禁</legend>
             </fieldset>
-            <form class="layui-form layui-form-pane" id="accessControllerEditPageForm" action="" lay-filter="access_controller-edit">
+            <form class="layui-form layui-form-pane" id="accessControllerEditPageForm" action=""
+                  lay-filter="access_controller-edit">
                 <input type="hidden" id="acId" name="acId">
                 <div class="layui-form-item">
                     <label class="layui-form-label">控制器类型</label>
@@ -479,8 +496,7 @@
                     <label class="layui-form-label">说明</label>
                     <div class="layui-input-block">
                         <input type="text" name="remark" autocomplete="off" id="remark"
-                               placeholder="网关"
-                               lay-reqtext="网关不能为空" lay-verify="required" class="layui-input">
+                               placeholder="说明" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -505,9 +521,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">车库类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="spaceType" autocomplete="off" id="spaceType"
-                               placeholder="车库类型"
-                               lay-reqtext="车库类型不能为空" lay-verify="required" class="layui-input">
+                        <select name="thirdPay" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空" >
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -533,9 +548,10 @@
     <div class="container" style="width: 98%">
         <div class="layui-form">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend>新增门禁</legend>
+                <legend>新增充电站</legend>
             </fieldset>
-            <form class="layui-form layui-form-pane" id="garageChargerPageForm" action="" lay-filter="garage-charger-edit">
+            <form class="layui-form layui-form-pane" id="garageChargerPageForm" action=""
+                  lay-filter="garage-charger-edit">
                 <input type="hidden" id="chargerId" name="chargerId">
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
@@ -557,9 +573,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">三方支付</label>
                     <div class="layui-input-block">
-                        <input type="text" name="thirdPay" autocomplete="off" id="thirdPay"
-                               placeholder="三方支付"
-                               lay-reqtext="三方支付" lay-verify="required" class="layui-input">
+                        <select name="thirdPay" id="thirdPay" lay-verify="required">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -572,7 +589,9 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="garageChargerFormSubmit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="garageChargerFormSubmit">
+                            立即提交
+                        </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -583,9 +602,6 @@
 
 <!-- js插件 -->
 <script src="../../vendor/jquery/jquery.min.js"></script>
-<script src="../../vendor/popper.js/umd/popper.min.js"></script>
-<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="../../vendor/jquery-validation/jquery.validate.min.js"></script>
 <script src="../../vendor/layui/layui.js" charset="utf-8"></script>
 <!-- js公共代码 -->
 <script src="../../js/common.js"></script>
@@ -601,11 +617,54 @@
             , table = layui.table
             , element = layui.element
             , $ = layui.jquery
-            , form = layui.form
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
+            , form = layui.form;
 
+        // -----------------------------------页面初始化做的操作----------------------------------
+        var spaceTypeList; //车位类型
+        var cameraTypeList;//监控类型
+        //查询车位类型
+        sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
+            if (res.resFlag === 'N') {
+                if (res.parkingSpaceTypeList) {
+                    spaceTypeList = res.parkingSpaceTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+        //查询车位类型
+        sendAjaxRequest("POST", "/getSysCodesAndName.json", "json", JSON.stringify({"typeList": [{"type": "cameraType"}]}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.cameraTypeList) {
+                    cameraTypeList = res.cameraTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+
+        // -------------------页面中的一般click事件--------------------
+
+        //关闭设备信息，显示车库信息
+        $("#closeDeviceContent").click(function (event) {
+            $("#deviceContent").hide();
+            $("#garageTable").show();
+        })
+
+        //关闭车库信息,显示设备信息
+        $("#deviceBtn").click(function (event) {
+            $("#garageTable").hide();
+            $("#maintainMomeDiv").hide();
+            $("#deviceContent").show();
+            tableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId})
+        });
+// -----------------------------------地图操作----------------------------------
         // 百度地图API功能
         var map = new BMap.Map("allmap");
         var point = new BMap.Point(119.98186101, 31.77139674);
@@ -614,225 +673,30 @@
         var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
         map.addOverlay(marker);
 
-        sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
-            if (res.resFlag === 'N') {
-
-            } else {
-                layer.msg("查询失败");
-            }
-        }, function () {
-            layer.msg("查询失败");
-        });
-
-        //列表搜索按钮
-        $("#searchMaintainBtn").click(function (event) {
-            tableReload(tableIns);
-        });
-
-        //点击查看微信用户详情
-        $("#wxUserNum").click(function (event) {
-
-        });
-
-        //监听提交
-        form.on('submit(cameraFormSubmit)', function () {
-            var data = $("#cameraEditPageFrom").serializeObject();
-            var url = "/cameraAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "/cameraUpdate.json";
-            }
-            data.port = parseInt(data.port);
-            data.cameraType = parseInt(data.cameraType);
-            data.garageId = parseInt(maintainInfo.garageId);
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-        //监听提交
-        form.on('submit(acFormSubmit)', function () {
-            var data = $("#accessControllerEditPageForm").serializeObject();
-            var url = "accessControllerAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "accessControllerUpdate.json";
-            }
-            data.port = parseInt(data.acPort);
-            data.acType = parseInt(data.acType);
-            data.garageId = parseInt(maintainInfo.garageId);
-
-            data.sn = data.acSn;
-            data.ip = data.acIp;
-            data.mac = data.acMac;
-
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-        //监听提交
-        form.on('submit(carFormSubmit)', function () {
-            var data = $("#carPageForm").serializeObject();
-            var url = "parkingSpaceAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "parkingSpaceUpdate.json";
-            }
-            data.spaceType = parseInt(data.spaceType);
-            data.addCount = parseInt(data.addCount);
-            data.garageId = parseInt(maintainInfo.garageId);
-
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-        //监听提交
-        form.on('submit(garageChargerFormSubmit)', function () {
-            var data = $("#carPageForm").serializeObject();
-            var url = "garageChargerAdd.json";
-            if (data.id) {
-                data.id = parseInt(data.id)
-                url = "garageChargerUpdate.json";
-            }
-            data.currentVersion = parseInt(data.currentVersion);
-            data.thirdPay = parseInt(data.thirdPay);
-            data.garageId = parseInt(maintainInfo.garageId);
-
-            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
-                if (res.resFlag === 'N') {
-                    layer.msg("保存成功");
-                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
-                    layer.closeAll();
-                } else {
-                    layer.msg("保存失败");
-                }
-            }, function () {
-                layer.msg("操作失败");
-            });
-            return false;
-        });
-
-
-
-
-        $("#cameraAddPageBtn").click(function (event) {
-            layer.open({
-                 type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '600px']
-                , id: 'lay-cameraAddPageBtn' //设定一个id，防止重复弹出
-                , content: $("#cameraEditPage").html()
-            });
-        });
-
-        $("#acAddPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '650px']
-                , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
-                , content: $("#accessControllerEditPage").html()
-            });
-        });
-
-        $("#carPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '300px']
-                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
-                , content: $("#carEditPage").html()
-            });
-        });
-
-        $("#garageChargerPageBtn").click(function (event) {
-            layer.open({
-                type: 1
-                , title: false //不显示标题栏
-                , area: ['500px', '500px']
-                , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
-                , content: $("#garageChargerEditPage").html()
-            });
-        });
-
-        $("#closeDeviceContent").click(function (event) {
-            $("#deviceContent").hide();
-            $("#garageTable").show();
-        })
-
-        $("#deviceBtn").click(function (event) {
-            $("#garageTable").hide();
-            $("#maintainMomeDiv").hide();
-            $("#deviceContent").show();
-            tableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId})
-        });
-
-        $("#parkingInfo li").click(function () {
-            $("#parkingInfo li").removeClass("active");
-            $(this).addClass("active");
-        });
-
-        $("#garageMemoAddPageBtn").click(function (event) {
-            layer.prompt({title: '增加车库备忘录', formType: 2}, function (text, index) {
-                layer.close(index);
-                saveGarageMemoBtn({
-                    "garageId": maintainInfo.garageId,
-                    "content": text,
-                    "orgId": maintainInfo.orgId
-                });
-            });
-        });
-
-        //增加备忘录
-        function saveGarageMemoBtn(content) {
-            if (content) {
-                var url = "/garageMemoAdd.json";
-                if (content.id) {
-                    url = "/garageMemoUpdate.json";
-                }
-                sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
-                    if (res.resFlag === 'N') {
-                        layer.msg("保存成功");
-                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
-                    } else {
-                        layer.msg("保存失败");
+        // 用经纬度设置地图中心点
+        function theLocation(longitude, latitude, addFlag, name, address) {
+            if (longitude != "" && latitude != "") {
+                var new_point = new BMap.Point(longitude, latitude);
+                map.centerAndZoom(new_point, 15);
+                var marker = new BMap.Marker(new_point);  // 创建标注
+                if (addFlag) {
+                    map.addOverlay(marker);              // 将标注添加到地图中
+                    var opts = {
+                        width: 200,     // 信息窗口宽度
+                        height: 100,     // 信息窗口高度
+                        title: name // 信息窗口标题
                     }
-                }, function () {
-                    layer.msg("操作失败");
-                });
-            } else {
-                layer.msg("请填写备注")
+                    var infoWindow = new BMap.InfoWindow("地址：" + address, opts);  // 创建信息窗口对象
+                    marker.addEventListener("click", function () {
+                        map.openInfoWindow(infoWindow, new_point); //开启信息窗口
+                    });
+                }
+                map.panTo(new_point);
             }
         }
+
+// -----------------------------------功能性操作----------------------------------
+//         ---------------------------车库-------------------------
 
         var garageListCols = [[
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
@@ -889,8 +753,80 @@
             }
         }
 
-        var tableIns = initTable(table, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, garageListdone);
+        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
 
+        //监听行工具事件
+        table.on('tool(maintainTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                maintainInfo = data;
+                showMaintain(data, true)
+                $("#editMaintainForm").hide();
+                $("#showMaintain").show()
+            } else if (obj.event === 'garageMemo') {
+                $("#maintainMomeDiv").show();
+                tableReload(momeTableIns, {garageId: data.garageId})
+            }
+        });
+
+        //车库列表搜索按钮
+        $("#searchMaintainBtn").click(function (event) {
+            tableReload(tableIns);
+        });
+
+        //显示车库的详细信息
+        function showMaintain(maintainInfo, locationFlag) {
+            $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
+            $("#orgIdLabel").html(maintainInfo.orgId);//所属机构id
+            $("#inglatLabel").html(maintainInfo.ing + "--" + maintainInfo.lat);//经度
+            $("#addressLabel").html(maintainInfo.address);//地址
+            $("#adminLabel").html(maintainInfo.admin);//车库管理员
+            $("#mobileLabel").html(maintainInfo.mobile);//联系方式
+            $("#wxUserNum").html("微信用户数量");//微信用户数量
+            $("#createTime").html(maintainInfo.createTime);//创建时间
+            $("#accessControlNum").html("门禁数量");//门禁数量
+            if (locationFlag) {
+                theLocation(maintainInfo.ing, maintainInfo.lat, false, maintainInfo.garageName, maintainInfo.address);
+            }
+            $("#maintainInfoDetails").show();
+            $("#maintainMapInfo").css("min-width", "65%");
+        }
+
+
+//         ---------------------------备忘录-------------------------
+        //打开增加备忘录页面
+        $("#garageMemoAddPageBtn").click(function (event) {
+            layer.prompt({title: '增加车库备忘录', formType: 2}, function (text, index) {
+                layer.close(index);
+                saveGarageMemoBtn({
+                    "garageId": maintainInfo.garageId,
+                    "content": text,
+                    "orgId": maintainInfo.orgId
+                });
+            });
+        });
+
+        //增加备忘录
+        function saveGarageMemoBtn(content) {
+            if (content) {
+                var url = "/garageMemoAdd.json";
+                if (content.id) {
+                    url = "/garageMemoUpdate.json";
+                }
+                sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
+                    if (res.resFlag === 'N') {
+                        layer.msg("保存成功");
+                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                    } else {
+                        layer.msg("保存失败");
+                    }
+                }, function () {
+                    layer.msg("操作失败");
+                });
+            } else {
+                layer.msg("请填写备注")
+            }
+        }
 
         var maintainMomeCols = [[
             {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
@@ -911,218 +847,7 @@
             }
         ]];
 
-        var momeTableIns = initTable(table, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null);
-
-
-        function accessRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.accessControllerInfoList
-            };
-        }
-
-        var accessCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-            {
-                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
-            },
-            {
-                field: 'ip', title: 'IP地址', sort: false, fixed: 'center'
-            },
-            {
-                field: 'port', title: '端口', sort: false, fixed: 'center'
-            }
-        ]];
-
-        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
-
-
-        function parkingSpaceRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.rows
-            };
-        }
-
-        var parkingSpaceCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-            {
-                field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'spaceTypeName', title: '车位类别', sort: false, fixed: 'center'
-            },
-            {
-                field: 'status', title: '车位状态', toolbar: "#parkingSpaceStatus", sort: false, fixed: 'center'
-            },
-            {
-                field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
-            }
-        ]];
-        var parkingSpaceTableIns = initTable(table, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null);
-
-
-        function garageChargerRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.garageChargerInfoList
-            };
-        }
-
-        var garageChargerCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-
-            {
-                field: 'chargerName', title: '充电站名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
-            },
-            {
-                field: 'status', title: '设备状态', sort: false, fixed: 'center'
-            },
-            {
-                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
-            },
-            {
-                field: 'thirdPay',
-                title: '是否支持第三方支付',
-                toolbar: "#garageChargerThirdPayToolbar",
-                sort: false,
-                fixed: 'center'
-            },
-            {
-                field: 'spaceName', title: '创建时间', sort: false, fixed: 'center'
-            },
-        ]];
-        var garageChargerTableIns = initTable(table, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null);
-
-        var cameraCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-
-            {
-                field: 'cameraName', title: '监控名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'cameraType', title: '监控类型', sort: false, fixed: 'center'
-            },
-            {
-                field: 'ip', title: '监控ip', sort: false, fixed: 'center'
-            },
-            {
-                field: 'loginAccount', title: '登录账号', sort: false, fixed: 'center'
-            },
-            {
-                field: 'installAddress', title: '安装地址描述', sort: false, fixed: 'center'
-            },
-            {
-                field: 'status', title: '状态', sort: false, fixed: 'center'
-            },
-        ]];
-
-        function cameraRes(res) {
-            return {
-                code: 0,
-                msg: "",
-                data: res.cameraInfoList
-            };
-        }
-
-        var cameraTableIns = initNotPageTable(table, "cameraTable", "/getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
-
-
-        function showMaintain(maintainInfo, locationFlag) {
-            $("#garageNameLabel").html(maintainInfo.garageName);//车库名称
-            $("#orgIdLabel").html(maintainInfo.orgId);//所属机构id
-            $("#inglatLabel").html(maintainInfo.ing + "--" + maintainInfo.lat);//经度
-            $("#addressLabel").html(maintainInfo.address);//地址
-            $("#adminLabel").html(maintainInfo.admin);//车库管理员
-            $("#mobileLabel").html(maintainInfo.mobile);//联系方式
-            $("#wxUserNum").html("微信用户数量");//微信用户数量
-            $("#createTime").html(maintainInfo.createTime);//创建时间
-            $("#accessControlNum").html("门禁数量");//门禁数量
-            if (locationFlag) {
-                theLocation(maintainInfo.ing, maintainInfo.lat, false, maintainInfo.garageName, maintainInfo.address);
-            }
-            $("#maintainInfoDetails").show();
-            $("#maintainMapInfo").css("min-width", "65%");
-        }
-
-        // 用经纬度设置地图中心点
-        function theLocation(longitude, latitude, addFlag, name, address) {
-            if (longitude != "" && latitude != "") {
-                var new_point = new BMap.Point(longitude, latitude);
-                map.centerAndZoom(new_point, 15);
-                var marker = new BMap.Marker(new_point);  // 创建标注
-                if (addFlag) {
-                    map.addOverlay(marker);              // 将标注添加到地图中
-                    var opts = {
-                        width: 200,     // 信息窗口宽度
-                        height: 100,     // 信息窗口高度
-                        title: name // 信息窗口标题
-                    }
-                    var infoWindow = new BMap.InfoWindow("地址：" + address, opts);  // 创建信息窗口对象
-                    marker.addEventListener("click", function () {
-                        map.openInfoWindow(infoWindow, new_point); //开启信息窗口
-                    });
-                }
-                map.panTo(new_point);
-            }
-        }
-
-        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
-
-        function clickOrg(orgInfo) {
-            tableReload(tableIns, {orgId: orgInfo.data.id})
-
-            if (orgInfo.data.level === 3) {
-                map.clearOverlays();
-                $("#maintainInfoDetails").show();
-                // $("#maintainMomeDiv").show();
-                $("#maintainMapInfo").css("min-width", "65%");
-                $("#garageTable").show();
-                $("#deviceContent").hide();
-            } else {
-                map.clearOverlays();
-                $("#maintainInfoDetails").hide();
-                $("#maintainMomeDiv").hide();
-                $("#garageTable").show();
-                $("#deviceContent").hide();
-                $("#maintainMapInfo").css("min-width", "97%");
-            }
-        }
-
-        //监听行工具事件
-        table.on('tool(maintainTable)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'detail') {
-                maintainInfo = data;
-                showMaintain(data, true)
-                $("#editMaintainForm").hide();
-                $("#showMaintain").show()
-            } else if (obj.event === 'garageMemo') {
-                $("#maintainMomeDiv").show();
-                tableReload(momeTableIns, {garageId: data.garageId})
-            }
-        });
-
-        //监听设备详情中选项卡
-        element.on('tab(deviceDetails)', function (data) {
-            if (data.index === 1) {
-                noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
-            } else if (data.index === 2) {
-                tableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
-            } else if (data.index === 3) {
-                noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
-            }
-        });
-
+        var momeTableIns = initTable(table, null, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null, null);
 
         //监听行工具事件
         table.on('tool(maintainMomeTable)', function (obj) {
@@ -1158,6 +883,417 @@
                 });
             }
         });
+
+//         ---------------------------监控-------------------------
+
+        var cameraCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'cameraName', title: '监控名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'cameraTypeName', title: '监控类型', sort: false, fixed: 'center'
+            },
+            {
+                field: 'ip', title: '监控ip', sort: false, fixed: 'center'
+            },
+            {
+                field: 'loginAccount', title: '登录账号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'installAddress', title: '安装地址描述', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '状态', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        function cameraRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                data: res.cameraInfoList
+            };
+        }
+
+        var cameraTableIns = initNotPageTable(table, "cameraTable", "/getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
+
+        //监听监控行工具事件
+        table.on('tool(cameraTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                openCameraEditPage();
+                setCamera(data);
+                form.render();
+            } else if (obj.event === 'delete') {
+                sendDelRequest("cameraDelete.json", JSON.stringify({cameraId: data.cameraId}), cameraTableIns);
+            }
+        });
+
+        function setCamera(data){
+            $("#cameraId").val(data.cameraId)
+            $("#cameraName").val(data.cameraName);
+            $("#cameraType").val(data.cameraType);
+            $("#ip").val(data.ip);
+            $("#port").val(data.port);
+            $("#loginAccount").val(data.loginAccount);
+            $("#password").val(data.password);
+            $("#installAddress").val(data.installAddress);
+        }
+
+        function clearCamera(){
+            $("#cameraId").val("")
+            $("#cameraName").val("");
+            $("#cameraType").val("");
+            $("#ip").val("");
+            $("#port").val("");
+            $("#loginAccount").val("");
+            $("#password").val("");
+            $("#installAddress").val("");
+        }
+
+        function openCameraEditPage(){
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '600px']
+                , id: 'lay-cameraAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#cameraEditPage").html()
+            });
+            clearCamera();
+            $("#cameraType").html("");
+            for (var i = 0; i < cameraTypeList.length; i++) {
+                var cameraType = cameraTypeList[i];
+                $("#cameraType").append("<option value=" + cameraType.code + ">" + cameraType.name + "</option>")
+            }
+            form.render();
+        }
+
+        //打开增加修改监控页面
+        $("#cameraAddPageBtn").click(function (event) {
+            openCameraEditPage();
+        });
+
+        //监控新增监听提交
+        form.on('submit(cameraFormSubmit)', function () {
+            var data = $("#cameraEditPageFrom").serializeObject();
+            var url = "/cameraAdd.json";
+            if (data.cameraId) {
+                data.cameraId = parseInt(data.cameraId)
+                url = "/cameraUpdate.json";
+            }
+            data.port = parseInt(data.port);
+            data.cameraType = parseInt(data.cameraType);
+            data.garageId = parseInt(maintainInfo.garageId);
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------门禁-------------------------
+
+
+        function accessRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.accessControllerInfoList
+            };
+        }
+
+        var accessCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'ip', title: 'IP地址', sort: false, fixed: 'center'
+            },
+            {
+                field: 'port', title: '端口', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        var accessTableIns = initNotPageTable(table, "accessTable", "/getAccessControllerList.json", {garageId: -1}, accessRes, accessCols, null);
+
+        //监听监控行工具事件
+        table.on('tool(accessTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+            } else if (obj.event === 'delete') {
+                sendDelRequest("accessControllerDelete.json", JSON.stringify({acId: data.acId}), accessTableIns);
+            }
+        });
+
+        //打开增加修改门禁页面
+        $("#acAddPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '650px']
+                , id: 'lay-acAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#accessControllerEditPage").html()
+            });
+            form.render();
+        });
+
+        //新增门禁监听提交
+        form.on('submit(acFormSubmit)', function () {
+            var data = $("#accessControllerEditPageForm").serializeObject();
+            var url = "accessControllerAdd.json";
+            if (data.acId) {
+                data.acId = parseInt(data.id)
+                url = "accessControllerUpdate.json";
+            }
+            data.port = parseInt(data.acPort);
+            data.acType = parseInt(data.acType);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            data.sn = data.acSn;
+            data.ip = data.acIp;
+            data.mac = data.acMac;
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------车位-------------------------
+
+
+        function parkingSpaceRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        var parkingSpaceCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'spaceTypeName', title: '车位类别', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '车位状态', toolbar: "#parkingSpaceStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, null);
+
+        //监听车位行工具事件
+        table.on('tool(parkingSpaceTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+            } else if (obj.event === 'delete') {
+                sendDelRequest("parkingSpaceDelete.json", JSON.stringify({spaceId: data.spaceId}), parkingSpaceTableIns);
+            }
+        });
+
+        //打开增加修改车位页面
+        $("#carPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                , content: $("#carEditPage").html()
+            });
+            $("#spaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            form.render();
+        });
+
+        //车位监听提交
+        form.on('submit(carFormSubmit)', function () {
+            var data = $("#carPageForm").serializeObject();
+            var url = "parkingSpaceAdd.json";
+            if (data.spaceId) {
+                data.spaceId = parseInt(data.spaceId)
+                url = "parkingSpaceUpdate.json";
+            }
+            data.spaceType = parseInt(data.spaceType);
+            data.addCount = parseInt(data.addCount);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------充电站-------------------------
+
+        function garageChargerRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.garageChargerInfoList
+            };
+        }
+
+        var garageChargerCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'chargerName', title: '充电站名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '设备状态', toolbar: "#garageChargerStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
+            },
+            {
+                field: 'thirdPay',
+                title: '是否支持第三方支付',
+                toolbar: "#garageChargerThirdPayToolbar",
+                sort: false,
+                fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, null);
+
+        //监听监控行工具事件
+        table.on('tool(garageChargerTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+            } else if (obj.event === 'delete') {
+                sendDelRequest("garageChargerDelete.json", JSON.stringify({chargerId: data.chargerId}), garageChargerTableIns);
+            }
+        });
+
+        //打开增加修改充电桩页面
+        $("#garageChargerPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '500px']
+                , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
+                , content: $("#garageChargerEditPage").html()
+            });
+            form.render();
+        });
+
+        //新增充电站监听提交
+        form.on('submit(garageChargerFormSubmit)', function () {
+            var data = $("#garageChargerPageForm").serializeObject();
+            var url = "garageChargerAdd.json";
+            if (data.chargerId) {
+                data.chargerId = parseInt(data.chargerId)
+                url = "garageChargerUpdate.json";
+            }
+            data.currentVersion = parseInt(data.currentVersion);
+            data.thirdPay = parseInt(data.thirdPay);
+            data.garageId = parseInt(maintainInfo.garageId);
+            data.chargerId = parseInt(data.chargerId);
+            data.sn = data.gcSn;
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+// ----------------------------机构数-----------------------------
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+
+        function clickOrg(orgInfo) {
+            tableReload(tableIns, {orgId: orgInfo.data.id})
+
+            if (orgInfo.data.level === 3) {
+                map.clearOverlays();
+                $("#maintainInfoDetails").show();
+                // $("#maintainMomeDiv").show();
+                $("#maintainMapInfo").css("min-width", "65%");
+                $("#garageTable").show();
+                $("#deviceContent").hide();
+            } else {
+                map.clearOverlays();
+                $("#maintainInfoDetails").hide();
+                $("#maintainMomeDiv").hide();
+                $("#garageTable").show();
+                $("#deviceContent").hide();
+                $("#maintainMapInfo").css("min-width", "97%");
+            }
+        }
+
+// --------------------------监听选项卡------------------------
+        //监听设备详情中选项卡
+        element.on('tab(deviceDetails)', function (data) {
+            if (data.index === 1) {
+                noPageTableReload(accessTableIns, {garageId: maintainInfo.garageId});
+            } else if (data.index === 2) {
+                tableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+            } else if (data.index === 3) {
+                noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+            }
+        });
+
+
     });
 </script>
 </body>

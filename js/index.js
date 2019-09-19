@@ -3,14 +3,14 @@ layui.use(["element", "layer"], function () {
   /**
    * 页面加载时检查是否登陆
    */
-  layer.ready(function () {
-    var userInfoStorage = layui.sessionData('userInfoStorage').userInfo;
-    if (userInfoStorage == null || userInfoStorage == undefined || userInfoStorage == "") {
-      location.href = "./login.html";
-    } else {
-      location.href = "#";
-    }
-  });
+
+  var userInfoStorage = layui.sessionData('userInfoStorage').userInfo;
+  if (userInfoStorage == null || userInfoStorage == undefined || userInfoStorage == "") {
+    location.href = "./login.html";
+  } else {
+    location.href = "#";
+  }
+
   /**
    *退出
    */
@@ -20,6 +20,75 @@ layui.use(["element", "layer"], function () {
     layui.sessionData('menuInfoStorage', null);
     location.href = "../login.html";
   });
+
+  /**
+   * 动态展示 managerTit
+   */
+  var userId;
+  var userName;
+  for (var i in userInfoStorage) {
+    if (userInfoStorage.hasOwnProperty(i)) {
+      const element = userInfoStorage[i];
+      if (element.key == "userName") {
+        userName = element.value;
+        $("#managerTit h1").html(userName);
+      }
+      if (element.key == "userId") {
+        userId = element.value;
+      }
+
+    }
+  }
+  now = new Date(), hour = now.getHours()
+  if (hour < 6) {
+    $("#managerTit p").html("凌晨好！")
+  } else if (hour < 9) {
+    $("#managerTit p").html("早上好！")
+  } else if (hour < 12) {
+    $("#managerTit p").html("上午好！")
+  } else if (hour < 14) {
+    $("#managerTit p").html("中午好！")
+  } else if (hour < 17) {
+    $("#managerTit p").html("下午好！")
+  } else if (hour < 19) {
+    $("#managerTit p").html("傍晚好！")
+  } else if (hour < 22) {
+    $("#managerTit p").html("晚上好！")
+  } else {
+    $("#managerTit p").html("夜里好！")
+  }
+
+  /**
+   * 个人信息
+   */
+  $("#myInfo").bind("click", function () {
+    layer.open({
+      type: 2,
+      title: false,
+      anim: 1,
+      area: ['700px', '600px'],
+      content: '/html/config/myInformation.html?userId=' + userId,
+    });
+  });
+  /**
+   * 修改密码
+   */
+  $("#changePwd").bind("click", function () {
+    layer.open({
+      type: 2,
+      title: false,
+      anim: 1,
+      area: ['780px', '300px'],
+      content: '/html/config/changePwd.html?userId=' + userId,
+    });
+  });
+  /**
+   * 开启提醒
+   */
+  $("#remind").bind("click", function () {
+    layer.msg("还没做好哎！", function () {});
+  });
+
   // ------------------------------------------------------- //
   // Search Box
   // ------------------------------------------------------ //
