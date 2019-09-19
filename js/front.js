@@ -1,22 +1,15 @@
  /**
   * 检查是否有登陆信息
   */
- var userInfo={};
+ var userInfo = {};
  var userInfoStorage = layui.sessionData('userInfoStorage').userInfo;
  if (userInfoStorage == null || userInfoStorage == undefined || userInfoStorage == "") {
    location.href = window.location.origin + "/login.html";
  } else {
-   for (var i in userInfoStorage) {
-     if (userInfoStorage.hasOwnProperty(i)) {
-       var element = userInfoStorage[i];
-       if (element.key == 'userId') {
-        userInfo.userId = element.value;
-       }
-       if (element.key == 'sessionId') {
-        userInfo.sessionId = element.value;
-       }
-     }
-   }
+   userInfoStorage = JSON.parse(userInfoStorage);
+   userInfo.orgId = userInfoStorage.orgId;
+   userInfo.userId = userInfoStorage.userId;
+   userInfo.sessionId = userInfoStorage.sessionId;
    location.href = "#";
  }
  (function () {

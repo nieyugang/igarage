@@ -1,28 +1,28 @@
-//菜单与图标对照表
-//请勿修改或删除
+//菜单与图标对照表 ;请勿修改或删除  图标的menuId与菜单的menuId一致
+
  var _menuSlideIcon_=[
   {
-    "menuId": 1,
+    "menuId": 1,//基础信息管理
     "icon": "address-card-o"
   },
   {
-    "menuId": 2,
+    "menuId": 6,//用户基础操作
     "icon": "wrench"
   },
   {
-    "menuId": 3,
+    "menuId": 12,//全局监控
     "icon": "television"
   },
   {
-    "menuId": 41,
-    "icon": "address-card-o"
+    "menuId": 16,//电瓶车充电站
+    "icon": "battery-3"
   },
   {
-    "menuId": 42,
+    "menuId": 22,//充值机
     "icon": "credit-card"
   },
   {
-    "menuId": 43,
+    "menuId": 27,//车库系统
     "icon": "gears"
   }
 ];
