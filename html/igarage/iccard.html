@@ -136,7 +136,16 @@
                         layer.msg("Loss");
                         break;
                     case 'icImport':
-                        layer.msg("IcImport");
+                        layer.open({
+                            type: 2,
+                            title: false,
+                            anim: 1,
+                            area: ['480px', '600px'],
+                            content: './file-import.html',
+                            end: function () {
+                                table.reload('table_iccard');
+                            }
+                        });
                         break;
                 };
             });
