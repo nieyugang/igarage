@@ -13,10 +13,13 @@
   <link rel="stylesheet" href="../../css/formSelects-v4.css">
   <link rel="stylesheet" href="" id="layui-theme-stylesheet">
   <style>
-    input:hover {
+    select:hover {
       cursor: not-allowed;
     }
 
+    input:hover {
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -24,85 +27,63 @@
   <div class="container">
     <div class="layui-form">
       <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>个人详情</legend>
+        <legend>用户新增</legend>
       </fieldset>
       <form class="layui-form layui-form-pane" action="" lay-filter="userInfo-detail">
-        <div class="layui-form-item" style="display: none">
-          <label class="layui-form-label">用户ID</label>
-          <div class="layui-input-block">
-            <input type="text" name="userId" autocomplete="off" lay-verify="userId"
-              class="layui-input">
-          </div>
-        </div>
         <div class="layui-form-item">
           <label class="layui-form-label">登陆ID</label>
           <div class="layui-input-block">
-            <input type="text" name="loginId" autocomplete="off" lay-verify="loginId"
+            <input type="text" name="loginId" autocomplete="off" lay-verify="loginId" placeholder="请输入登陆ID"
               class="layui-input">
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">用户名</label>
           <div class="layui-input-block">
-            <input type="text" name="userName" autocomplete="off" lay-verify="required"
+            <input type="text" name="userName" autocomplete="off" lay-verify="required" placeholder="请输入用户名"
               class="layui-input">
           </div>
         </div>
-        <!-- <div class="layui-form-item" id="password"> 密码修改放到个人资料中修改
-          <label class="layui-form-label">登陆密码</label>
-          <div class="layui-input-block">
-            <input type="text" name="password" autocomplete="off" lay-verify="password" placeholder="请输入登陆密码"
-              class="layui-input">
-          </div>
-        </div> -->
         <div class="layui-form-item">
           <label class="layui-form-label">组织机构</label>
           <div class="layui-input-block">
-            <select name="orgId" xm-select="select_orgId" lay-verify="required" xm-select-radio=""  disabled="disabled" >
-            </select>
+            <input type="text" name="orgId_Name" autocomplete="off" class="layui-input">
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">角色</label>
           <div class="layui-input-block">
-            <select name="roleId" xm-select="select_role" lay-verify="required" xm-select-radio=""  disabled="disabled">
+            <select name="roleId" id="roleId" disabled>
             </select>
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">手机号码</label>
           <div class="layui-input-block">
-            <input type="text" name="telephone" autocomplete="off" lay-verify="phone"
+            <input type="text" name="telephone" autocomplete="off" lay-verify="phone" placeholder="请输入手机号码"
               class="layui-input">
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">座机</label>
           <div class="layui-input-block">
-            <input type="text" name="mobile" autocomplete="off" lay-verify="required"
+            <input type="text" name="mobile" autocomplete="off" lay-verify="required" placeholder="请输入座机号码"
               class="layui-input">
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">邮件</label>
           <div class="layui-input-block">
-            <input type="text" name="email" autocomplete="off" lay-verify="email"
+            <input type="text" name="email" autocomplete="off" lay-verify="email" placeholder="请输入正确格式的邮件"
               class="layui-input">
           </div>
         </div>
-        <!-- <div class="layui-form-item">
-          <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="formSubmit">更新</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-          </div>
-        </div> -->
       </form>
     </div>
   </div>
   <!-- js插件 -->
   <script src="../../vendor/jquery/jquery.js"></script>
   <script src="../../vendor/layui/layui.js"></script>
-  <!-- 下拉框多选插件 具体用法见：https://hnzzmsf.github.io/example/example_v4.html-->
   <script src="../../vendor/layui/lay/modules/formSelects-v4.js"></script>
   <!-- md5插件 -->
   <script src="../../vendor/md5/md5.js"></script>
@@ -110,159 +91,86 @@
   <script src="../../js/common.js"></script>
 
   <script>
-    //加载组织树
-    var nodes = [];
-    $.ajax({
-      url: backServiceUrl + '/getOrgTree.json',
-      type: 'POST',
-      data: JSON.stringify({
-        "userInfo": userInfo,
-        "orgId": 1
-      }),
-      contentType: "application/json",
-      dataType: 'json',
-      async: true,
-      success: function (res) {
-        //处理返回数据
-        var orgTreeInfo = res.orgTreeInfo;// 顶层节点
-        var childrens;
-        childrens = getTreeJson(orgTreeInfo.childOrgList);
-        var root_node = {
-          "value": orgTreeInfo.orgId,
-          "name": orgTreeInfo.orgName,
-          "selected": "",
-          "disabled": "",
-          "children": childrens
-        };// 存放tree数据
-        nodes.push(root_node);
-        layui.formSelects.data('select_orgId', 'local', {
-          arr: nodes
-        });
-      },
-      error: function () {
-        layer.msg("操作失败");
+    var InitializationUserInfo = userInfoStorage;
+
+    function successCallback(res) {
+      var orgName;
+      //处理返回数据
+      var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+      if (orgTreeInfo.orgId == InitializationUserInfo.orgId) {
+        orgName = orgTreeInfo.orgName;
+      } else {
+        getTreeJson_Name(orgTreeInfo.childOrgList, orgName);
       }
-    });
-    //获取角色data
-    $.ajax({
-      url: backServiceUrl + '/getRoleList.json',
-      type: 'POST',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({
-        "userInfo": userInfo,
-      }),
-      success: function (res) {
-        var roleList = res.roleList;
-        var data = [];
-        for (var i in roleList) {
-          if (roleList.hasOwnProperty(i)) {
-            var element = roleList[i];
-            var name = element.roleName;
-            var value = element.roleId;
-            var selected = "";
-            var disabled = "";
-            var role = {
-              "name": name,
-              "value": value,
-              "selected": selected,
-              "disabled": disabled
-            };
-            data.push(role);
-          }
+      InitializationUserInfo.orgName = orgName;
+    };
+    function errorCallback() {
+      layer.msg("操作失败");
+    };
+
+    sendAjaxRequest("POST", "/getOrgTree.json", "json", JSON.stringify({ "userInfo": userInfo, "orgId": userInfoStorage.orgId }), successCallback, errorCallback);
+
+    function successCallback_Role(res) {
+      var roleList = res.roleList;
+      var role_select = $("#roleId");
+      var options = "";
+      for (var i in roleList) {
+        if (roleList.hasOwnProperty(i)) {
+          var element = roleList[i];
+          var name = element.roleName;
+          var value = element.roleId;
+
+          var option = "<option value = '" + value + "'>" + name + "</option>";
+          options += option;
         }
-        // 设置select_role 的值  formSelects.value('select_role', [2, 4]);  获取：formSelects.value('select_role'); // [{"name":"上海","val":"2"},{"name":"深圳","val":"4"}]
-        layui.formSelects.data('select_role', 'local', {
-          arr: data
-        });
-      },
-      error: function () {
-        layer.msg("与服务器通信异常！");
       }
-    });
+      role_select.append(options);
+
+    };
+    sendAjaxRequest("POST", "/getRoleList.json", "json", JSON.stringify({ "userInfo": userInfo }), successCallback_Role, errorCallback);
+
 
     //加载模块
     layui.use(['form', 'layedit'], function () {
       var form = layui.form;
       var layer = layui.layer;
       var layedit = layui.layedit;
+      var $ = layui.$;
+
       layui.$('input').attr('disabled', true);
       layui.form.render();
-
-
-      var userId = RequestParameter()["userId"];//转json对象
-
-      sendAjaxRequest("POSt", url, dataType, data, successCallback, errorCallback);
-      function successCallback() {
-        if (InitializationUserInfo != null) {
-          //表单初始赋值
-          form.val('userInfo-detail', {
-            "userId": InitializationUserInfo.userId,
-            "loginId": InitializationUserInfo.loginId,
-            "userName": InitializationUserInfo.userName,
-            "password": InitializationUserInfo.password,
-            "select_role": layui.formSelects.value('select_role', [InitializationUserInfo.roleId]),//formSelects.value('select_role', [2, 4])
-            "select_orgId": layui.formSelects.value('select_orgId', [InitializationUserInfo.orgId]),
-            "telephone": InitializationUserInfo.telephone,
-            "mobile": InitializationUserInfo.mobile,
-            "email": InitializationUserInfo.email,
-            "enable": InitializationUserInfo.enable
-          });
-        }
-      };
-      function errorCallback() {
-        layer.msg("网络通信异常", {
-          icon: 2
+      if (InitializationUserInfo != null) {
+        //表单初始赋值
+        form.val('userInfo-detail', {
+          "userId": InitializationUserInfo.userId,
+          "loginId": InitializationUserInfo.loginId,
+          "userName": InitializationUserInfo.userName,
+          "password": InitializationUserInfo.password,
+          "orgId_Name": InitializationUserInfo.orgName,
+          "roleId": InitializationUserInfo.roleId,
+          "telephone": InitializationUserInfo.telephone,
+          "mobile": InitializationUserInfo.mobile,
+          "email": InitializationUserInfo.email,
+          "enable": InitializationUserInfo.enable
         });
       }
-      // 表单验证
-      form.verify({
-        loginId: function (value) { //value：表单的值、item：表单的DOM对象
-          if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-            return '用户名不能有特殊字符';
-          }
-          if (/(^\_)|(\__)|(\_+$)/.test(value)) {
-            return '用户名首尾不能出现下划线\'_\'';
-          }
-          if (/^\d+\d+\d$/.test(value)) {
-            return '用户名不能全为数字';
-          }
-        },
-        password: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格']
-      });
-
-      //监听提交
-      form.on('submit(formSubmit)', function (data) {
-        var formData = data.field;// JSON.stringify(data.field);
-        formData.userInfo = userInfo;
-        formData.userId = parseInt(formData.userId);
-        formData.roleId = parseInt(formData.roleId);
-        formData.orgId = parseInt(formData.orgId);
-        // 提交
-        sendSubmitRequest("/userUpdate.json", JSON.stringify(formData));
-        return false;
-      });
     });
-    // js 递归返回的组织树
-    function getTreeJson(childrens) {
+    // js 递归查组织name
+    function getTreeJson_Name(childrens, orgName) {
       var child_node = [];
       for (var i in childrens) {
-        var node = {
-          "value": childrens[i].orgId,
-          "name": childrens[i].orgName,
-          "selected": "",
-          "disabled": ""
-        };// 存放tree数据
-        var childrens_node = childrens[i].childOrgList;
-        if (childrens_node != 0) {
-          var son = getTreeJson(childrens_node);
-          node.children = son;
+        if (childrens.hasOwnProperty(i)) {
+          if (childrens[i].orgId == InitializationUserInfo.orgId) {
+            orgName = childrens[i].orgName;
+          } else {
+            var childrens_node = childrens[i].childOrgList;
+            if (childrens_node != 0) {
+              getTreeJson_Name(childrens_node);
+            }
+          }
         }
-        child_node.push(node);
       }
-      return child_node;
     };
-
   </script>
 </body>
 
