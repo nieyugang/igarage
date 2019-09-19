@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -109,7 +112,7 @@
                 }
             }
 
-            initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({ "userInfo": userInfo, "orgId": 1 }), clickOrg, operateOrg, ['add'])
+            initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({ "userInfo": userInfo, "orgId": userInfo.orgId }), clickOrg, operateOrg, ['add'])
             //获取组织机构数据nodes:[{},{}]
             var cols = [[
                 { type: 'radio', fixed: 'left' },
@@ -134,7 +137,7 @@
                 };
             };
             // 表格初始化
-            var tableIns = initTable(table, "基础-用户信息表", "t-user", 20, "/getUserList.json", { "userInfo": userInfo, "orgId": 1 }, res, cols, "#toolbar", "");
+            var tableIns = initTable(table, "基础-用户信息表", "t-user", 20, "/getUserList.json", { "userInfo": userInfo, "orgId": userInfo.orgId }, res, cols, "#toolbar", "");
             // 监听头部工具栏事件
             table.on('toolbar(t-user)', function (obj) {
                 var checkStatus = table.checkStatus(obj.config.id);
