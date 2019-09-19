@@ -172,7 +172,18 @@ function noPageTableReload(table, where) {
     });
 };
 
-function initTree(ztree, elem, url, where, clickOrg, operateOrg) {
+/**
+ *初始化Tree
+ * @param {*} ztree layui Tree组件
+ * @param {*} elem 指向容器选择器
+ * @param {*} url　请求url
+ * @param {*} where 数据源
+ * @param {*} clickOrg 节点被点击回调
+ * @param {*} operateOrg 操作节点回调
+ * @param {*} edit ['add','update','del']
+ * @returns
+ */
+function initTree(ztree, elem, url, where, clickOrg, operateOrg, edit) {
     var nodes = [];
     sendAjaxRequest("POST", url, "json", where, getOrgTreeSuccess, getOrgTreeError);
 
@@ -191,11 +202,13 @@ function initTree(ztree, elem, url, where, clickOrg, operateOrg) {
             nodes.push(root_node);
             //渲染tree
             ztree.render({
+                id:elem,
                 elem: elem,
                 data: nodes,
                 showLine: false, //是否开启连接线
                 onlyIconControl: true, //是否仅允许节点左侧图标控制展开收缩
                 click: clickOrg,
+                edit: edit,
                 operate: operateOrg
             });
         }
@@ -264,6 +277,7 @@ function sendAjaxRequest(type, url, dataType, data, successCallback, errorCallba
 function sendDelRequest(url, data, tableIns) {
     layer.confirm('确定删除吗？', function (index) {
         sendAjaxRequest("POST", url, "json", data, getOrgTreeSuccess, getOrgTreeError);
+
         function getOrgTreeSuccess(res) {
             if (res.resFlag == "N") {
                 layer.msg('操作成功', {
@@ -275,6 +289,7 @@ function sendDelRequest(url, data, tableIns) {
 
             }
         };
+
         function getOrgTreeError() {
             layer.msg("网络通信异常", {
                 icon: 2
@@ -290,6 +305,7 @@ function sendDelRequest(url, data, tableIns) {
  */
 function sendSubmitRequest(url, data) {
     sendAjaxRequest("POST", url, "json", data, successCallback, errorCallback);
+
     function successCallback(res) {
         if (res.resFlag == "N") {
             layer.msg('操作成功', {
@@ -300,6 +316,7 @@ function sendSubmitRequest(url, data) {
             }, 3000);
         }
     };
+
     function errorCallback() {
         layer.msg('通信异常', {
             icon: 2
@@ -322,3 +339,16 @@ $.fn.serializeObject = function () {
     });
     return o;
 };
+//获取url中"?"符后的字串'./userAdd.html?orgId='+node_id,  例如：var orgId= RequestParameter()[orgId]
+function RequestParameter() {
+    var url = window.location.search;
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        var strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+        }
+    }
+    return theRequest
+}
