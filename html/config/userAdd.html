@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
   <link rel="stylesheet" href="../../css/formSelects-v4.css">
   <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+  <style>
+    #orgName:hover {
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 
 <body>
@@ -45,17 +50,23 @@
         <div class="layui-form-item">
           <label class="layui-form-label">组织机构</label>
           <div class="layui-input-block">
-            <input type="text" name="orgId" autocomplete="off" lay-verify="email" class="layui-input"  style="display:none;">
-            <input type="text" name="orgName" autocomplete="off" lay-verify="email" class="layui-input" readonly=true>
+            <input type="text" name="orgId" autocomplete="off" class="layui-input" style="display:none;">
+            <input type="text" name="orgName" id="orgName" autocomplete="off" class="layui-input" readonly=true>
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">角色</label>
           <div class="layui-input-block">
-            <select name="roleId" xm-select="select_role" lay-verify="required" xm-select-radio="">
+            <!-- <select name="roleId" xm-select="select_role" lay-verify="required" xm-select-radio="">
+            </select> -->
+            <!-- 后续如果需要多选，添加 multiple 即可 -->
+            <select name="roleId" id="roleId">
+              <option value="">请选择该用户的角色</option>
             </select>
           </div>
         </div>
+
+
         <div class="layui-form-item">
           <label class="layui-form-label">手机号码</label>
           <div class="layui-input-block">
@@ -106,92 +117,44 @@
   <script src="../../js/common.js"></script>
 
   <script>
-    // //加载组织树
-    // var nodes = [];
-    // $.ajax({
-    //   url: backServiceUrl + '/getOrgTree.json',
-    //   type: 'POST',
-    //   data: JSON.stringify({
-    //     "userInfo": userInfo,
-    //     "orgId": 1
-    //   }),
-    //   contentType: "application/json",
-    //   dataType: 'json',
-    //   async: true,
-    //   success: function (res) {
-    //     //处理返回数据
-    //     var orgTreeInfo = res.orgTreeInfo;// 顶层节点
-    //     var childrens;
-    //     childrens = getTreeJson(orgTreeInfo.childOrgList);
-    //     var root_node = {
-    //       "value": orgTreeInfo.orgId,
-    //       "name": orgTreeInfo.orgName,
-    //       "selected": "",
-    //       "disabled": "",
-    //       "children": childrens
-    //     };// 存放tree数据
-    //     nodes.push(root_node);
-    //     layui.formSelects.data('select_orgId', 'local', {
-    //       arr: nodes
-    //     });
-    //   },
-    //   error: function () {
-    //     layer.msg("操作失败");
-    //   }
-    // });
 
-    //获取角色data
-    $.ajax({
-      url: backServiceUrl + '/getRoleList.json',
-      type: 'POST',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({
-        "userInfo": userInfo,
-      }),
-      success: function (res) {
-        var roleList = res.roleList;
-        var data = [];
-        for (var i in roleList) {
-          if (roleList.hasOwnProperty(i)) {
-            var element = roleList[i];
-            var name = element.roleName;
-            var value = element.roleId;
-            var selected = "";
-            var disabled = "";
-            var role = {
-              "name": name,
-              "value": value,
-              "selected": selected,
-              "disabled": disabled
-            };
-            data.push(role);
-          }
+    function successCallback(res) {
+      var roleList = res.roleList;
+      var role_select = $("#roleId");
+      var options = "";
+      for (var i in roleList) {
+        if (roleList.hasOwnProperty(i)) {
+          var element = roleList[i];
+          var name = element.roleName;
+          var value = element.roleId;
+
+          var option = "<option value = '" + value + "'>" + name + "</option>";
+          options += option;
         }
-        // 设置select_role 的值  formSelects.value('select_role', [2, 4]);  获取：formSelects.value('select_role'); // [{"name":"上海","val":"2"},{"name":"深圳","val":"4"}]
-        layui.formSelects.data('select_role', 'local', {
-          arr: data
-        });
-      },
-      error: function () {
+      }
+      role_select.append(options);
+
+    };
+    function errorCallback() {
         layer.msg("与服务器通信异常！");
       }
-    });
+    sendAjaxRequest("POST", "/getRoleList.json", "json", JSON.stringify({ "userInfo": userInfo}), successCallback, errorCallback);
 
     //加载模块
     layui.use(['form', 'layedit'], function () {
       var form = layui.form;
       var layer = layui.layer;
       var layedit = layui.layedit;
+      var $ = layui.$;
 
 
       var orgId = RequestParameter()["orgId"];
       var orgName = decodeURIComponent(RequestParameter()["orgName"]);
 
       form.val('userInfo-detail', {
-        "select_orgId": layui.formSelects.value('select_orgId', [12]),
         "orgName": orgName,
-        "orgId": orgId
+        "orgId": orgId,
+        // "roleId":1
       });
 
       // 表单验证
@@ -223,25 +186,6 @@
         return false;
       });
     });
-    // js 递归返回的组织树
-    function getTreeJson(childrens) {
-      var child_node = [];
-      for (var i in childrens) {
-        var node = {
-          "value": childrens[i].orgId,
-          "name": childrens[i].orgName,
-          "selected": "",
-          "disabled": ""
-        };// 存放tree数据
-        var childrens_node = childrens[i].childOrgList;
-        if (childrens_node != 0) {
-          var son = getTreeJson(childrens_node);
-          node.children = son;
-        }
-        child_node.push(node);
-      }
-      return child_node;
-    };
   </script>
 </body>
 
