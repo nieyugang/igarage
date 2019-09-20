@@ -203,7 +203,7 @@ function initTree(ztree, elem, url, where, clickOrg, operateOrg, edit) {
             nodes.push(root_node);
             //渲染tree
             ztree.render({
-                id:elem,
+                id: elem,
                 elem: elem,
                 data: nodes,
                 showLine: false, //是否开启连接线
@@ -229,18 +229,20 @@ function initTree(ztree, elem, url, where, clickOrg, operateOrg, edit) {
     function getTreeJson(childrens) {
         var child_node = [];
         for (var i in childrens) {
-            var node = {
-                "id": childrens[i].orgId,
-                "title": childrens[i].orgName,
-                // "spread": true,
-                "level": childrens[i].orgLevel
-            }; // 存放tree数据
-            var childrens_node = childrens[i].childOrgList;
-            if (childrens_node != 0) {
-                var son = getTreeJson(childrens_node);
-                node.children = son;
+            if (childrens.hasOwnProperty(i)) {
+                var node = {
+                    "id": childrens[i].orgId,
+                    "title": childrens[i].orgName,
+                    // "spread": true,
+                    "level": childrens[i].orgLevel
+                }; // 存放tree数据
+                var childrens_node = childrens[i].childOrgList;
+                if (childrens_node != 0) {
+                    var son = getTreeJson(childrens_node);
+                    node.children = son;
+                }
+                child_node.push(node);
             }
-            child_node.push(node);
         }
         return child_node;
     };

@@ -139,56 +139,7 @@
                 //设置userInfoCaChe缓存
                 layui.sessionData('userInfoStorage', {
                   key: 'userInfo',
-                  value: [
-                    {
-                      key: 'email',
-                      value: res.userInfo.email
-                    },
-                    {
-                      key: 'enable',
-                      value: res.userInfo.enable
-                    },
-                    {
-                      key: 'loginId',
-                      value: res.userInfo.loginId
-                    },
-                    {
-                      key: 'mobile',
-                      value: res.userInfo.mobile
-                    },
-                    {
-                      key: 'orgId',
-                      value: res.userInfo.orgId
-                    },
-                    {
-                      key: 'password',
-                      value: res.userInfo.password
-                    },
-                    {
-                      key: 'reserve',
-                      value: res.userInfo.reserve
-                    },
-                    {
-                      key: 'roleId',
-                      value: res.userInfo.roleId
-                    },
-                    {
-                      key: 'sessionId',
-                      value: res.userInfo.sessionId
-                    },
-                    {
-                      key: 'telephone',
-                      value: res.userInfo.telephone
-                    },
-                    {
-                      key: 'userId',
-                      value: res.userInfo.userId
-                    },
-                    {
-                      key: 'userName',
-                      value: res.userInfo.userName
-                    }
-                  ]
+                  value: JSON.stringify(res.userInfo)
                 });
                 layui.sessionData('menuInfoStorage', {
                   key: 'menuInfo',
