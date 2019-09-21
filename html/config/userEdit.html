@@ -115,74 +115,52 @@
   <script>
     //加载组织树
     var nodes = [];
-    $.ajax({
-      url: backServiceUrl + '/getOrgTree.json',
-      type: 'POST',
-      data: JSON.stringify({
-        "userInfo": userInfo,
-        "orgId": 1
-      }),
-      contentType: "application/json",
-      dataType: 'json',
-      async: true,
-      success: function (res) {
-        //处理返回数据
-        var orgTreeInfo = res.orgTreeInfo;// 顶层节点
-        var childrens;
-        childrens = getTreeJson(orgTreeInfo.childOrgList);
-        var root_node = {
-          "value": orgTreeInfo.orgId,
-          "name": orgTreeInfo.orgName,
-          "selected": "",
-          "disabled": "",
-          "children": childrens
-        };// 存放tree数据
-        nodes.push(root_node);
-        layui.formSelects.data('select_orgId', 'local', {
-          arr: nodes
-        });
-      },
-      error: function () {
-        layer.msg("操作失败");
-      }
-    });
-    //获取角色data
-    $.ajax({
-      url: backServiceUrl + '/getRoleList.json',
-      type: 'POST',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({
-        "userInfo": userInfo,
-      }),
-      success: function (res) {
-        var roleList = res.roleList;
-        var data = [];
-        for (var i in roleList) {
-          if (roleList.hasOwnProperty(i)) {
-            var element = roleList[i];
-            var name = element.roleName;
-            var value = element.roleId;
-            var selected = "";
-            var disabled = "";
-            var role = {
-              "name": name,
-              "value": value,
-              "selected": selected,
-              "disabled": disabled
-            };
-            data.push(role);
-          }
+    function successCallback(res) {
+      //处理返回数据
+      var orgTreeInfo = res.orgTreeInfo;// 顶层节点
+      var childrens;
+      childrens = getTreeJson(orgTreeInfo.childOrgList);
+      var root_node = {
+        "value": orgTreeInfo.orgId,
+        "name": orgTreeInfo.orgName,
+        "selected": "",
+        "disabled": "",
+        "children": childrens
+      };// 存放tree数据
+      nodes.push(root_node);
+      layui.formSelects.data('select_orgId', 'local', {
+        arr: nodes
+      });
+    };
+    function errorCallback() {
+      layer.msg("操作失败");
+    };
+
+    sendAjaxRequest("POST", "/getOrgTree.json", "json", JSON.stringify({ "userInfo": userInfo, "orgId": userInfoStorage.orgId }), successCallback, errorCallback);
+    function successCallback_role(res) {
+      var roleList = res.roleList;
+      var data = [];
+      for (var i in roleList) {
+        if (roleList.hasOwnProperty(i)) {
+          var element = roleList[i];
+          var name = element.roleName;
+          var value = element.roleId;
+          var selected = "";
+          var disabled = "";
+          var role = {
+            "name": name,
+            "value": value,
+            "selected": selected,
+            "disabled": disabled
+          };
+          data.push(role);
         }
-        // 设置select_role 的值  formSelects.value('select_role', [2, 4]);  获取：formSelects.value('select_role'); // [{"name":"上海","val":"2"},{"name":"深圳","val":"4"}]
-        layui.formSelects.data('select_role', 'local', {
-          arr: data
-        });
-      },
-      error: function () {
-        layer.msg("与服务器通信异常！");
       }
-    });
+      layui.formSelects.data('select_role', 'local', {
+        arr: data
+      });
+    };
+    sendAjaxRequest("POST", "/getRoleList.json", "json", JSON.stringify({ "userInfo": userInfo }), successCallback_role, errorCallback);
 
     //加载模块
     layui.use(['form', 'layedit'], function () {
@@ -238,18 +216,20 @@
     function getTreeJson(childrens) {
       var child_node = [];
       for (var i in childrens) {
-        var node = {
-          "value": childrens[i].orgId,
-          "name": childrens[i].orgName,
-          "selected": "",
-          "disabled": ""
-        };// 存放tree数据
-        var childrens_node = childrens[i].childOrgList;
-        if (childrens_node != 0) {
-          var son = getTreeJson(childrens_node);
-          node.children = son;
+        if (childrens.hasOwnProperty(i)) {
+          var node = {
+            "value": childrens[i].orgId,
+            "name": childrens[i].orgName,
+            "selected": "",
+            "disabled": ""
+          };// 存放tree数据
+          var childrens_node = childrens[i].childOrgList;
+          if (childrens_node != 0) {
+            var son = getTreeJson(childrens_node);
+            node.children = son;
+          }
+          child_node.push(node);
         }
-        child_node.push(node);
       }
       return child_node;
     };

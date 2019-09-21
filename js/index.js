@@ -24,21 +24,10 @@ layui.use(["element", "layer"], function () {
   /**
    * 动态展示 managerTit
    */
-  var userId;
-  var userName;
-  for (var i in userInfoStorage) {
-    if (userInfoStorage.hasOwnProperty(i)) {
-      const element = userInfoStorage[i];
-      if (element.key == "userName") {
-        userName = element.value;
-        $("#managerTit h1").html(userName);
-      }
-      if (element.key == "userId") {
-        userId = element.value;
-      }
+  userInfoStorage = JSON.parse(userInfoStorage);
+  var userId =userInfoStorage.userId;
+  $("#managerTit h1").html(userInfoStorage.userName);
 
-    }
-  }
   now = new Date(), hour = now.getHours()
   if (hour < 6) {
     $("#managerTit p").html("凌晨好！")
