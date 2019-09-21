@@ -134,9 +134,13 @@
                             "garageId": gData.length>0?parseInt(gData[0].garageId):0
                         }
                     });
-
-
-
+                }else{
+                    table.reload('table_door', {
+                        where: {
+                            "userInfo": userInfo,
+                            "garageId": 0
+                        }
+                    });
                 }
                 form.render('select');
             });
