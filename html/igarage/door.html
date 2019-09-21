@@ -7,74 +7,78 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
 </head>
 
 <body>
-<form class="layui-form" action="">
-    <div class="layui-form-item">
-        <div class="layui-input-inline">
-            <select name="firstLevel" id="firstLevel" lay-filter="firstLevel">
-            </select>
+<div class="content-inner" style="z-index: 0;  width: 98%;">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <div class="layui-row layui-col-space30" style="background-color: #FFFFFF;">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: calc(95vh);">
+            <div>
+                <div id="orgTree"></div>
+            </div>
         </div>
-        <div class="layui-input-inline">
-            <select name="secondLevel" id="secondLevel" lay-filter="secondLevel">
-            </select>
-        </div>
-        <div class="layui-input-inline">
-            <select name="areaLevel" id="areaLevel">
-                <option value="1" selected="">丽华新村</option>
-                <option value="2">清潭新村</option>
-                <option value="3">邮电公寓</option>
-            </select>
-        </div>
-        <div class="layui-input-inline">
-            <select name="igarageId" id="igarageId" lay-filter="igarageId">
-                <option value="1">丽华新村1号车库</option>
-                <option value="2">丽华新村2号车库</option>
-                <option value="3" selected>丽华新村3号车库</option>
-            </select>
+        <div class="layui-col-md10" style="height: calc(95vh);">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>门禁操作</legend>
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <select name="garageList" id="garageList" lay-filter="garageList">
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <label class="layui-form-label" id="labelOrg" style="width:100%;"></label>
+                        </div>
+                    </div>
+                </form>
+
+
+                <div class="layui-card-body">
+                    <table id="table_door" lay-filter="table_door"></table>
+
+                    <script type="text/html" id="acTpl">
+                        <select lay-ignore>
+                            <option value="1">单门双向控制器</option>
+                            <option value="2">四门单向控制器</option>
+                        </select>
+                    </script>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" id="setNet">设置网络</button>
+                        </div>
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" id="clearAuth">清除权限</button>
+                        </div>
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" id="setTime">设置时间</button>
+                        </div>
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" id="setDoor">设置门</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" lay-filter="icCard" id="icCard">IC卡用户管理</button>
+                        </div>
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" lay-filter="access" id="access">门禁操作</button>
+                        </div>
+                    </div>
+                    <input id="accessId" value="aa" type="hidden"/>
+
+                </div>
+            </fieldset>
         </div>
     </div>
-
-    <table id="table_door" lay-filter="table_door"></table>
-
-    <script type="text/html" id="acTpl">
-        <select lay-ignore>
-            <option value="1">单门双向控制器</option>
-            <option value="2">四门单向控制器</option>
-        </select>
-    </script>
-
-    <div class="layui-form-item">
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="setNet">设置网络</button>
-        </div>
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="clearAuth">清除权限</button>
-        </div>
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="setTime">设置时间</button>
-        </div>
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" id="setDoor">设置门</button>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" lay-filter="icCard" id="icCard">IC卡用户管理</button>
-        </div>
-        <div class="layui-input-inline">
-            <button type="button" class="layui-btn" lay-filter="access" id="access">门禁操作</button>
-        </div>
-    </div>
-    <input id="accessId" value="aa" type="hidden"/>
-
-</form>
+</div>
 
 <!-- js插件 -->
 <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -84,28 +88,14 @@
 <script src="../../js/common.js"></script>
 <script>
     var baseUrl = "/hqigservice";
-    layui.use(['table','form','element','layer'], function () {
+    layui.use(['table','form','element','layer','tree'], function () {
         var table = layui.table
-            ,element = layui.element
+            ,tree = layui.tree
             ,layer = layui.layer
             ,form = layui.form;
 
-        layer.ready(function(){
-            var pdata = getPData();
-            for(var i in pdata){
-                $("#firstLevel").append('<option value="' + pdata[i].id + '">' + pdata[i].name + '</option>');
-            }
-
-            var pid = pdata[0].id;
-            var cdata = getCData(pid);
-            for(var j in cdata){
-                $("#secondLevel").append('<option value="' + cdata[j].id + '">' + cdata[j].name + '</option>');
-            }
-            form.render('select');
-        });
-
         initTable(table, "小区所属门禁信息表", "table_door", 10, '/getAccessControllerList.json',
-            { "userInfo": userInfo,"garageId": parseInt($("#igarageId").val())},
+            { "userInfo": userInfo,"garageId": parseInt($("#garageList").val())},
             function (res) {
                 return {
                     code: 0,
@@ -124,44 +114,38 @@
                 {field:'port', title:'PORT'},
                 {field:'remark', title:'所在区域'},
                 {field:'mac', title:'所控制的门'}
-            ]], 'default')
+            ]], 'default');
 
-        // 表格初始化
-        // table.render({
-        //     title: '小区所属门禁信息表',
-        //     elem: '#table_door',
-        //     height: 'full-200',
-        //     method: 'POST',
-        //     contentType: 'application/json',
-        //     limit: 30,
-        //     url: baseUrl + '/getAccessControllerList.json',
-        //     where: {
-        //         "userInfo": userInfo,
-        //         "garageId": parseInt($("#igarageId").val())
-        //     },
-        //     parseData: function (res) {
-        //         return {
-        //             code: 0,
-        //             msg: "",
-        //             count: res.accessControllerInfoList ? res.accessControllerInfoList.length : 0,
-        //             data: res.accessControllerInfoList
-        //         };
-        //     },
-        //     toolbar: 'default',
-        //     page: true,
-        //     cols: [[
-        //         { type: 'radio', fixed: 'left'},
-        //         { type: 'numbers', title: '序号', align: 'center' },
-        //         {field:'acType', title:'控制器类型',templet: function(x){
-        //                 return x.acType>1 ? '四门单向控制器': '单门双向控制器';
-        //             }},
-        //         {field:'sn', title:'产品序列号'},
-        //         {field:'ip', title:'IP'},
-        //         {field:'port', title:'PORT'},
-        //         {field:'remark', title:'所在区域'},
-        //         {field:'mac', title:'所控制的门'}
-        //     ]]
-        // });
+        initTree(tree, "#orgTree", "/getOrgTree.json",
+            JSON.stringify({"userInfo": userInfo,"orgId": 1}),
+            function(obj){
+                $("#labelOrg").text("所属机构:  "+obj.data.title);
+                // layer.msg(JSON.stringify(obj.data.title));
+                $("#garageList").empty();
+                if(obj.data.level > 2){
+                    var gData = getGarageList(obj.data.id);
+                    // layer.msg(JSON.stringify(gData));
+                    for(var i in gData){
+                        if(!isNaN(i)){
+                            $("#garageList").append('<option value="' + gData[i].garageId + '">' + gData[i].garageName + '</option>');
+                        }
+                    }
+                    table.reload('table_door',{
+                        where: {
+                            "userInfo": userInfo,
+                            "garageId": gData.length>0?parseInt(gData[0].garageId):0
+                        }
+                    });
+                }else{
+                    table.reload('table_door', {
+                        where: {
+                            "userInfo": userInfo,
+                            "garageId": 0
+                        }
+                    });
+                }
+                form.render('select');
+            });
 
         // 监听头部工具栏事件
         table.on('toolbar(table_door)', function (obj) {
@@ -177,9 +161,6 @@
                         anim: 1,
                         area: ['480px', '600px'],
                         content: './door-edit.html',
-                        end: function () {
-                            table.reload('table_door');
-                        }
                     });
                     break;
                 case 'update':
@@ -196,11 +177,7 @@
                             anim: 1,
                             area: ['480px', '600px'],
                             content: './door-edit.html',
-                            end: function () {
-                                table.reload('table_door');
-                            }
                         });
-
                     }
                     break;
                 case 'delete':
@@ -238,25 +215,15 @@
             };
         });
 
-        form.on('select(igarageId)', function(data){
-            // layer.msg($("#igarageId").val());
+        form.on('select(garageList)', function(data){
+            // layer.msg(JSON.stringify(data));
             table.reload('table_door',{
                 where: {
                     "userInfo": userInfo,
-                    "garageId": parseInt($("#igarageId").val())
+                    "garageId": parseInt($("#garageList").val())
                 }
             });
         });
-
-        form.on('select(firstLevel)', function(data){
-            var pid = data.value;
-            var cdata = getCData(pid);
-            $("#secondLevel").empty();
-            for(var j in cdata){
-                $("#secondLevel").append('<option value="' + cdata[j].id + '">' + cdata[j].name + '</option>');
-            }
-            form.render('select');
-        })
 
         $(document).on('click','#setNet',function(){
             layer.msg("设置网络成功!");
@@ -272,91 +239,69 @@
         });
 
         $(document).on('click','#access',function(){
-            var elem = window.parent.layui.element;
-            elem.tabDelete("_tab_iframe_", "door-operation.html");
-            elem.tabAdd("_tab_iframe_", {
-                title: "门禁操作",
-                content: '<iframe scrolling="auto" frameborder="0" src="/html/igarage/door-operation.html" style="width: 100%;height: 100%;display: block;"></iframe>',
-                id: "door-operation.html"
-            });
-            elem.tabChange("_tab_iframe_", "door-operation.html");
+            var options=$("#garageList option:selected");
+            var garageId = options.val();
+            if(garageId>0){
+                var elem = window.parent.layui.element;
+                elem.tabDelete("_tab_iframe_", "door-operation.html");
+                elem.tabAdd("_tab_iframe_", {
+                    title: "门禁操作",
+                    content: '<iframe scrolling="auto" frameborder="0" src="/html/igarage/door-operation.html?igarageId='
+                        + garageId
+                        + '&igarageName='
+                        + encodeURIComponent(options.text())
+                        + '" style="width: 100%;height: 100%;display: block;"></iframe>',
+                    id: "door-operation.html"
+                });
+                elem.tabChange("_tab_iframe_", "door-operation.html");
+            }else{
+                layer.msg("请选择要管理的车库!")
+            }
         });
 
         $(document).on('click','#icCard',function(){
-            var elem = window.parent.layui.element;
-            elem.tabDelete("_tab_iframe_", "iccard.html");
-            elem.tabAdd("_tab_iframe_", {
-                title: "IC卡管理",
-                content: '<iframe scrolling="auto" frameborder="0" src="/html/igarage/iccard.html?igarageId='+$("#igarageId").val()+'" style="width: 100%;height: 100%;display: block;"></iframe>',
-                id: "iccard.html"
-            });
-            elem.tabChange("_tab_iframe_", "iccard.html");
-
+            var options=$("#garageList option:selected");
+            var garageId = options.val();
+            if(garageId>0){
+                var elem = window.parent.layui.element;
+                elem.tabDelete("_tab_iframe_", "iccard.html");
+                elem.tabAdd("_tab_iframe_", {
+                    title: "IC卡管理",
+                    content: '<iframe scrolling="auto" frameborder="0" src="/html/igarage/iccard.html?igarageId='
+                        + garageId
+                        + '&igarageName='
+                        + encodeURIComponent(options.text())
+                        + '" style="width: 100%;height: 100%;display: block;"></iframe>',
+                    id: "iccard.html"
+                });
+                elem.tabChange("_tab_iframe_", "iccard.html");
+            }else{
+                layer.msg("请选择要管理的车库!")
+            }
         });
 
-        //获取省列表
-        function getPData() {
-            var pdata = [];
+        //获取小区车库列表
+        function getGarageList(orgId) {
+            var gdata = [];
             $.ajax({
-                url: baseUrl + '/getProvinceList.json',
+                url: baseUrl + '/getGarageList.json',
                 type: 'POST',
                 data: JSON.stringify({
                     "userInfo": userInfo,
+                    "orgId":parseInt(orgId)
                 }),
                 contentType: "application/json",
                 dataType: 'json',
                 async: false,
                 success: function (res) {
-                    pdata =  res.provinceList;
+                    gdata = res.rows;
                 },
             });
-            return pdata;
-        }
-
-        //获取市列表
-        function getCData(pid) {
-            var cdata = [];
-            $.ajax({
-                url: baseUrl + '/getCityList.json',
-                type: 'POST',
-                data: JSON.stringify({
-                    "userInfo": userInfo,
-                    "provinceId":parseInt(pid)
-                }),
-                contentType: "application/json",
-                dataType: 'json',
-                async: false,
-                success: function (res) {
-                    cdata = res.cityList;
-                },
-            });
-            return cdata;
-        }
-
-        //获取市列表
-        function getAreaData(cid) {
-            $.ajax({
-                url: baseUrl + '/getCityList.json',
-                type: 'POST',
-                data: JSON.stringify({
-                    "userInfo": userInfo,
-                    "provinceId":parseInt(pid)
-                }),
-                contentType: "application/json",
-                dataType: 'json',
-                async: true,
-                success: function (res) {
-                    return res.cityList;
-                },
-            });
+            return gdata;
         }
     });
 
 </script>
-
-
-
-
 </body>
 
 </html>

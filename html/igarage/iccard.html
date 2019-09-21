@@ -18,10 +18,6 @@
         <div class="layui-form-item">
             <div class="layui-input-inline">
                 <select name="igarageId" id="igarageId">
-                    <option value="">请选车库</option>
-                    <option value="1">丽华新村1号车库</option>
-                    <option value="2">丽华新村2号车库</option>
-                    <option value="3">丽华新村3号车库</option>
                 </select>
             </div>
         </div>
@@ -72,6 +68,14 @@
                 ,laydate = layui.laydate
                 ,form = layui.form;
 
+            layer.ready(function(){
+                var igarageId = RequestParameter()["igarageId"];
+                var igarageName = decodeURIComponent(RequestParameter()["igarageName"]);
+                $("#igarageId").val(igarageId);
+                $("#igarageId").append('<option value="' + igarageId + '">' + igarageName + '</option>');
+                form.render('select');
+            });
+
             //日期
             laydate.render({
                 elem: '#begDate'
@@ -91,7 +95,7 @@
                 url: baseUrl + '/getAccessControllerList.json',
                 where: {
                     "userInfo": userInfo,
-                    "garageId": 3
+                    "garageId": parseInt($("#igarageId").val())
                 },
                 parseData: function (res) {
                     return {
@@ -116,12 +120,6 @@
                     {field:'mac', title:'入库时间'},
                     {field:'mac', title:'状态'}
                 ]]
-            });
-
-            layer.ready(function(){
-                var igarageId = RequestParameter()["igarageId"];
-                $("#igarageId").val(igarageId);
-                form.render('select');
             });
 
             //头工具栏事件
