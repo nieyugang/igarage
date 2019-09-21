@@ -126,7 +126,9 @@
                     var gData = getGarageList(obj.data.id);
                     // layer.msg(JSON.stringify(gData));
                     for(var i in gData){
-                        $("#garageList").append('<option value="' + gData[i].garageId + '">' + gData[i].garageName + '</option>');
+                        if(!isNaN(i)){
+                            $("#garageList").append('<option value="' + gData[i].garageId + '">' + gData[i].garageName + '</option>');
+                        }
                     }
                     table.reload('table_door',{
                         where: {
