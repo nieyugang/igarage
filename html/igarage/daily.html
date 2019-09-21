@@ -848,7 +848,6 @@
                     <label class="layui-form-label">支付方式</label>
                     <div class="layui-input-block">
                         <select name="payType" id="payType" lay-verify="required" lay-reqtext="支付方式不能为空">
-                            <option value="1">支付宝</option>
                         </select>
                     </div>
                 </div>
@@ -926,6 +925,8 @@
         var chargerVersionInfoList; //充电站版本列表
         var garagePlugTypeList;//车库充电站插头类型列表
         var parkingSpaceData;//车位信息
+        var payTypeList;//支付方式
+
         //查询车位类型
         sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
             if (res.resFlag === 'N') {
@@ -957,6 +958,19 @@
             if (res.resFlag === 'N') {
                 if (res.acTypeList) {
                     accessTypeList = res.acTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+        //查询支付方式
+        sendAjaxRequest("POST", "/getSysCodesAndName.json", "json", JSON.stringify({"typeList": [{"type": "payType"}]}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.payTypeList) {
+                    payTypeList = res.payTypeList;
                 }
             } else {
                 layer.msg("查询失败");
@@ -1647,6 +1661,11 @@
                 , id: 'lay-openRenewFeePage' //设定一个id，防止重复弹出
                 , content: $("#parkingSpaceRenewFeePage").html()
             });
+            $("#payType").html("");
+            for (var i = 0; i < payTypeList.length; i++) {
+                var payType = payTypeList[i];
+                $("#payType").append("<option value=" + payType.id + ">" + payType.name + "</option>")
+            }
             form.render();
         }
 
