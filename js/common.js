@@ -35,6 +35,7 @@ function ajaxComplete(event, xhr, settings) {
                         title: '异常警告',
                         closeBtn: 0,
                         icon: 5,
+                        id: 'lay-login', //设定一个id，防止重复弹出
                         anim: 6,
                         content: xhr.responseJSON.resMsg,
                         yes: function (layero) {
@@ -47,6 +48,7 @@ function ajaxComplete(event, xhr, settings) {
                     layer.open({
                         title: '异常警告',
                         closeBtn: 0,
+                        id: 'lay-error', //设定一个id，防止重复弹出
                         icon: 5,
                         anim: 6,
                         content: xhr.responseJSON.resMsg,

@@ -594,7 +594,6 @@
                 <legend>新增车位</legend>
             </fieldset>
             <form class="layui-form layui-form-pane" id="carPageForm" action="" lay-filter="car-edit">
-                <input type="hidden" id="spaceId" name="spaceId">
                 <div class="layui-form-item">
                     <label class="layui-form-label">车库类型</label>
                     <div class="layui-input-block">
@@ -838,7 +837,7 @@
     <div class="container" style="width: 98%">
         <div class="layui-form">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend>编辑插头</legend>
+                <legend>车位续费</legend>
             </fieldset>
             <form class="layui-form layui-form-pane" id="parkingSpaceRenewFeeForm" action="" lay-filter="door-edit">
                 <div class="layui-form-item">
@@ -880,7 +879,7 @@
     <div class="container" style="width: 98%">
         <div class="layui-form">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                <legend>编辑插头</legend>
+                <legend>延期</legend>
             </fieldset>
             <form class="layui-form layui-form-pane" id="parkingSpaceDelayForm" action="" lay-filter="door-edit">
                 <div class="layui-form-item">
@@ -894,6 +893,171 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceDelayBtn">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="parkingSpaceUpdatePage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>编辑车位</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="parkingSpaceUpdateForm" action=""
+                  lay-filter="parkingSpaceUpdate-edit">
+
+                <div class="layui-collapse" lay-accordion>
+                    <h2 class="layui-colla-title">车位信息</h2>
+                    <div class="layui-colla-content layui-show">
+                        <input type="hidden" id="spaceId" name="spaceId">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="spaceName" autocomplete="off" id="spaceName"
+                                       placeholder="车位名称"
+                                       lay-reqtext="车位名称不能为空" lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位序号</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="spaceNo" autocomplete="off" id="spaceNo"
+                                       placeholder="车位序号"
+                                       lay-reqtext="车位序号不能为空" lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位类型</label>
+                            <div class="layui-input-block">
+                                <select name="spaceType" id="upSpaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否附加充电站</label>
+                            <div class="layui-input-block">
+                                <select name="addCharger" id="addCharger" lay-verify="required"
+                                        lay-reqtext="是否附加充电站不能为空">
+                                    <option value="1">附加</option>
+                                    <option value="0">不附加</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">充电站</label>
+                            <div class="layui-input-block">
+                                <select name="chargerId" id="upChargerId" lay-verify="required">
+                                    <option value="1">无</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位状态</label>
+                            <div class="layui-input-block">
+                                <select name="status" id="status" lay-verify="required">
+                                    <option value="0">空闲</option>
+                                    <option value="1">故障</option>
+                                    <option value="2">保留</option>
+                                    <option value="3">已预约</option>
+                                    <option value="4">使用中</option>
+                                    <option value="5">冻结</option>
+                                    <option value="6">停卡</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="remark" autocomplete="off" id="upRemark"
+                                       placeholder="备注" class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">用户信息</h2>
+                    <div class="layui-colla-content layui-show">
+                        <div id="icCardInfo">
+                            <input type="hidden" id="cardId" name="cardId">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">卡号</label>
+                                <div class="layui-input-block">
+                                    <input type="number" name="cardNo" autocomplete="off" id="cardNo"
+                                           placeholder="卡号"
+                                           lay-reqtext="卡号不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="customerName" autocomplete="off" id="customerName"
+                                           placeholder="用户姓名"
+                                           lay-reqtext="用户姓名不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">联系方式</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="mobile" autocomplete="off" id="mobile"
+                                           placeholder="联系方式"
+                                           lay-reqtext="联系方式不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="address" autocomplete="off" id="address"
+                                           placeholder="地址"
+                                           lay-reqtext="地址不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">开始租用车位日期</label>
+                                <div class="layui-input-block">
+                                    <input type="text" class="layui-input" id="startDate" id="startDate"
+                                           placeholder="开始租用车位日期"
+                                           lay-reqtext="开始租用车位日期不能为空" lay-verify="required" placeholder="yyyyMMdd">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">租用月数</label>
+                                <div class="layui-input-block">
+                                    <input type="number" name="rentMonths" autocomplete="off" id="rentMonths"
+                                           placeholder="开始租用车位日期"
+                                           lay-reqtext="开始租用车位日期不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">支付方式</label>
+                                <div class="layui-input-block">
+                                    <select name="payType" id="upPayType" lay-verify="required" lay-reqtext="支付方式不能为空">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceUpdateBtn">立即提交
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
@@ -921,8 +1085,8 @@
             , table = layui.table
             , element = layui.element
             , $ = layui.jquery
-            , form = layui.form;
-
+            , form = layui.form
+            , laydate = layui.laydate;
         // -----------------------------------页面初始化做的操作----------------------------------
         var spaceTypeList; //车位类型
         var cameraTypeList;//监控类型
@@ -1127,7 +1291,7 @@
             }
         });
 
-        table.on('row(maintainTable)', function(obj){
+        table.on('row(maintainTable)', function (obj) {
             var data = obj.data;
             maintainInfo = data;
             showMaintain(data, true)
@@ -1255,7 +1419,7 @@
         });
 
         //监听行单击事件（单击事件为：rowDouble）
-        table.on('row(maintainMomeTable)', function(obj){
+        table.on('row(maintainMomeTable)', function (obj) {
             var data = obj.data;
             layer.alert(data.content)
             //标注选中样式
@@ -1621,7 +1785,18 @@
             var data = obj.data;
             parkingSpaceData = data;
             if (obj.event === 'edit') {
-                openRenewFeePage();
+                //查询车位类型
+                sendAjaxRequest("POST", "/getParkingCardInfo.json", "json", JSON.stringify({"cardId": parkingSpaceData.cardId}), function (res) {
+                    if (res.resFlag === 'N') {
+                        openUpdateParkingSpace();
+                        setParkingSpace(data, res.parkingCardInfo);
+                    } else {
+                        layer.msg("查询失败");
+                    }
+                }, function () {
+                    layer.msg("查询失败");
+                });
+
             } else if (obj.event === 'delete') {
                 sendDelRequest("parkingSpaceDelete.json", JSON.stringify({spaceId: data.spaceId}), parkingSpaceTableIns);
             } else if (obj.event === 'renewFee') {//续费
@@ -1633,8 +1808,50 @@
             }
         });
 
-        function set() {
+        function setParkingSpace(parkingSpaceData, parkingCardData) {
+            $("#spaceName").val(parkingSpaceData.spaceName);
+            $("#spaceNo").val(parkingSpaceData.spaceNo);
+            $("#upSpaceType").val(parkingSpaceData.spaceType);
+            $("#addCharger").val(parkingSpaceData.addCharger);
+            $("#upChargerId").val(parkingSpaceData.chargerId);
+            $("#status").val(parkingSpaceData.status);
+            $("#upRemark").val(parkingSpaceData.remark);
+            if (parkingCardData) {
+                $("#cardId").val(parkingCardData.cardId);
+                $("#cardNo").val(parkingCardData.cardNo);
+                $("#customerName").val(parkingCardData.customerName);
+                $("#mobile").val(parkingCardData.mobile);
+                $("#address").val(parkingCardData.address);
+                $("#startDate").val(parkingCardData.startTime);
+                $("#rentMonths").val(parkingCardData.rentMonths);
+                $("#upPayType").val(parkingCardData.payType);
+            }
+            form.render();
+        }
 
+        function openUpdateParkingSpace() {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '600px']
+                , id: 'lay-openRenewFeePage' //设定一个id，防止重复弹出
+                , content: $("#parkingSpaceUpdatePage").html()
+            });
+            $("#upPayType").html("");
+            for (var i = 0; i < payTypeList.length; i++) {
+                var payType = payTypeList[i];
+                $("#upPayType").append("<option value=" + payType.id + ">" + payType.name + "</option>")
+            }
+            $("#upSpaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#upSpaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            laydate.render({
+                elem: '#startDate'
+                , format: 'yyyyMMdd'
+            });
+            form.render();
         }
 
         function getParkIngCard(cardId) {
