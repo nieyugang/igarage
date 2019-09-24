@@ -6,20 +6,360 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
-    <h1>车库系统 / 监控维护</h1>
+<h1>车库系统 / 日常管理</h1>
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <div class="row" style="background-color: white;">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
+            <div style="margin-top: 20%; height: 100%">
+                <label
+                        style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
+                <div id="orgTree" class="demo-tree"></div>
+            </div>
+        </div>
+        <div class="layui-col-md10">
+            <div style="margin-top: 2%;" class="row">
+                <div class="layui-col-md12" id="garageTable"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
+                    <div class="" style="background-color: #848d92">车库列表</div>
+                    <table style="margin: 10px" class="layui-hide" id="maintainTable"
+                           lay-filter="maintainTable"></table>
+                </div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+                <div id="deviceContent" class="layui-col-md12"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
+                    <div>
+                        <table class="layui-hide" id="cameraTable" lay-filter="cameraTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="ingAndLat">
+    {{d.ing}}--{{d.lat}}
+</script>
+
+<script type="text/html" id="garageBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">新增监控</a>
+</script>
+
+<script type="text/html" id="editBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+<script type="text/html" id="cameraEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>编辑监控</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="cameraEditPageFrom" action="" lay-filter="camera-edit">
+                <input type="hidden" id="cameraId" name="cameraId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">监控名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cameraName" autocomplete="off" id="cameraName"
+                               placeholder="监控名称"
+                               lay-reqtext="监控名称不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">监控类型</label>
+                    <div class="layui-input-block">
+                        <select name="cameraType" id="cameraType" lay-reqtext="监控类型不能为空" lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">监控ip</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="ip" autocomplete="off" id="ip" placeholder="监控ip"
+                               lay-reqtext="监控ip不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">监控端口</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="port" autocomplete="off" id="port"
+                               placeholder="监控端口"
+                               lay-reqtext="监控端口不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登录账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="loginAccount" autocomplete="off" id="loginAccount"
+                               placeholder="登录账号"
+                               lay-reqtext="登录账号不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登录密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="password" autocomplete="off" id="password"
+                               placeholder="登录密码"
+                               lay-reqtext="登录密码不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">安装地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="installAddress" autocomplete="off" id="installAddress"
+                               placeholder="安装地址"
+                               lay-reqtext="安装地址不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="cameraFormSubmit">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
+
+<script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+<script>
+    var maintainInfo;//车库
+    layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate'], function () {
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table
+            , element = layui.element
+            , $ = layui.jquery
+            , form = layui.form
+            , laydate = layui.laydate;
+        // -----------------------------------页面初始化做的操作----------------------------------
+        var cameraTypeList;//监控类型
+
+        //查询监控类型
+        sendAjaxRequest("POST", "/getSysCodesAndName.json", "json", JSON.stringify({"typeList": [{"type": "cameraType"}]}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.cameraTypeList) {
+                    cameraTypeList = res.cameraTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+// -----------------------------------功能性操作----------------------------------
+//         ---------------------------车库-------------------------
+
+        var garageListCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
+            },
+            {
+                field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        function res(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        function garageListdone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    noPageTableReload(cameraTableIns, {garageId: res.data[0].garageId});
+                }
+                maintainInfo = res.data[0];
+            }
+        }
+
+        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
+
+        //监听行工具事件
+        table.on('tool(maintainTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'add') {
+                openCameraEditPage();
+            }
+        });
+
+        table.on('row(maintainTable)', function (obj) {
+            var data = obj.data;
+            maintainInfo = data;
+            noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+
+//         ---------------------------监控-------------------------
+
+        var cameraCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'cameraName', title: '监控名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'cameraTypeName', title: '监控类型', sort: false, fixed: 'center'
+            },
+            {
+                field: 'ip', title: '监控ip', sort: false, fixed: 'center'
+            },
+            {
+                field: 'loginAccount', title: '登录账号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'installAddress', title: '安装地址描述', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '状态', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        function cameraRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                data: res.cameraInfoList
+            };
+        }
+
+        var cameraTableIns = initNotPageTable(table, "cameraTable", "/getCameraList.json", {garageId: -1}, cameraRes, cameraCols, null);
+
+        //监听监控行工具事件
+        table.on('tool(cameraTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                openCameraEditPage();
+                setCamera(data);
+                form.render();
+            } else if (obj.event === 'delete') {
+                sendDelRequest("cameraDelete.json", JSON.stringify({cameraId: data.cameraId}), cameraTableIns);
+            }
+        });
+
+        function setCamera(data) {
+            $("#cameraId").val(data.cameraId)
+            $("#cameraName").val(data.cameraName);
+            $("#cameraType").val(data.cameraType);
+            $("#ip").val(data.ip);
+            $("#port").val(data.port);
+            $("#loginAccount").val(data.loginAccount);
+            $("#password").val(data.password);
+            $("#installAddress").val(data.installAddress);
+        }
+
+        function clearCamera() {
+            $("#cameraId").val("")
+            $("#cameraName").val("");
+            $("#cameraType").val("");
+            $("#ip").val("");
+            $("#port").val("");
+            $("#loginAccount").val("");
+            $("#password").val("");
+            $("#installAddress").val("");
+        }
+
+        function openCameraEditPage() {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '600px']
+                , id: 'lay-cameraAddPageBtn' //设定一个id，防止重复弹出
+                , content: $("#cameraEditPage").html()
+            });
+            clearCamera();
+            $("#cameraType").html("");
+            for (var i = 0; i < cameraTypeList.length; i++) {
+                var cameraType = cameraTypeList[i];
+                $("#cameraType").append("<option value=" + cameraType.code + ">" + cameraType.name + "</option>")
+            }
+            form.render();
+        }
+
+        //打开增加修改监控页面
+        $("#cameraAddPageBtn").click(function (event) {
+            openCameraEditPage();
+        });
+
+        //监控新增监听提交
+        form.on('submit(cameraFormSubmit)', function () {
+            var data = $("#cameraEditPageFrom").serializeObject();
+            var url = "/cameraAdd.json";
+            if (data.cameraId) {
+                data.cameraId = parseInt(data.cameraId)
+                url = "/cameraUpdate.json";
+            }
+            data.port = parseInt(data.port);
+            data.cameraType = parseInt(data.cameraType);
+            data.garageId = parseInt(maintainInfo.garageId);
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+// ----------------------------机构数-----------------------------
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+
+        function clickOrg(orgInfo) {
+            tableReload(tableIns, {orgId: orgInfo.data.id})
+        }
+    });
+</script>
 </body>
 
 </html>

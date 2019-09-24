@@ -6,20 +6,693 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
-    <h1>车库系统 / 充电站维护</h1>
+<h1>车库系统 / 日常管理</h1>
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <div class="row" style="background-color: white;">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
+            <div style="margin-top: 20%; height: 100%">
+                <label
+                        style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
+                <div id="orgTree" class="demo-tree"></div>
+            </div>
+        </div>
+        <div class="layui-col-md10">
+            <div style="margin-top: 2%;" class="row">
+                <div class="layui-col-md12" id="garageTable"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
+                    <div class="" style="background-color: #848d92">车库列表</div>
+                    <table style="margin: 10px" class="layui-hide" id="maintainTable"
+                           lay-filter="maintainTable"></table>
+                </div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+                <div id="deviceContent" class="layui-col-md12"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
+                    <div>
+                        <table class="layui-hide" id="garageChargerTable"
+                               lay-filter="garageChargerTable"></table>
+
+                        <table class="layui-hide" id="garagePlugTable"
+                               lay-filter="garagePlugTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="ingAndLat">
+    {{d.ing}}--{{d.lat}}
+</script>
+
+
+<script type="text/html" id="garageChargerThirdPayToolbar">
+    {{#  if(d.thirdPay === 1){ }}
+    支持
+    {{#  } else { }}
+    不支持
+    {{#  } }}
+</script>
+
+<script type="text/html" id="garageChargerStatus">
+    {{#  if(d.status === 1){ }}
+    在线
+    {{#  } else { }}
+    离线
+    {{#  } }}
+</script>
+
+<script type="text/html" id="garageBar">
+   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">新增充电桩</a>
+</script>
+
+<script type="text/html" id="garageChargerBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addPlug">增加插头</a>
+</script>
+
+<script type="text/html" id="editBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+<script type="text/html" id="garageChargerEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>新增充电站</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="garageChargerPageForm" action=""
+                  lay-filter="garage-charger-edit">
+                <input type="hidden" id="chargerId" name="chargerId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="chargerName" autocomplete="off" id="chargerName"
+                               placeholder="充电站名称"
+                               lay-reqtext="充电站名称不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">序列号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="gcSn" autocomplete="off" id="gcSn"
+                               placeholder="序列号"
+                               lay-reqtext="产品序列号不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">三方支付</label>
+                    <div class="layui-input-block">
+                        <select name="thirdPay" id="thirdPay" lay-verify="required">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">版本</label>
+                    <div class="layui-input-block">
+                        <select name="currentVersion" id="currentVersion" lay-verify="required" lay-reqtext="当前版本不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="garageChargerFormSubmit">
+                            立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="garagePlugEditHide">
+    <div class="layui-form-item">
+        <label class="layui-form-label">起始插头编号</label>
+        <div class="layui-input-block">
+            <input type="number" name="startPlugNo" autocomplete="off" id="startPlugNo"
+                   placeholder="起始插头编号"
+                   lay-reqtext="起始插头编号不能为空" lay-verify="required" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">添加数量</label>
+        <div class="layui-input-block">
+            <input type="number" name="addCount" autocomplete="off" id="gpAddCount"
+                   placeholder="添加数量"
+                   lay-reqtext="添加数量不能为空" lay-verify="required" class="layui-input">
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="garagePlugEditDiv">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>编辑插头</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="garagePlugPageForm" action="" lay-filter="door-edit">
+                <input type="hidden" id="plugId" name="plugId">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="devName" autocomplete="off" id="devName"
+                               placeholder="设备名称"
+                               lay-reqtext="设备名称不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div id="garagePlugEditShow">
+
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备类型</label>
+                    <div class="layui-input-block">
+                        <select name="devType" id="devType" lay-verify="required" lay-reqtext="设备类型不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">版本</label>
+                    <div class="layui-input-block">
+                        <select name="currentVersion" id="gpCurrentVersion" lay-verify="required" lay-reqtext="版本不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">消费标准</label>
+                    <div class="layui-input-block">
+                        <select name="currentPayStandard" id="currentPayStandard" lay-verify="required"
+                                lay-reqtext="当前消费标准不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标准电流</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="standardCurrent" autocomplete="off" id="standardCurrent"
+                               placeholder="标准电流"
+                               lay-reqtext="标准电流不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">限制电流</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="limitCurrent" autocomplete="off" id="limitCurrent"
+                               placeholder="限制电流"
+                               lay-reqtext="限制电流不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">极限功率</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="maxPower" autocomplete="off" id="maxPower"
+                               placeholder="极限功率"
+                               lay-reqtext="极限功率不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="garagePlugFormSubmit">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
+
+<script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+<script>
+    var maintainInfo;//车库
+    var garageCharger;//充电站
+    layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate'], function () {
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table
+            , element = layui.element
+            , $ = layui.jquery
+            , form = layui.form
+            , laydate = layui.laydate;
+        // -----------------------------------页面初始化做的操作----------------------------------
+        var chargerVersionInfoList; //充电站版本列表
+        var garagePlugTypeList;//车库充电站插头类型列表
+
+        //充电站版本列表
+        sendAjaxRequest("POST", "/getChargerVersionList.json", "json", JSON.stringify({chargerType: 0}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.chargerVersionInfoList) {
+                    chargerVersionInfoList = res.chargerVersionInfoList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+        //充电站版本列表
+        sendAjaxRequest("POST", "/getGaragePlugTypeList.json", "json", {}, function (res) {
+            if (res.resFlag === 'N') {
+                if (res.garagePlugTypeList) {
+                    garagePlugTypeList = res.garagePlugTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+// -----------------------------------功能性操作----------------------------------
+//         ---------------------------车库-------------------------
+
+        var garageListCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
+            },
+            {
+                field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        function res(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        function garageListdone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    noPageTableReload(garageChargerTableIns, {garageId: res.data[0].garageId});
+                }
+                maintainInfo = res.data[0];
+            }
+        }
+
+        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
+
+        //监听行工具事件
+        table.on('tool(maintainTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'add') {
+                openGarageChargerPage();
+            }
+        });
+
+        table.on('row(maintainTable)', function (obj) {
+            var data = obj.data;
+            maintainInfo = data;
+            noPageTableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+
+//         ---------------------------充电站-------------------------
+
+        function garageChargerRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.garageChargerInfoList
+            };
+        }
+
+        var garageChargerCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'chargerName', title: '充电站名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'sn', title: '产品序列号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '设备状态', toolbar: "#garageChargerStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'currentVersion', title: '当前版本', sort: false, fixed: 'center'
+            },
+            {
+                field: 'updateVersion', title: '修改版本', sort: false, fixed: 'center'
+            },
+            {
+                field: 'thirdPay',
+                title: '是否支持第三方支付',
+                toolbar: "#garageChargerThirdPayToolbar",
+                sort: false,
+                fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'chargerId', title: '操作', toolbar: "#garageChargerBar", width: 400, sort: false, fixed: 'center'
+            }
+        ]];
+        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, garageChargerDone);
+
+        function garageChargerDone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    tableReload(garagePlugTableIns, {chargerId: res.data[0].chargerId})
+                    garageCharger = res.data[0];
+                }
+            }
+        }
+
+        //监听监控行工具事件
+        table.on('tool(garageChargerTable)', function (obj) {
+            var data = obj.data;
+            garageCharger = data;
+            if (obj.event === 'edit') {
+                openGarageChargerPage();
+                setGarageCharger(data);
+            } else if (obj.event === 'delete') {
+                sendDelRequest("garageChargerDelete.json", JSON.stringify({chargerId: data.chargerId}), garageChargerTableIns);
+            } else if (obj.event === 'addPlug') {
+                openGaragePlugPage();
+                $("#garagePlugEditShow").html($("#garagePlugEditHide").html());
+            }
+        });
+
+        table.on('row(garageChargerTable)', function (obj) {
+            var data = obj.data;
+            tableReload(garagePlugTableIns, {chargerId: data.chargerId})
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+
+        function setGarageCharger(data) {
+            $("#chargerId").val(data.chargerId);
+            $("#chargerName").val(data.chargerName);
+            $("#gcSn").val(data.sn);
+            $("#thirdPay").val(data.thirdPay);
+            $("#currentVersion").val(data.currentVersion);
+            form.render();
+        }
+
+        function clearGarageCharger() {
+            $("#chargerId").val("");
+            $("#chargerName").val("");
+            $("#gcSn").val("");
+            $("#thirdPay").val("");
+            $("#currentVersion").val("");
+        }
+
+        function openGarageChargerPage() {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '500px']
+                , id: 'lay-garageChargerPageBtn' //设定一个id，防止重复弹出
+                , content: $("#garageChargerEditPage").html()
+            });
+            clearGarageCharger();
+            for (var i = 0; i < chargerVersionInfoList.length; i++) {
+                var currentVersion = chargerVersionInfoList[i];
+                $("#currentVersion").append("<option value=" + currentVersion.versionId + ">" + currentVersion.versionName + "</option>")
+            }
+            form.render();
+        }
+
+        //新增充电站监听提交
+        form.on('submit(garageChargerFormSubmit)', function () {
+            var data = $("#garageChargerPageForm").serializeObject();
+            var url = "garageChargerAdd.json";
+            if (data.chargerId) {
+                data.chargerId = parseInt(data.chargerId)
+                data.updateVersion = parseInt(data.currentVersion);
+                url = "garageChargerUpdate.json";
+            }
+            data.currentVersion = parseInt(data.currentVersion);
+            data.thirdPay = parseInt(data.thirdPay);
+            data.garageId = parseInt(maintainInfo.garageId);
+            data.chargerId = parseInt(data.chargerId);
+            data.sn = data.gcSn;
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+//         ---------------------------充电站插头-------------------------
+
+        function garagePlugRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.garagePlugInfoList
+            };
+        }
+
+        var garagePlugCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+
+            {
+                field: 'plugName', title: '插头名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'plugNo', title: '插头编号', sort: false, fixed: 'center'
+            },
+            {
+                field: 'devType', title: '设备类型', sort: false, fixed: 'center'
+            },
+            {
+                field: 'binding', title: '绑定车位', sort: false, fixed: 'center'
+            },
+            {
+                field: 'standardCurrent', title: '标准电流', sort: false, fixed: 'center'
+            },
+            {
+                field: 'limitCurrent', title: '限制电流', sort: false, fixed: 'center'
+            },
+            {
+                field: 'maxPower', title: '最大攻略', sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'plugId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
+            }
+        ]];
+        var garagePlugTableIns = initTable(table, null, "garagePlugTable", 20, "getGaragePlugList.json", {chargerId: -1}, garagePlugRes, garagePlugCols, null, null);
+
+        //监听监控行工具事件
+        table.on('tool(garagePlugTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                openGaragePlugPage();
+                setGaragePlug(data);
+                $("#garagePlugEditShow").html("");
+            } else if (obj.event === 'delete') {
+                sendDelRequest("garagePlugDelete.json", JSON.stringify({plugId: data.plugId}), garagePlugTableIns);
+            }
+        });
+
+        function setGaragePlug(data) {
+            $("#plugId").val(data.plugId);
+            $("#devName").val(data.plugName);
+            $("#startPlugNo").val(data.plugNo);
+            $("#devType").val(data.devType);
+            $("#gpCurrentVersion").val(data.currentVersion);
+            $("#currentPayStandard").val(data.currentPayStandard);
+            $("#standardCurrent").val(data.standardCurrent);
+            $("#limitCurrent").val(data.limitCurrent);
+            $("#maxPower").val(data.maxPower);
+            form.render();
+        }
+
+        function clearGaragePlug() {
+            $("#plugId").val("");
+            $("#devName").val("");
+            $("#startPlugNo").val("");
+            $("#gpAddCount").val("");
+            $("#devType").val("");
+            $("#gpCurrentVersion").val("");
+            $("#currentPayStandard").val("");
+            $("#standardCurrent").val("");
+            $("#limitCurrent").val("");
+            $("#maxPower").val("");
+            form.render();
+        }
+
+        function garagePlugSelect(devType) {
+            $("#gpCurrentVersion").html("");
+            $("#currentPayStandard").html("");
+            if (devType) {
+                // 插头版本列表
+                sendAjaxRequest("POST", "/getGaragePlugVersionList.json", "json", JSON.stringify({"devType": devType}), function (res) {
+                    if (res.resFlag === 'N') {
+                        if (res.garagePlugVersionList) {
+                            for (var i = 0; i < res.garagePlugVersionList.length; i++) {
+                                var garagePlugVersion = res.garagePlugVersionList[i];
+                                $("#gpCurrentVersion").append("<option value=" + garagePlugVersion.versionId + ">" + garagePlugVersion.versionName + "</option>")
+                            }
+                            form.render();
+                        }
+                    } else {
+                        layer.msg("查询失败");
+                        form.render();
+                    }
+                }, function () {
+                    layer.msg("查询失败");
+                    form.render();
+                });
+
+                // 插头消费标准列表
+                sendAjaxRequest("POST", "/getGaragePlugPayStandardList.json", "json", JSON.stringify({"devType": devType}), function (res) {
+                    if (res.resFlag === 'N') {
+                        if (res.garagePlugPayStandardList) {
+                            for (var i = 0; i < res.garagePlugPayStandardList.length; i++) {
+                                var garagePlugPayStandard = res.garagePlugPayStandardList[i];
+                                $("#currentPayStandard").append("<option value=" + garagePlugPayStandard.standardId + ">" + garagePlugPayStandard.standardName + "</option>")
+                            }
+                            form.render();
+                        }
+                    } else {
+                        layer.msg("查询失败");
+                        form.render();
+                    }
+                }, function () {
+                    layer.msg("查询失败");
+                    form.render();
+                });
+            }
+        }
+
+
+        $("#devType").change(function () {
+            var devType = $("#devType").val();
+            garagePlugSelect(devType);
+        });
+
+        function openGaragePlugPage() {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '600px']
+                , id: 'lay-garagePlugPageBtn' //设定一个id，防止重复弹出
+                , content: $("#garagePlugEditDiv").html()
+            });
+            clearGaragePlug();
+            if (garagePlugTypeList) {
+                for (var i = 0; i < garagePlugTypeList.length; i++) {
+                    var garagePlugType = garagePlugTypeList[i];
+                    $("#devType").append("<option value=" + garagePlugType.id + ">" + garagePlugType.name + "</option>")
+                }
+                garagePlugSelect(garagePlugTypeList[0].id);
+            }
+            form.render();
+        }
+
+        //打开增加修改充电桩页面
+        $("#garagePlugPageBtn").click(function (event) {
+            openGaragePlugPage();
+        });
+
+
+        //新增充电站监听提交
+        form.on('submit(garagePlugFormSubmit)', function () {
+            var data = $("#garagePlugPageForm").serializeObject();
+            var url = "garagePlugAdd.json";
+            if (data.plugId) {
+                data.plugId = parseInt(data.plugId)
+                data.updateVersion = parseInt(data.gpCurrentVersion);
+                data.updatePayStandard = parseInt(data.currentPayStandard);
+                data.plugName = data.devName;
+                data.plugNo = parseInt(data.startPlugNo);
+                url = "garagePlugUpdate.json";
+            }
+            data.currentVersion = parseInt(data.currentVersion);
+            data.chargerId = parseInt(garageCharger.chargerId);
+            data.startPlugNo = parseInt(data.startPlugNo);
+            data.addCount = parseInt(data.addCount);
+            data.devType = parseInt(data.devType);
+
+            data.currentPayStandard = parseInt(data.currentPayStandard);
+            data.standardCurrent = parseInt(data.standardCurrent);
+            data.limitCurrent = parseInt(data.limitCurrent);
+            data.maxPower = parseInt(data.maxPower);
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    tableReload(garagePlugTableIns, {chargerId: garageCharger.chargerId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+// ----------------------------机构数-----------------------------
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+
+        function clickOrg(orgInfo) {
+            tableReload(tableIns, {orgId: orgInfo.data.id})
+        }
+    });
+</script>
 </body>
 
 </html>
