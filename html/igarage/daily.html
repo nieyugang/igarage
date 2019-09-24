@@ -63,16 +63,36 @@
                         style="border: 1px solid #848d92;min-height: 550px; min-width: 97%">
                         <div class="layui-tab layui-tab-brief">
                             <ul class="layui-tab-title">
-                                <li class="layui-this">地图</li>
-                                <li>工程图</li>
+                                <li class="layui-this" lay-filter="map_tab">地图</li>
+                                <li lay-filter="engineering_tab ">工程图</li>
+                                <li lay-filter="camare_tab">监控视频</li>
                             </ul>
+                            <!-- 地图 -->
                             <div class="layui-tab-content">
                                 <div class="layui-tab-item layui-show">
                                     <div id="allmap" style="height: 450px"></div>
                                 </div>
+                                <!-- 工程图 -->
                                 <div class="layui-tab-item">
                                     <div class="layui-form-item" style="text-align: center">
                                         <img id="maintainImg" src="">
+                                    </div>
+                                </div>
+                                <!-- 监控视频 -->
+                                <div class="layui-tab-item">
+                                    <div class="layui-row">
+                                        <div class="layui-col-md7">
+                                            <div id="divPlugin" class="plugin"></div>
+                                        </div>
+                                        <div class="layui-col-md5">
+                                            <button class="layui-btn"
+                                                onclick="	clickLogin('192.168.1.99', '80', 'admin', '123456789a');">预览</button>
+                                            <div class="layui-card">
+                                                <hr class="layui-bg-green">
+                                                <div class="layui-card-body" id="opinfo">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1083,6 +1103,8 @@
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+    <script src="../../vendor/hikvision/webVideoCtrl.js"></script>
+    <script src="../../vendor/hikvision/preview.js"></script>
     <!-- js公共代码 -->
     <script src="../../js/common.js"></script>
     <script src="../../js/front.js"></script>
