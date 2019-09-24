@@ -312,6 +312,10 @@
                                             <label class="layui-form-label-left-col-5" id="parkingAddress"></label>
                                         </div>
                                     </div>
+                                    <div class="layui-row" style="text-align: left">
+                                        <button type="button" class="layui-btn" id="batchRenewBtn">批量续费</button>
+                                        <button type="button" class="layui-btn" id="batchDelay">批量延期</button>
+                                    </div>
                                     <div class="layui-col-md12">
                                         <table class="layui-hide" id="parkingSpaceTable"
                                                lay-filter="parkingSpaceTable" style="width: 600px"></table>
@@ -839,6 +843,7 @@
                 <legend>车位续费</legend>
             </fieldset>
             <form class="layui-form layui-form-pane" id="parkingSpaceRenewFeeForm" action="" lay-filter="door-edit">
+                <input id="renewSpaceId" name="spaceId" type="hidden">
                 <div class="layui-form-item">
                     <label class="layui-form-label">续租月数</label>
                     <div class="layui-input-block">
@@ -881,6 +886,7 @@
                 <legend>延期</legend>
             </fieldset>
             <form class="layui-form layui-form-pane" id="parkingSpaceDelayForm" action="" lay-filter="door-edit">
+                <input id="delaySpaceId" name="spaceId" type="hidden">
                 <div class="layui-form-item">
                     <label class="layui-form-label">延期天数</label>
                     <div class="layui-input-block">
@@ -1774,7 +1780,7 @@
         }
 
         var parkingSpaceCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {type: 'checkbox', width: 80, fixed: 'center'},
             {
                 field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
             },
@@ -1802,6 +1808,7 @@
                 }
             }
         }
+
 
         form.on('select(upChargerId)', function (data) {
             getGaragePlugList(data.value);
@@ -1861,9 +1868,12 @@
                             getGaragePlugList(chargerId);
                         }
                         $("#upPayType").html("");
-                        for (var i = 0; i < payTypeList.length; i++) {
-                            var payType = payTypeList[i];
-                            $("#upPayType").append("<option value=" + payType.code + ">" + payType.name + "</option>")
+                        if(payTypeList) {
+                            for (var i = 0; i < payTypeList.length; i++) {
+                                var payType = payTypeList[i];
+                                $("#upPayType").append("<option value=" + payType.code + ">" + payType.name + "</option>")
+                            }
+                            $("#upPayType").val(payTypeList[0].code);
                         }
                         setParkingSpace(data, res.parkingCardInfo);
                     } else {
@@ -1876,9 +1886,9 @@
             } else if (obj.event === 'delete') {
                 sendDelRequest("parkingSpaceDelete.json", JSON.stringify({spaceId: data.spaceId}), parkingSpaceTableIns);
             } else if (obj.event === 'renewFee') {//续费
-                openRenewFeePage();
+                openRenewFeePage(data.spaceId);
             } else if (obj.event === 'delay') {//延期
-                openDelayPage();
+                openDelayPage(data.spaceId);
             } else if (obj.event === 'cardInfo') {
                 getParkIngCard(data.cardId)
             }
@@ -2015,7 +2025,38 @@
             $("#parkingCreateTime").html("");
         }
 
-        function openRenewFeePage() {
+        // <button type="button" class="layui-btn" id="batchRenewBtn">批量续费</button>
+        //         <button type="button" class="layui-btn" id="batchDelay">批量延期</button>
+        //     批量续费
+        var spaceIdList = new Array();
+        $("#batchRenewBtn").click(function () {
+            var checkStatus = table.checkStatus("parkingSpaceTable");
+            var data = checkStatus.data;
+            if(data.length === 0){
+                layer.msg("请选中行后操作！")
+            }else {
+                for(var i = 0; i < data.length; i++){
+                    spaceIdList.push({spaceId: data[i].spaceId})
+                }
+            }
+            openRenewFeePage("")
+        })
+
+        // 批量延期
+        $("#batchDelay").click(function () {
+            var checkStatus = table.checkStatus("parkingSpaceTable");
+            var data = checkStatus.data;
+            if(data.length === 0){
+                layer.msg("请选中行后操作！")
+            }else {
+                for(var i = 0; i < data.length; i++){
+                    spaceIdList.push({spaceId: data[i].spaceId})
+                }
+            }
+            openDelayPage("")
+        })
+
+        function openRenewFeePage(id) {
             layer.open({
                 type: 1
                 , title: false //不显示标题栏
@@ -2024,14 +2065,18 @@
                 , content: $("#parkingSpaceRenewFeePage").html()
             });
             $("#payType").html("");
-            for (var i = 0; i < payTypeList.length; i++) {
-                var payType = payTypeList[i];
-                $("#payType").append("<option value=" + payType.id + ">" + payType.name + "</option>")
+            if(payTypeList) {
+                for (var i = 0; i < payTypeList.length; i++) {
+                    var payType = payTypeList[i];
+                    $("#payType").append("<option value=" + payType.code + ">" + payType.name + "</option>")
+                }
+                $("#payType").val(payTypeList[0].code);
             }
+            $("#renewSpaceId").val(id);
             form.render();
         }
 
-        function openDelayPage() {
+        function openDelayPage(id) {
             layer.open({
                 type: 1
                 , title: false //不显示标题栏
@@ -2039,6 +2084,7 @@
                 , id: 'lay-openDelayPage' //设定一个id，防止重复弹出
                 , content: $("#parkingSpaceDelayPage").html()
             });
+            $("#delaySpaceId").val(id);
             form.render();
         }
 
@@ -2064,8 +2110,13 @@
         form.on('submit(parkingSpaceDelayBtn)', function () {
             var data = $("#parkingSpaceDelayForm").serializeObject();
             var url = "parkingSpaceDelay.json";
-            data.spaceId = parseInt(parkingSpaceData.spaceId);
-            data.addDays = parseInt(parkingSpaceData.addDays);
+            if(data.spaceId) {
+                data.spaceId = parseInt(data.spaceId);
+            }else{
+                url = "parkingSpaceDelayBatch.json";
+                data.spaceIdList = spaceIdList;
+            }
+            data.addDays = parseInt(data.addDays);
             sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
                 if (res.resFlag === 'N') {
                     layer.msg("延期成功");
@@ -2084,7 +2135,12 @@
         form.on('submit(parkingSpaceRenewFeeBtn)', function () {
             var data = $("#parkingSpaceRenewFeeForm").serializeObject();
             var url = "parkingSpaceRenewFee.json";
-            data.spaceId = parseInt(parkingSpaceData.spaceId);
+            if(data.spaceId) {
+                data.spaceId = parseInt(data.spaceId);
+            }else{
+                url = "parkingSpaceRenewFeeBatch.json";
+                data.spaceIdList = spaceIdList;
+            }
             data.addMonths = parseInt(data.addMonths);
             data.payType = parseInt(data.payType);
             data.payAmount = parseInt(data.payAmount);
