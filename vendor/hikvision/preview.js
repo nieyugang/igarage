@@ -144,6 +144,26 @@ function clickLogin(szIP, szPort, szUsername, szPassword) {
 	}
 }
 
+// 退出
+function clickLogout(szIP) {
+	var szIP = szIP,
+		szInfo = "";
+
+	if (szIP == "") {
+		return;
+	}
+
+	var iRet = WebVideoCtrl.I_Logout(szIP);
+	if (0 == iRet) {
+		szInfo = "退出成功！";
+
+		$("#ip option[value='" + szIP + "']").remove();
+		getChannelInfo();
+	} else {
+		szInfo = "退出失败！";
+	}
+	showOPInfo(szIP + " " + szInfo);
+}
 // 获取通道
 function getChannelInfo(szIP) {
 	var szIP = szIP,

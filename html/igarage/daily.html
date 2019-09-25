@@ -1112,6 +1112,7 @@
     <script>
         var maintainInfo;//车库
         var garageCharger;//充电站
+        var checkedGarageId;//选中车库ID ,用于获取车库下摄像头信息
         layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate'], function () {
             var tree = layui.tree
                 , layer = layui.layer
@@ -1316,7 +1317,9 @@
                                 theLocation(res.data[i].ing, res.data[i].lat, true, res.data[i].garageName, res.data[i].address)
                             }
                         }, 100);
+                        checkedGarageId = maintainInfo.garageId;//赋值默认显示地车库ID用于获取nvr录像机信息
                         showMaintain(res.data[0], true);
+
                         // tableReload(momeTableIns, {garageId: res.data[0].garageId})
                     } else {
                         $("#maintainInfoDetails").hide();
@@ -1341,6 +1344,7 @@
             table.on('row(maintainTable)', function (obj) {
                 var data = obj.data;
                 maintainInfo = data;
+                checkedGarageId = maintainInfo.garageId;//动态赋值选中车库ID
                 showMaintain(data, true)
                 $("#editMaintainForm").hide();
                 $("#showMaintain").show()
@@ -2580,9 +2584,39 @@
 
         });
         // 监控自动预览 camare-preview
+        var szIP = "";
+        var szPort = "";
+        var szUsername = "";
+        var szPassword = "";
         $("#camare-preview").click(function () {
-            layui.element.tabChange('maintainMapInfo_tab', 'camare_tab');
-            clickLogin('192.168.1.99', '80', 'admin', '123456789a');
+            // clickLogout(szIP);//先退出上次视频预览ip
+            sendAjaxRequest("POST", "/getCameraList.json", "json", JSON.stringify({ garageId: checkedGarageId }), getOrgTreeSuccess, getOrgTreeError);
+            function getOrgTreeSuccess(res) {
+                if (res.resFlag == "N") {
+                    if (res.cameraInfoList.length != 0) {
+                        var cameraInfo = res.cameraInfoList[0];
+                        // 车库nvr录像机相关信息  ip、端口、用户名、密码，原则上一个车库只有一个nvr录像机
+                        szIP = cameraInfo.ip;
+                        szPort = cameraInfo.port.toString();
+                        szUsername = cameraInfo.loginAccount;
+                        szPassword = cameraInfo.password;
+                        layui.element.tabChange('maintainMapInfo_tab', 'camare_tab');
+                        clickLogin(szIP, szPort, szUsername, szPassword);
+                        // clickLogin("192.168.1.99", '80', 'admin', '123456789a');
+                    } else {
+                        layer.tips('该车库下没有摄像头', '#camare-preview', { tips: [1, '#FFB800'], });
+                    }
+
+                } else {
+                    layer.msg(res.resMsg, { icon: 5, offset: 't' });
+                }
+            };
+            function getOrgTreeError() {
+                layer.msg("通信异常", { icon: 5 });
+            }
+
+
+
         });
     </script>
 </body>
