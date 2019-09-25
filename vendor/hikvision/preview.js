@@ -15,7 +15,7 @@ $(function () {
 	}
 
 	// 初始化插件参数及插入插件
-	WebVideoCtrl.I_InitPlugin(600, 440, {
+	WebVideoCtrl.I_InitPlugin(800, 440, {
 		bWndFull: true, //是否支持单窗口双击全屏，默认支持 true:支持 false:不支持
 		iWndowType: 2,
 		cbSelWnd: function (xmlDoc) {
@@ -126,7 +126,6 @@ function clickLogin(szIP, szPort, szUsername, szPassword) {
 
 	var iRet = WebVideoCtrl.I_Login(szIP, 1, szPort, szUsername, szPassword, {
 		success: function (xmlDoc) {
-			showOPInfo(szIP + " 登录成功！");
 			getChannelInfo(szIP);
 			setTimeout(function () {
 				for (var i = 1; i <= channels_; i++) {
@@ -135,15 +134,35 @@ function clickLogin(szIP, szPort, szUsername, szPassword) {
 			}, 100);
 		},
 		error: function () {
-			showOPInfo(szIP + " 登录失败！");
+			layer.tips('登陆失败，请刷新页面重试', '#camare-preview', { tips: [1, '#FF5722'], });
 		}
 	});
 
 	if (-1 == iRet) {
-		showOPInfo(szIP + " 已登录过！");
+		layer.tips('已登录过！', '#camare-preview', { tips: [1, '#009688'], });
 	}
 }
 
+// 退出
+function clickLogout(szIP) {
+	var szIP = szIP,
+		szInfo = "";
+
+	if (szIP == "") {
+		return;
+	}
+
+	var iRet = WebVideoCtrl.I_Logout(szIP);
+	if (0 == iRet) {
+		szInfo = "退出成功！";
+
+		$("#ip option[value='" + szIP + "']").remove();
+		getChannelInfo();
+	} else {
+		szInfo = "退出失败！";
+	}
+	showOPInfo(szIP + " " + szInfo);
+}
 // 获取通道
 function getChannelInfo(szIP) {
 	var szIP = szIP,
@@ -272,7 +291,8 @@ function clickStartRealPlay(szIP, iChannelID) {
 	} else {
 		szInfo = "开始预览失败！";
 	}
-	showOPInfo(szIP + " " + szInfo);
+	layer.tips(szInfo, '#camare-preview', { tips: [1, '#009688'], });
+	// showOPInfo(szIP + " " + szInfo);
 }
 
 // 停止预览
