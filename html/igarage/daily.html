@@ -61,11 +61,11 @@
                 <div style="margin-top: 2%;" class="row">
                     <div class="layui-col-md7" id="maintainMapInfo"
                         style="border: 1px solid #848d92;min-height: 550px; min-width: 97%">
-                        <div class="layui-tab layui-tab-brief">
+                        <div class="layui-tab layui-tab-brief" lay-filter="maintainMapInfo_tab">
                             <ul class="layui-tab-title">
                                 <li class="layui-this">地图</li>
                                 <li>工程图</li>
-                                <li lay-filter="camare_tab">监控视频</li>
+                                <li lay-id="camare_tab">监控视频</li>
                             </ul>
                             <div class="layui-tab-content">
                                 <!-- 地图 -->
@@ -2577,9 +2577,11 @@
                     noPageTableReload(cameraTableIns, { garageId: maintainInfo.garageId });
                 }
             });
+
         });
         // 监控自动预览 camare-preview
         $("#camare-preview").click(function () {
+            layui.element.tabChange('maintainMapInfo_tab', 'camare_tab');
             clickLogin('192.168.1.99', '80', 'admin', '123456789a');
         });
     </script>
