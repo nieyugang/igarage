@@ -154,10 +154,11 @@
             </fieldset>
             <form class="layui-form layui-form-pane" id="parkingSpaceRenewFeeForm" action="" lay-filter="door-edit">
                 <input id="renewSpaceId" name="spaceId" type="hidden">
+                <input id="typeId" name="typeId" type="hidden">
                 <div class="layui-form-item">
                     <label class="layui-form-label">续租月数</label>
                     <div class="layui-input-block">
-                        <input type="number" name="addMonths" autocomplete="off" id="addMonths"
+                        <input type="number" name="addMonths" autocomplete="off" id="addMonths" lay-filter="addMonths"
                                placeholder="续租月数"
                                lay-reqtext="续租月数不能为空" lay-verify="required" class="layui-input">
                     </div>
@@ -165,16 +166,15 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">支付方式</label>
                     <div class="layui-input-block">
-                        <select name="payType" id="payType" lay-verify="required" lay-reqtext="支付方式不能为空">
+                        <select name="payType" id="payType" lay-verify="required"  lay-filter="payType" lay-reqtext="支付方式不能为空">
                         </select>
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item" id="payAmountDiv">
                     <label class="layui-form-label">应付金额</label>
                     <div class="layui-input-block">
                         <input type="number" name="payAmount" autocomplete="off" id="payAmount"
-                               placeholder="应付金额"
-                               lay-reqtext="应付金额不能为空" lay-verify="required" class="layui-input">
+                               placeholder="应付金额" readonly="readonly" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -511,20 +511,20 @@
             if (res.data) {
                 if (res.data[0]) {
                     noPageTableReload(parkingSpaceTableIns, {garageId: res.data[0].garageId});
-                }
-                //查询充电站
-                sendAjaxRequest("POST", "/getGarageChargerList.json", "json", JSON.stringify({"garageId": maintainInfo.garageId}), function (res) {
-                    if (res.resFlag === 'N') {
-                        if (res.garageChargerInfoList) {
-                            garageChargerList = res.garageChargerInfoList;
+                    maintainInfo = res.data[0];
+                    //查询充电站
+                    sendAjaxRequest("POST", "/getGarageChargerList.json", "json", JSON.stringify({"garageId": maintainInfo.garageId}), function (res) {
+                        if (res.resFlag === 'N') {
+                            if (res.garageChargerInfoList) {
+                                garageChargerList = res.garageChargerInfoList;
+                            }
+                        } else {
+                            layer.msg("查询失败");
                         }
-                    } else {
+                    }, function () {
                         layer.msg("查询失败");
-                    }
-                }, function () {
-                    layer.msg("查询失败");
-                });
-                maintainInfo = res.data[0];
+                    });
+                }
             }
         }
 
@@ -689,7 +689,7 @@
             } else if (obj.event === 'delete') {
                 sendDelRequest("parkingSpaceDelete.json", JSON.stringify({spaceId: data.spaceId}), parkingSpaceTableIns);
             } else if (obj.event === 'renewFee') {//续费
-                openRenewFeePage(data.spaceId);
+                openRenewFeePage(data.spaceId,data.spaceType);
             } else if (obj.event === 'delay') {//延期
                 openDelayPage(data.spaceId);
             } else if (obj.event === 'cardInfo') {
@@ -837,12 +837,13 @@
             var data = checkStatus.data;
             if(data.length === 0){
                 layer.msg("请选中行后操作！")
+                return;
             }else {
                 for(var i = 0; i < data.length; i++){
                     spaceIdList.push({spaceId: data[i].spaceId})
                 }
             }
-            openRenewFeePage("")
+            openRenewFeePage("","")
         })
 
         // 批量延期
@@ -850,7 +851,8 @@
             var checkStatus = table.checkStatus("parkingSpaceTable");
             var data = checkStatus.data;
             if(data.length === 0){
-                layer.msg("请选中行后操作！")
+                layer.msg("请选中行后操作！");
+                return;
             }else {
                 for(var i = 0; i < data.length; i++){
                     spaceIdList.push({spaceId: data[i].spaceId})
@@ -859,7 +861,7 @@
             openDelayPage("")
         })
 
-        function openRenewFeePage(id) {
+        function openRenewFeePage(id, type) {
             layer.open({
                 type: 1
                 , title: false //不显示标题栏
@@ -875,9 +877,42 @@
                 }
                 $("#payType").val(payTypeList[0].code);
             }
+            if(id == null || id == ''){
+                $("#payAmountDiv").hide();
+            }else {
+                $("#payAmountDiv").show();
+            }
+            $("#typeId").val(type);
             $("#renewSpaceId").val(id);
+            //输入框的值改变时触发
+            $("#addMonths").on("input propertychange",function(e){
+                parkingFeeCalc()
+            });
             form.render();
         }
+
+        form.on('select(payType)', function (data) {
+            parkingFeeCalc()
+        });
+
+        //停车费计算
+        function parkingFeeCalc() {
+            var data = $("#parkingSpaceRenewFeeForm").serializeObject();
+            data.garageId = parseInt(maintainInfo.garageId);
+            data.typeId = parseInt(data.typeId);
+            data.rentMonths = parseInt(data.addMonths);
+            sendAjaxRequest("POST", "parkingFeeCalc.json", "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    $("#payAmount").val(res.feeYuan);
+                } else {
+                    layer.msg("计算失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+
+        }
+
 
         function openDelayPage(id) {
             layer.open({
