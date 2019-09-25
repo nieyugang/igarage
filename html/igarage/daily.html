@@ -84,15 +84,6 @@
                                         <div class="layui-col-md7">
                                             <div id="divPlugin" class="plugin"></div>
                                         </div>
-                                        <div class="layui-col-md5">
-                                            <button class="layui-btn"
-                                                onclick="	clickLogin('192.168.1.99', '80', 'admin', '123456789a');">预览</button>
-                                            <div class="layui-card">
-                                                <hr class="layui-bg-green">
-                                                <div class="layui-card-body" id="opinfo">
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +224,7 @@
                                             <button type="button" class="layui-btn" title="远程开门"><i class="fa fa-key"
                                                     aria-hidden="true"></i>
                                             </button>
-                                            <button type="button" class="layui-btn" title="监控"  id="camare-preview" ><i
+                                            <button type="button" class="layui-btn" title="监控" id="camare-preview"><i
                                                     class="fa fa-video-camera" aria-hidden="true"></i>
                                             </button>
                                             <button type="button" class="layui-btn" title="报警"><i class="fa fa-bell"
@@ -2589,13 +2580,7 @@
         });
         // 监控自动预览 camare-preview
         $("#camare-preview").click(function () {
-            layer.open({
-                type: 2,
-                title: false,
-                anim: 1,
-                area: ['1045px', '441px'],
-                content: './camare-preview.html',
-            });
+            clickLogin('192.168.1.99', '80', 'admin', '123456789a');
         });
     </script>
 </body>
