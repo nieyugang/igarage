@@ -126,7 +126,6 @@ function clickLogin(szIP, szPort, szUsername, szPassword) {
 
 	var iRet = WebVideoCtrl.I_Login(szIP, 1, szPort, szUsername, szPassword, {
 		success: function (xmlDoc) {
-			showOPInfo(szIP + " 登录成功！");
 			getChannelInfo(szIP);
 			setTimeout(function () {
 				for (var i = 1; i <= channels_; i++) {
@@ -135,12 +134,12 @@ function clickLogin(szIP, szPort, szUsername, szPassword) {
 			}, 100);
 		},
 		error: function () {
-			showOPInfo(szIP + " 登录失败！");
+			layer.tips('登陆失败，请刷新页面重试', '#camare-preview', { tips: [1, '#FF5722'], });
 		}
 	});
 
 	if (-1 == iRet) {
-		showOPInfo(szIP + " 已登录过！");
+		layer.tips('已登录过！', '#camare-preview', { tips: [1, '#009688'], });
 	}
 }
 
@@ -292,7 +291,8 @@ function clickStartRealPlay(szIP, iChannelID) {
 	} else {
 		szInfo = "开始预览失败！";
 	}
-	showOPInfo(szIP + " " + szInfo);
+	layer.tips(szInfo, '#camare-preview', { tips: [1, '#009688'], });
+	// showOPInfo(szIP + " " + szInfo);
 }
 
 // 停止预览
