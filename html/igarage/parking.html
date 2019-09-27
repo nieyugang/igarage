@@ -6,20 +6,1030 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
-    <h1>车库系统 / 车位维护</h1>
+<h1>车库系统 / 日常管理</h1>
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <div class="row" style="background-color: white;">
+        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
+            <div style="margin-top: 20%; height: 100%">
+                <label
+                        style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
+                <div id="orgTree" class="demo-tree"></div>
+            </div>
+        </div>
+        <div class="layui-col-md10">
+            <div style="margin-top: 2%;" class="row">
+                <div class="layui-col-md12" id="garageTable"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
+                    <div class="" style="background-color: #848d92">车库列表</div>
+                    <table style="margin: 10px" class="layui-hide" id="maintainTable"
+                           lay-filter="maintainTable"></table>
+                </div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+                <div id="deviceContent" class="layui-col-md12"
+                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
+                    <div>
+                        <div class="layui-row" style="text-align: center">
+                            <div class="layui-col-md11"
+                                 style="border: 1px solid rgb(132, 141, 146); min-width: 300px; margin-top: 10px; margin-left: 4%">
+                                <div style="background-color: #848d92" class="layui-col-md12">
+                                    <div class="layui-col-md11">车位卡信息</div>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">卡号</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingCardNo"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">用户姓名</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingCustomerName"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">联系方式</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingMobile"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">启用时间</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingStartTime"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">卡状态</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingStatus"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">结束时间</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingEndTime"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">创建时间</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingCreateTime"></label>
+                                </div>
+                                <div class="layui-col-md4" style="margin-top: 10px; margin-bottom: 0px;">
+                                    <label class="layui-form-label-right-col-2">地址</label>
+                                    <label class="layui-form-label-left-col-5" id="parkingAddress"></label>
+                                </div>
+                            </div>
+                            <div class="layui-col-md12">
+                                <div class="layui-row" style="text-align: left">
+                                    <button type="button" class="layui-btn" id="batchRenewBtn">批量续费</button>
+                                    <button type="button" class="layui-btn" id="batchDelay">批量延期</button>
+                                </div>
+                                <table class="layui-hide" id="parkingSpaceTable"
+                                       lay-filter="parkingSpaceTable" style="width: 600px"></table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="ingAndLat">
+    {{d.ing}}--{{d.lat}}
+</script>
+
+<script type="text/html" id="garageBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">新增车位</a>
+</script>
+
+<script type="text/html" id="parkingSpaceBar">
+
+    {{#  if(d.cardId){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="cardInfo">卡信息</a>
+    {{#  } }}
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="renewFee">续费</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delay">延期</a>
+</script>
+
+<script type="text/html" id="carEditPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>新增车位</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="carPageForm" action="" lay-filter="car-edit">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车库类型</label>
+                    <div class="layui-input-block">
+                        <select name="spaceType" id="spaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">添加数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="addCount" autocomplete="off" id="addCount"
+                               placeholder="添加数量"
+                               lay-reqtext="添加数量不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="carFormSubmit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="parkingSpaceRenewFeePage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>车位续费</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="parkingSpaceRenewFeeForm" action="" lay-filter="door-edit">
+                <input id="renewSpaceId" name="spaceId" type="hidden">
+                <input id="typeId" name="typeId" type="hidden">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">续租月数</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="addMonths" autocomplete="off" id="addMonths" lay-filter="addMonths"
+                               placeholder="续租月数"
+                               lay-reqtext="续租月数不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">支付方式</label>
+                    <div class="layui-input-block">
+                        <select name="payType" id="payType" lay-verify="required"  lay-filter="payType" lay-reqtext="支付方式不能为空">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="payAmountDiv">
+                    <label class="layui-form-label">应付金额</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="payAmount" autocomplete="off" id="payAmount"
+                               placeholder="应付金额" readonly="readonly" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceRenewFeeBtn">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="parkingSpaceDelayPage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>延期</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="parkingSpaceDelayForm" action="" lay-filter="door-edit">
+                <input id="delaySpaceId" name="spaceId" type="hidden">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">延期天数</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="addDays" autocomplete="off" id="addDays"
+                               placeholder="延期天数"
+                               lay-reqtext="延期天数不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceDelayBtn">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="parkingSpaceUpdatePage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>编辑车位</legend>
+            </fieldset>
+            <div class="layui-form layui-form-pane">
+
+                <div class="layui-collapse" lay-accordion>
+                    <h2 class="layui-colla-title">车位信息</h2>
+                    <form class="layui-colla-content layui-show" id="parkingSpaceUpdateFormInfo">
+                        <input type="hidden" id="spaceId" name="spaceId">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="spaceName" autocomplete="off" id="spaceName"
+                                       placeholder="车位名称"
+                                       lay-reqtext="车位名称不能为空" lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位序号</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="spaceNo" autocomplete="off" id="spaceNo"
+                                       placeholder="车位序号"
+                                       lay-reqtext="车位序号不能为空" lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位类型</label>
+                            <div class="layui-input-block">
+                                <select name="spaceType" id="upSpaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否附加充电站</label>
+                            <div class="layui-input-block">
+                                <select name="addCharger" id="addCharger" lay-verify="required"
+                                        lay-reqtext="是否附加充电站不能为空">
+                                    <option value="1">附加</option>
+                                    <option value="0">不附加</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">充电站</label>
+                            <div class="layui-input-block">
+                                <select name="chargerId" id="upChargerId" lay-verify="required" lay-filter="upChargerId" lay-reqtext="充电站不能为空">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">插头</label>
+                            <div class="layui-input-block">
+                                <select name="plugId" id="upPlugId" lay-verify="required" lay-reqtext="插头不能为空">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车位状态</label>
+                            <div class="layui-input-block">
+                                <select name="status" id="status" lay-verify="required">
+                                    <option value="0">空闲</option>
+                                    <option value="1">故障</option>
+                                    <option value="2">保留</option>
+                                    <option value="3">已预约</option>
+                                    <option value="4">使用中</option>
+                                    <option value="5">冻结</option>
+                                    <option value="6">停卡</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="remark" autocomplete="off" id="upRemark"
+                                       placeholder="备注" class="layui-input">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">用户信息</h2>
+                    <form class="layui-colla-content layui-show" id="parkingSpaceUserFormInfo">
+                        <div id="icCardInfo">
+                            <input type="hidden" id="cardId" name="cardId">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">卡号</label>
+                                <div class="layui-input-block">
+                                    <input type="number" name="cardNo" autocomplete="off" id="cardNo"
+                                           placeholder="卡号"
+                                           lay-reqtext="卡号不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="customerName" autocomplete="off" id="customerName"
+                                           placeholder="用户姓名"
+                                           lay-reqtext="用户姓名不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">联系方式</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="mobile" autocomplete="off" id="mobile"
+                                           placeholder="联系方式"
+                                           lay-reqtext="联系方式不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="address" autocomplete="off" id="address"
+                                           placeholder="地址"
+                                           lay-reqtext="地址不能为空" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div id="addParkingSpaceUser">
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceUpdateBtn">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="addParkingSpaceUserPage">
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始租用车位日期</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" id="startDate" id="startDate"
+                   placeholder="开始租用车位日期"
+                   lay-reqtext="开始租用车位日期不能为空" lay-verify="required" placeholder="yyyyMMdd">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">租用月数</label>
+        <div class="layui-input-block">
+            <input type="number" name="rentMonths" autocomplete="off" id="rentMonths"
+                   placeholder="开始租用车位日期"
+                   lay-reqtext="开始租用车位日期不能为空" lay-verify="required" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付方式</label>
+        <div class="layui-input-block">
+            <select name="payType" id="upPayType" lay-verify="required"
+                    lay-reqtext="支付方式不能为空">
+            </select>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="parkingSpaceStatus">
+    {{#  if(d.status === 0){ }}
+    空闲
+    {{#  } else if(d.status === 1) { }}
+    故障
+    {{#  } else if(d.status === 2) { }}
+    保留
+    {{#  } else if(d.status === 3) { }}
+    已预约
+    {{#  } else if(d.status === 4) { }}
+    使用中
+    {{#  } else if(d.status === 5) { }}
+    冻结
+    {{#  } else if(d.status === 6) { }}
+    停卡
+    {{#  } }}
+</script>
+
+<script type="text/html" id="plugToolbar">
+    {{#  if(d.addCharger === 1){ }}
+    附加
+    {{#  } else { }}
+    不附加
+    {{#  } }}
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
+
+<script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+<script>
+    var maintainInfo;//车库
+    layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate'], function () {
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table
+            , element = layui.element
+            , $ = layui.jquery
+            , form = layui.form
+            , laydate = layui.laydate;
+        // -----------------------------------页面初始化做的操作----------------------------------
+        var payTypeList;//支付方式
+        var spaceTypeList; //车位类型
+        var garageChargerList;//充电站列表
+
+        //查询车位类型
+        sendAjaxRequest("POST", "/getParkingSpaceTypeList.json", "json", {}, function (res) {
+            if (res.resFlag === 'N') {
+                if (res.parkingSpaceTypeList) {
+                    spaceTypeList = res.parkingSpaceTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+        //查询支付方式
+        sendAjaxRequest("POST", "/getSysCodesAndName.json", "json", JSON.stringify({"typeList": [{"type": "payType"}]}), function (res) {
+            if (res.resFlag === 'N') {
+                if (res.payTypeList) {
+                    payTypeList = res.payTypeList;
+                }
+            } else {
+                layer.msg("查询失败");
+            }
+        }, function () {
+            layer.msg("查询失败");
+        });
+
+// -----------------------------------功能性操作----------------------------------
+//         ---------------------------车库-------------------------
+
+        var garageListCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
+            },
+            {
+                field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        function res(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        function garageListdone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    noPageTableReload(parkingSpaceTableIns, {garageId: res.data[0].garageId});
+                    maintainInfo = res.data[0];
+                    //查询充电站
+                    sendAjaxRequest("POST", "/getGarageChargerList.json", "json", JSON.stringify({"garageId": maintainInfo.garageId}), function (res) {
+                        if (res.resFlag === 'N') {
+                            if (res.garageChargerInfoList) {
+                                garageChargerList = res.garageChargerInfoList;
+                            }
+                        } else {
+                            layer.msg("查询失败");
+                        }
+                    }, function () {
+                        layer.msg("查询失败");
+                    });
+                }
+            }
+        }
+
+        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
+
+        //监听行工具事件
+        table.on('tool(maintainTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'add') {
+                layer.open({
+                    type: 1
+                    , title: false //不显示标题栏
+                    , area: ['500px', '300px']
+                    , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                    , content: $("#carEditPage").html()
+                });
+                $("#spaceType").html("");
+                for (var i = 0; i < spaceTypeList.length; i++) {
+                    var spaceType = spaceTypeList[i];
+                    $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+                }
+                form.render();
+            }
+        });
+
+        table.on('row(maintainTable)', function (obj) {
+            var data = obj.data;
+            maintainInfo = data;
+            //查询充电站
+            sendAjaxRequest("POST", "/getGarageChargerList.json", "json", JSON.stringify({"garageId": maintainInfo.garageId}), function (res) {
+                if (res.resFlag === 'N') {
+                    if (res.garageChargerInfoList) {
+                        garageChargerList = res.garageChargerInfoList;
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+            noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+
+//         ---------------------------车位-------------------------
+
+
+        function parkingSpaceRes(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        var parkingSpaceCols = [[
+            {type: 'checkbox', width: 80, fixed: 'center'},
+            {
+                field: 'spaceName', title: '车位名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'spaceTypeName', title: '车位类别', sort: false, fixed: 'center'
+            },
+            {
+                field: 'status', title: '车位状态', toolbar: "#parkingSpaceStatus", sort: false, fixed: 'center'
+            },
+            {
+                field: 'addCharger', title: '充电站插头', toolbar: "#plugToolbar", sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', width: 350, toolbar: "#parkingSpaceBar", sort: false, fixed: 'center'
+            }
+        ]];
+        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, parkingSpaceTableDone);
+
+        function parkingSpaceTableDone(res, curr, count) {
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            if (res.data) {
+                if (res.data[0]) {
+                    getParkIngCard(res.data[0].cardId);
+                }
+            }
+        }
+
+
+        form.on('select(upChargerId)', function (data) {
+            getGaragePlugList(data.value);
+        });
+
+        function getGaragePlugList(chargerValue) {
+            $("#upPlugId").html("");
+            if (chargerValue) {
+                //充电站插头列表
+                sendAjaxRequest("POST", "/getGaragePlugList.json", "json", JSON.stringify({chargerId: parseInt(chargerValue)}), function (res) {
+                    if (res.resFlag === 'N') {
+                        if (res.garagePlugInfoList) {
+                            for (var i = 0; i < res.garagePlugInfoList.length; i++) {
+                                var garagePlugInfo = res.garagePlugInfoList[i];
+                                $("#upPlugId").append("<option value=" + garagePlugInfo.plugId + ">" + garagePlugInfo.plugName + "</option>")
+                            }
+                            $("#upPlugId").val(res.garagePlugInfoList[0].plugId);
+                        }
+                        form.render();
+                    } else {
+                        layer.msg("查询失败");
+                    }
+                }, function () {
+                    layer.msg("查询失败");
+                });
+            }
+        }
+
+        //监听车位行工具事件
+        table.on('tool(parkingSpaceTable)', function (obj) {
+            var data = obj.data;
+            parkingSpaceData = data;
+            if (obj.event === 'edit') {
+                //查询车位用户信息
+                sendAjaxRequest("POST", "/getParkingCardInfo.json", "json", JSON.stringify({"cardId": parkingSpaceData.cardId}), function (res) {
+                    if (res.resFlag === 'N') {
+                        openUpdateParkingSpace();
+                        if (parkingSpaceData.cardId) {
+                            $("#addParkingSpaceUser").html("")
+                        } else {
+                            $("#addParkingSpaceUser").html($("#addParkingSpaceUserPage").html())
+                        }
+
+                        $("#upChargerId").html("");
+                        if (garageChargerList) {
+                            for (var i = 0; i < garageChargerList.length; i++) {
+                                var garageCharger = garageChargerList[i];
+                                $("#upChargerId").append("<option value=" + garageCharger.chargerId + ">" + garageCharger.chargerName + "</option>")
+                            }
+                            var chargerId;
+                            if(data.chargerId){
+                                chargerId = data.chargerId;
+                            }else {
+                                chargerId = garageChargerList[0].chargerId;
+                            }
+                            $("#upChargerId").val(chargerId);
+                            getGaragePlugList(chargerId);
+                        }
+                        $("#upPayType").html("");
+                        if(payTypeList) {
+                            for (var i = 0; i < payTypeList.length; i++) {
+                                var payType = payTypeList[i];
+                                $("#upPayType").append("<option value=" + payType.code + ">" + payType.name + "</option>")
+                            }
+                            $("#upPayType").val(payTypeList[0].code);
+                        }
+                        setParkingSpace(data, res.parkingCardInfo);
+                    } else {
+                        layer.msg("查询失败");
+                    }
+                }, function () {
+                    layer.msg("查询失败");
+                });
+
+            } else if (obj.event === 'delete') {
+                sendDelRequest("parkingSpaceDelete.json", JSON.stringify({spaceId: data.spaceId}), parkingSpaceTableIns);
+            } else if (obj.event === 'renewFee') {//续费
+                openRenewFeePage(data.spaceId,data.spaceType);
+            } else if (obj.event === 'delay') {//延期
+                openDelayPage(data.spaceId);
+            } else if (obj.event === 'cardInfo') {
+                getParkIngCard(data.cardId)
+            }
+        });
+
+        //车位修改
+        form.on('submit(parkingSpaceUpdateBtn)', function () {
+            var parkingSpaceUpdateFormInfo = $("#parkingSpaceUpdateFormInfo").serializeObject();
+            var parkingSpaceUserFormInfo = $("#parkingSpaceUserFormInfo").serializeObject();
+            var url = "parkingSpaceUpdate.json";
+            parkingSpaceUpdateFormInfo.spaceId = parseInt(parkingSpaceUpdateFormInfo.spaceId);
+            parkingSpaceUpdateFormInfo.spaceNo = parseInt(parkingSpaceUpdateFormInfo.spaceNo);
+            parkingSpaceUpdateFormInfo.spaceType = parseInt(parkingSpaceUpdateFormInfo.spaceType);
+            parkingSpaceUpdateFormInfo.addCharger = parseInt(parkingSpaceUpdateFormInfo.addCharger);
+            parkingSpaceUpdateFormInfo.chargerId = parseInt($("#upChargerId").val());
+            parkingSpaceUpdateFormInfo.plugId = parseInt(parkingSpaceUpdateFormInfo.plugId);
+            parkingSpaceUpdateFormInfo.status = parseInt(parkingSpaceUpdateFormInfo.status);
+            if (parkingSpaceUserFormInfo.cardId) {
+                parkingSpaceUpdateFormInfo.icCardFlag = 2;
+                parkingSpaceUserFormInfo.cardId = parseInt(parkingSpaceUserFormInfo.cardId);
+            } else {
+                parkingSpaceUserFormInfo.cardId =
+                    parkingSpaceUpdateFormInfo.icCardFlag = 1;
+            }
+            if (parkingSpaceUserFormInfo.rentMonths) {
+                parkingSpaceUserFormInfo.rentMonths = parseInt(parkingSpaceUserFormInfo.rentMonths);
+            }
+            if (parkingSpaceUserFormInfo.payType) {
+                parkingSpaceUserFormInfo.payType = parseInt(parkingSpaceUserFormInfo.payType);
+            }
+            parkingSpaceUserFormInfo.startDate = $("#startDate").val();
+            parkingSpaceUpdateFormInfo.icCardInfo = parkingSpaceUserFormInfo;
+            sendAjaxRequest("POST", url, "json", JSON.stringify(parkingSpaceUpdateFormInfo), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("修改成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("修改失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+        function setParkingSpace(parkingSpaceData, parkingCardData) {
+            $("#spaceId").val(parkingSpaceData.spaceId);
+            $("#spaceName").val(parkingSpaceData.spaceName);
+            $("#spaceNo").val(parkingSpaceData.spaceNo);
+            $("#upSpaceType").val(parkingSpaceData.spaceType);
+            $("#addCharger").val(parkingSpaceData.addCharger);
+            if(parkingSpaceData.chargerId) {
+                $("#upChargerId").val(parkingSpaceData.chargerId);
+            }
+            if(parkingSpaceData.chargerId) {
+                $("#upChargerId").val(parkingSpaceData.chargerId);
+            }
+            $("#status").val(parkingSpaceData.status);
+            $("#upRemark").val(parkingSpaceData.remark);
+            if (parkingCardData) {
+                $("#cardId").val(parkingCardData.cardId);
+                $("#cardNo").val(parkingCardData.cardNo);
+                $("#customerName").val(parkingCardData.customerName);
+                $("#mobile").val(parkingCardData.mobile);
+                $("#address").val(parkingCardData.address);
+                $("#startDate").val(parkingCardData.startTime);
+                $("#rentMonths").val(parkingCardData.rentMonths);
+                $("#upPayType").val(parkingCardData.payType);
+            }
+            laydate.render({
+                elem: '#startDate'
+                , format: 'yyyyMMdd'
+            });
+            form.render();
+        }
+
+        function openUpdateParkingSpace() {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '600px']
+                , id: 'lay-openRenewFeePage' //设定一个id，防止重复弹出
+                , content: $("#parkingSpaceUpdatePage").html()
+            });
+            $("#upSpaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#upSpaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            form.render();
+        }
+
+        function getParkIngCard(cardId) {
+            clearParkIngCard();
+            if (cardId) {
+                sendAjaxRequest("POST", "getParkingCardInfo.json", "json", JSON.stringify({cardId: cardId}), function (res) {
+                    if (res.resFlag === 'N') {
+                        setParkIngCard(res)
+                    } else {
+                        layer.msg("查询失败");
+                    }
+                }, function () {
+                    layer.msg("查询失败");
+                });
+            }
+        }
+
+        function setParkIngCard(data) {
+            $("#parkingCardNo").html(data.parkingCardInfo.cardNo);
+            $("#parkingCustomerName").html(data.parkingCardInfo.customerName);
+            $("#parkingMobile").html(data.parkingCardInfo.mobile);
+            $("#parkingAddress").html(data.parkingCardInfo.address);
+            $("#parkingStartTime").html(data.parkingCardInfo.startTime);
+            $("#parkingEndTime").html(data.parkingCardInfo.endTime);
+            var statusName = "未知";
+            if (data.parkingCardInfo.status === 0) {
+                statusName = "正常";
+            } else if (data.parkingCardInfo.status === 1) {
+                statusName = "注销";
+            }
+            $("#parkingStatus").html(statusName);
+            $("#parkingCreateTime").html(data.parkingCardInfo.createTime);
+        }
+
+        function clearParkIngCard() {
+            $("#parkingCardNo").html("");
+            $("#parkingCustomerName").html("");
+            $("#parkingMobile").html("");
+            $("#parkingAddress").html("");
+            $("#parkingStartTime").html("");
+            $("#parkingEndTime").html("");
+            $("#parkingStatus").html("");
+            $("#parkingCreateTime").html("");
+        }
+
+        // <button type="button" class="layui-btn" id="batchRenewBtn">批量续费</button>
+        //         <button type="button" class="layui-btn" id="batchDelay">批量延期</button>
+        //     批量续费
+        var spaceIdList = new Array();
+        $("#batchRenewBtn").click(function () {
+            var checkStatus = table.checkStatus("parkingSpaceTable");
+            var data = checkStatus.data;
+            if(data.length === 0){
+                layer.msg("请选中行后操作！")
+                return;
+            }else {
+                for(var i = 0; i < data.length; i++){
+                    spaceIdList.push({spaceId: data[i].spaceId})
+                }
+            }
+            openRenewFeePage("","")
+        })
+
+        // 批量延期
+        $("#batchDelay").click(function () {
+            var checkStatus = table.checkStatus("parkingSpaceTable");
+            var data = checkStatus.data;
+            if(data.length === 0){
+                layer.msg("请选中行后操作！");
+                return;
+            }else {
+                for(var i = 0; i < data.length; i++){
+                    spaceIdList.push({spaceId: data[i].spaceId})
+                }
+            }
+            openDelayPage("")
+        })
+
+        function openRenewFeePage(id, type) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '400px']
+                , id: 'lay-openRenewFeePage' //设定一个id，防止重复弹出
+                , content: $("#parkingSpaceRenewFeePage").html()
+            });
+            $("#payType").html("");
+            if(payTypeList) {
+                for (var i = 0; i < payTypeList.length; i++) {
+                    var payType = payTypeList[i];
+                    $("#payType").append("<option value=" + payType.code + ">" + payType.name + "</option>")
+                }
+                $("#payType").val(payTypeList[0].code);
+            }
+            if(id == null || id == ''){
+                $("#payAmountDiv").hide();
+            }else {
+                $("#payAmountDiv").show();
+            }
+            $("#typeId").val(type);
+            $("#renewSpaceId").val(id);
+            //输入框的值改变时触发
+            $("#addMonths").on("input propertychange",function(e){
+                parkingFeeCalc()
+            });
+            form.render();
+        }
+
+        form.on('select(payType)', function (data) {
+            parkingFeeCalc()
+        });
+
+        //停车费计算
+        function parkingFeeCalc() {
+            var data = $("#parkingSpaceRenewFeeForm").serializeObject();
+            data.garageId = parseInt(maintainInfo.garageId);
+            data.typeId = parseInt(data.typeId);
+            data.rentMonths = parseInt(data.addMonths);
+            sendAjaxRequest("POST", "parkingFeeCalc.json", "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    $("#payAmount").val(res.feeYuan);
+                } else {
+                    layer.msg("计算失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+
+        }
+
+
+        function openDelayPage(id) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-openDelayPage' //设定一个id，防止重复弹出
+                , content: $("#parkingSpaceDelayPage").html()
+            });
+            $("#delaySpaceId").val(id);
+            form.render();
+        }
+
+        //打开增加修改车位页面
+        $("#carPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                , content: $("#carEditPage").html()
+            });
+            $("#spaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            form.render();
+        });
+
+
+        //车位延期
+        form.on('submit(parkingSpaceDelayBtn)', function () {
+            var data = $("#parkingSpaceDelayForm").serializeObject();
+            var url = "parkingSpaceDelay.json";
+            if(data.spaceId) {
+                data.spaceId = parseInt(data.spaceId);
+            }else{
+                url = "parkingSpaceDelayBatch.json";
+                data.spaceIdList = spaceIdList;
+            }
+            data.addDays = parseInt(data.addDays);
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("延期成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+        //车位续费
+        form.on('submit(parkingSpaceRenewFeeBtn)', function () {
+            var data = $("#parkingSpaceRenewFeeForm").serializeObject();
+            var url = "parkingSpaceRenewFee.json";
+            if(data.spaceId) {
+                data.spaceId = parseInt(data.spaceId);
+            }else{
+                url = "parkingSpaceRenewFeeBatch.json";
+                data.spaceIdList = spaceIdList;
+            }
+            data.addMonths = parseInt(data.addMonths);
+            data.payType = parseInt(data.payType);
+            data.payAmount = parseInt(data.payAmount);
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+        //车位监听提交
+        form.on('submit(carFormSubmit)', function () {
+            var data = $("#carPageForm").serializeObject();
+            var url = "parkingSpaceAdd.json";
+            if (data.spaceId) {
+                data.spaceId = parseInt(data.spaceId)
+                url = "parkingSpaceUpdate.json";
+            }
+            data.spaceType = parseInt(data.spaceType);
+            data.addCount = parseInt(data.addCount);
+            data.garageId = parseInt(maintainInfo.garageId);
+
+            sendAjaxRequest("POST", url, "json", JSON.stringify(data), function (res) {
+                if (res.resFlag === 'N') {
+                    layer.msg("保存成功");
+                    noPageTableReload(parkingSpaceTableIns, {garageId: maintainInfo.garageId});
+                    layer.closeAll();
+                } else {
+                    layer.msg("保存失败");
+                }
+            }, function () {
+                layer.msg("操作失败");
+            });
+            return false;
+        });
+
+// ----------------------------机构数-----------------------------
+        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+
+        function clickOrg(orgInfo) {
+            tableReload(tableIns, {orgId: orgInfo.data.id})
+        }
+    });
+</script>
 </body>
 
 </html>

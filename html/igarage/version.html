@@ -6,20 +6,90 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
-    <h1>车库系统 / 版本管理</h1>
+<div class="content-inner" style=" background-color: white; z-index: 0;">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>版本管理列表</legend>
+        <div class="layui-field-box">
+            <div class="work-area" style="margin-top: 10px;margin-left: 10px">
+                <table class="layui-hide" id="varsionTable" lay-filter="varsionTable"></table>
+            </div>
+        </div>
+    </fieldset>
+</div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+<script type="text/html" id="chargerTypeName">
+    {{#  if(d.chargerType === 0){ }}
+    车库充电站
+    {{#  } else if(d.chargerType === 1) { }}
+    非车库充电站
+    {{#  } }}
+</script>
+
+<script type="text/html" id="versionTypeName">
+    {{#  if(d.versionType === 0){ }}
+    出厂版本
+    {{#  } else if(d.versionType === 1) { }}
+    更新版本
+    {{#  } }}
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
+
+<script type="application/javascript">
+    layui.use('table', function () {
+        var table = layui.table;
+
+        var chargerVersionListCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'versionName', title: '类型名称', sort: false, fixed: 'center'
+            },{
+                field: 'chargerType', title: '充电站类型', toolbar: "#chargerTypeName", sort: false, fixed: 'center'
+            },{
+                field: 'sv', title: 'SV', sort: false, fixed: 'center'
+            },{
+                field: 'hv', title: 'HV', sort: false, fixed: 'center'
+            },{
+                field: 'protocol', title: '协议', sort: false, fixed: 'center'
+            },{
+                field: 'versionType', title: '版本类型', toolbar: "#versionTypeName", sort: false, fixed: 'center'
+            },{
+                field: 'remark', title: '备注', sort: false, fixed: 'center'
+            },{
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            }
+        ]];
+
+        function res(res) {
+            var count = 0;
+            if (res.chargerVersionInfoList) {
+                count = res.chargerVersionInfoList.length;
+            }
+            return {
+                code: 0,
+                msg: "",
+                count: count,
+                data: res.chargerVersionInfoList
+            };
+        }
+
+        initNotPageTable(table, "varsionTable", "/getChargerVersionList.json", {chargerType: 0}, res, chargerVersionListCols, null);
+    });
+</script>
 </body>
 
 </html>

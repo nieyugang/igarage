@@ -1,140 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
+
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
 </head>
 
-<body>
-    <h1>全局监控 / 地图展示</h1>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <div>
-        <input type="text">
-    </div>
-    <h3>到底咯~</h3>
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 98%"></div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- system common js -->
+    <script src="../../vendor/jquery/jquery.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
+    <script src="../../js/common.js"></script>
     <script src="../../js/front.js"></script>
+    <!-- echarts&bmap  js  -->
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+    <script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+
+
+
+    <script type="text/javascript">
+
+
+        //加载模块
+        layui.use(['form', 'layedit'], function () {
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            var dom = document.getElementById("container");
+            var myChart = echarts.init(dom);
+            var app = {};
+            option = null;
+
+            var data = []; // var data = [{name: '海门', value: 9},{name: '鄂尔多斯', value: 12}]
+            var geoCoordMap = "{"; //var geoCoordMap = {'海门':[121.15,31.89], '鄂尔多斯':[109.781327,39.608266]}
+
+            sendAjaxRequest("POST", "/getGarageMapInfoList.json", "JSON", JSON.stringify({ "orgId": userInfo.orgId }), successCallback, errorCallback)
+
+            function successCallback(res) {
+                if (res.resFlag == "N") {
+                    if (res.garageMapInfoList.length == 0) {
+                        layer.msg("该账户下没有管理");
+                    } else {
+                        var garageMapInfoList = res.garageMapInfoList;
+                        for (var i in garageMapInfoList) {
+                            if (garageMapInfoList.hasOwnProperty(i)) {
+                                var element = garageMapInfoList[i];
+                                var GARAGE_NAME = element.GARAGE_NAME;
+                                var ADDRESS = element.ADDRESS;
+                                var ING = element.ING;
+                                var LAT = element.LAT;
+
+                                var garage_info = { "name": GARAGE_NAME, "value": ADDRESS };
+                                data.push(garage_info);
+
+                                if (i != garageMapInfoList.length - 1) {
+                                    var gpsInfo = '"' + GARAGE_NAME + '":' + '[' + ING + "," + LAT + ']' + ",";
+                                } else {
+                                    var gpsInfo = '"' + GARAGE_NAME + '":' + '[' + ING + "," + LAT + ']';
+                                }
+                                geoCoordMap += gpsInfo
+                            }
+                        }
+                        geoCoordMap += "}";
+
+
+
+                        var convertData = function (data) {
+                            geoCoordMap = JSON.parse(geoCoordMap);
+                            var res = [];
+                            for (var i = 0; i < data.length; i++) {
+                                var geoCoord = geoCoordMap[data[i].name];
+                                if (geoCoord) {
+                                    res.push({
+                                        name: data[i].name,
+                                        value: geoCoord.concat(data[i].value)
+                                    });
+                                }
+                            }
+                            return res;
+                        };
+
+                        option = {
+                            title: {
+                                text: '华谦电子智能车库分布图',
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: function (params) {
+                                    var location = params.data.value[2];
+                                    var igarageName = params.name;
+                                    return "车库名称：" + igarageName + "</br>车库位置：" + location;
+                                }
+
+                            },
+                            bmap: {
+                                center: [119.97592438671873, 31.813334037097285],
+                                zoom: 14,
+                                roam: true,
+                            },
+                            series: [
+                                {
+                                    name: '车库信息',
+                                    type: 'effectScatter',
+                                    coordinateSystem: 'bmap',
+                                    data: convertData(data),
+                                    symbolSize: 20,
+                                    showEffectOn: 'render',
+                                    rippleEffect: {
+                                        brushType: 'stroke'
+                                    },
+                                    hoverAnimation: true,
+                                    label: {
+                                        normal: {
+                                            formatter: '{b}',
+                                            position: 'right',
+                                            show: false
+                                        }
+                                    },
+                                    itemStyle: {
+                                        normal: {
+                                            color: 'purple',
+                                            shadowBlur: 10,
+                                            shadowColor: '#333'
+                                        }
+                                    },
+                                    zlevel: 1
+                                }
+                            ]
+                        };;
+                        if (option && typeof option === "object") {
+                            myChart.setOption(option, true);
+                        }
+                    }
+                } else {
+                    layer.msg(res.resMsg, { icon: 5 });
+                }
+            }
+            function errorCallback() {
+                layer.msg("与服务器通信异常！", { icon: 5 });
+            }
+
+        });
+    </script>
 </body>
 
 </html>
