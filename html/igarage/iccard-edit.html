@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+</head>
+
+<body>
+<!-- 主体内容区 -->
+<form class="layui-form" style="padding: 20px 30px 0 0;" action="" lay-filter="card-detail">
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">卡号:</label>
+        <div class="layui-input-block"  style="margin-left:150px;">
+            <input type="text" name="cardNo" class="layui-input" value="" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">用户名:</label>
+        <div class="layui-input-block"  style="margin-left:150px;">
+            <input type="text" name="customerName" class="layui-input" value="" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">联系方式:</label>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="mobile" required  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <lable class="layui-form-label" style="width:150px;">地址:</lable>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="address" required  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <lable class="layui-form-label" style="width:150px;">车位名称:</lable>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="spaceName" required  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <lable class="layui-form-label" style="width:150px;">开始时间:</lable>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="startTime" id="startTime"  required  lay-verify="date" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <lable class="layui-form-label" style="width:150px;">结束时间:</lable>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="endTime" id="endTime" required  lay-verify="date" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="submit">提交</button>
+            <button type="button" class="layui-btn" lay-filter="cancel" id="cancel">取消</button>
+        </div>
+    </div>
+</form>
+
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../vendor/layui/layui.js"></script>
+<script src="../../js/front.js"></script>
+<!-- js funcitons -->
+<script>
+    layui.use(['form','table','element','jquery','laydate'], function() {
+        var table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , element = layui.element
+            , $ = layui.jquery
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+
+        if(parent.$("#cardId").val() != ""){
+            var cardInfo = JSON.parse(parent.$("#cardId").val());
+            form.val('card-detail', {
+                "cardNo": cardInfo.cardNo,
+                "customerName": cardInfo.customerName,
+                "mobile": cardInfo.mobile,
+                "address": cardInfo.address,
+                "spaceName":cardInfo.spaceName,
+                "startTime": cardInfo.startTime,
+                "endTime":cardInfo.endTime
+            });
+        }
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            var formData = data.field;// JSON.stringify(data.field);
+            formData.userInfo = userInfo;
+            return false;
+
+            var garageId = parent.$("#igarageId").val();
+            formData.garageId = parseInt(garageId);
+
+            var backServiceUrl = "/hqigservice";
+            var jsonAction = "/accessControllerAdd.json";
+            if (formData.acId != "") {
+                jsonAction = "/accessControllerUpdate.json";
+                formData.acId = parseInt(formData.acId);
+            }
+
+            formData.acType = parseInt(formData.acType);
+            formData.port = parseInt(formData.port);
+            // 提交
+            $.ajax({
+                url: backServiceUrl + jsonAction,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formData),
+                success: function (res) {
+                    if (res.resFlag == "N") {
+                        layer.msg('操作成功', {icon: 1});
+                        setTimeout(function () {
+                            window.parent.layer.closeAll();//关闭弹窗
+                        }, 1000);
+                        window.parent.layui.table.reload("table_door")
+                    } else {
+                        layer.msg('通信异常', {icon: 2});
+                    }
+                },
+                error: function () {
+                    layer.msg('通信异常', {icon: 2});
+                }
+
+            });
+            return false;
+        });
+
+        $(document).on('click','#cancel',function() {
+            window.parent.layer.closeAll();//关闭弹窗
+        });
+    })
+</script>
+</body>
+
+</html>

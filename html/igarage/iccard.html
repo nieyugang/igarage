@@ -42,6 +42,7 @@
             <div class="layui-input-inline">
                 <button type="button" class="layui-btn">查询</button>
             </div>
+            <input id="cardId" value="aa" type="hidden"/>
         </div>
     </form>
 
@@ -63,14 +64,14 @@
     <script src="../../js/front.js"></script>
     <script>
         var baseUrl = "/hqigservice";
+        var igarageId = RequestParameter()["igarageId"];
+        var igarageName = decodeURIComponent(RequestParameter()["igarageName"]);
         layui.use(['table','laydate','form'], function () {
             var table = layui.table
                 ,laydate = layui.laydate
                 ,form = layui.form;
 
             layer.ready(function(){
-                var igarageId = RequestParameter()["igarageId"];
-                var igarageName = decodeURIComponent(RequestParameter()["igarageName"]);
                 $("#igarageId").val(igarageId);
                 $("#igarageId").append('<option value="' + igarageId + '">' + igarageName + '</option>');
                 form.render('select');
@@ -92,7 +93,7 @@
                 method: 'POST',
                 contentType: 'application/json',
                 limit: 30,
-                url: baseUrl + '/getAccessControllerList.json',
+                url: baseUrl + '/getParkingCardList.json',
                 where: {
                     "userInfo": userInfo,
                     "garageId": parseInt($("#igarageId").val())
@@ -101,8 +102,8 @@
                     return {
                         code: 0,
                         msg: "",
-                        count:  res.accessControllerInfoList ? res.accessControllerInfoList.length : 0,
-                        data: res.accessControllerInfoList
+                        count:  res.rows ? res.rows.length : 0,
+                        data: res.rows
                     };
                 },
                 toolbar:'#toolbarCard',
@@ -110,26 +111,42 @@
                 cols: [[
                     { type: 'radio', fixed: 'left'},
                     { type: 'numbers', title: '序号', align: 'center' },
-                    {field:'sn', title:'用户编号'},
-                    {field:'sn', title:'用户名'},
-                    {field:'ip', title:'卡号'},
-                    {field:'port', title:'联系方式'},
-                    {field:'remark', title:'地址'},
-                    {field:'mac', title:'车库名称'},
-                    {field:'mac', title:'车位名称'},
-                    {field:'mac', title:'入库时间'},
-                    {field:'mac', title:'状态'}
+                    {field:'cardId', title:'用户编号'},
+                    {field:'customerName', title:'用户名'},
+                    {field:'cardNo', title:'卡号'},
+                    {field:'mobile', title:'联系方式'},
+                    {field:'address', title:'地址'},
+                    {field:'spaceId', title:'车库名称',templet: function(x){
+                            return igarageName;
+                        }},
+                    {field:'spaceName', title:'车位名称'},
+                    {field:'createTime', title:'入库时间'},
+                    {field:'statusName', title:'状态'}
                 ]]
             });
 
             //头工具栏事件
             table.on('toolbar(table_iccard)', function(obj){
                 var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
-                // var data = checkStatus.data;  //获取选中行数据
+                var data = checkStatus.data;  //获取选中行数据
                 var layEvet = obj.event;
                 switch(layEvet){
                     case 'userEdit':
-                        layer.msg("Edit");
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else if (data.length > 1) {
+                            layer.msg('只能同时编辑一个', function () { });
+                        } else {
+                            $("#cardId").attr("value",JSON.stringify(data[0]));
+                            // layer.msg($("#cardId").val());
+                            layer.open({
+                                type: 2,
+                                title: false,
+                                anim: 1,
+                                area: ['480px', '600px'],
+                                content: './iccard-edit.html',
+                            });
+                        }
                         break;
                     case 'userLoss':
                         layer.msg("Loss");
