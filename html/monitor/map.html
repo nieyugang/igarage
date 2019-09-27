@@ -47,7 +47,7 @@
             function successCallback(res) {
                 if (res.resFlag == "N") {
                     if (res.garageMapInfoList.length == 0) {
-                        layer.msg("该账户下没有管理");
+                        layer.msg("该账户下没有管理的小区");
                     }
                     var garageMapInfoList = res.garageMapInfoList;
                     for (var i in garageMapInfoList) {
