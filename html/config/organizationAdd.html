@@ -31,13 +31,13 @@
 
         <div class="layui-form-item" id="area-picker">
           <div class="layui-form-label" style="width: 115px;">机构归属地</div>
-          <div class="layui-input-inline">
-            <select name="provinceId">
+          <div class="layui-form layui-input-inline " lay-filter="province">
+            <select name="provinceId" id="provinceId" lay-filter="provinceId">
               <option value="">请选择省</option>
             </select>
           </div>
-          <div class="layui-input-inline">
-            <select name="cityId">
+          <div class="layui-form layui-input-inline" lay-filter="city">
+            <select name="cityId" id="cityId">
               <option value="">请选择市</option>
             </select>
           </div>
@@ -113,18 +113,50 @@
 
       //表单初始赋值
       var parent_id = RequestParameter()["parent_id"];
-
       if (parent_id != null) {
         form.val('organization-detail', {
           "parentOrgId": parent_id,
         });
       }
 
+      //动态获取行政区划省市
+      sendAjaxRequest("POST", "/getProvinceList.json", "json", "", getProvinceSuccess);
 
-      layarea.render({
-        elem: '#area-picker',
-        change: function (res) {
-          console.log(res);
+      function getProvinceSuccess(res) {
+        var provinceList = res.provinceList;
+        if (res.resFlag = "N") {
+          for (var i in provinceList) {
+            if (provinceList.hasOwnProperty(i)) {
+              var province = provinceList[i];
+              $("#provinceId").append($('<option value="' + province.id + '">' + province.name + '</option>'));
+            }
+          }
+          form.render('', 'province');
+        } else {
+          layer.msg(res.resMsg, function () { });
+        }
+      };
+
+      //监听省选择事件
+      form.on('select(provinceId)', function (data) {
+        var provinceId = parseInt(data.value);
+        //动态获市
+        sendAjaxRequest("POST", "/getCityList.json", "json", JSON.stringify({ "provinceId": provinceId }), getCitySuccess);
+
+        function getCitySuccess(res) {
+          $("#cityId").empty();
+          var cityList = res.cityList;
+          if (res.resFlag = "N") {
+            for (var i in cityList) {
+              if (cityList.hasOwnProperty(i)) {
+                var city = cityList[i];
+                $("#cityId").append($('<option value="' + city.id + '">' + city.name + '</option>'));
+              }
+            }
+            form.render('', 'city');
+          } else {
+            layer.msg(res.resMsg, function () { });
+          }
         }
       });
 
@@ -149,9 +181,8 @@
         var formData = data.field;
         formData.userInfo = userInfo;
         formData.parentOrgId = parseInt(formData.parentOrgId);
-        //TODO  省市由于数据不全，暂时无法处理
-        formData.cityId = 320400;
-        formData.provinceId = 320200;
+        formData.provinceId = parseInt(provinceId);
+        formData.cityId = parseInt(cityId);
         // 提交
         sendSubmitRequest("/orgAdd.json", JSON.stringify(formData));
         return false;

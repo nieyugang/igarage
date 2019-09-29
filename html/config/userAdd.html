@@ -6,8 +6,6 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="robots" content="all,follow">
-  <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
   <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
   <link rel="stylesheet" href="../../css/formSelects-v4.css">
@@ -117,35 +115,30 @@
   <script src="../../js/common.js"></script>
 
   <script>
-
-    function successCallback(res) {
-      var roleList = res.roleList;
-      var role_select = $("#roleId");
-      var options = "";
-      for (var i in roleList) {
-        if (roleList.hasOwnProperty(i)) {
-          var element = roleList[i];
-          var name = element.roleName;
-          var value = element.roleId;
-
-          var option = "<option value = '" + value + "'>" + name + "</option>";
-          options += option;
-        }
-      }
-      role_select.append(options);
-
-    };
-    function errorCallback() {
-        layer.msg("与服务器通信异常！");
-      }
-    sendAjaxRequest("POST", "/getRoleList.json", "json", JSON.stringify({ "userInfo": userInfo}), successCallback, errorCallback);
-
     //加载模块
     layui.use(['form', 'layedit'], function () {
       var form = layui.form;
       var layer = layui.layer;
       var layedit = layui.layedit;
       var $ = layui.$;
+
+      function successCallback(res) {
+        var roleList = res.roleList;
+        var role_select = $("#roleId");
+        for (var i in roleList) {
+          if (roleList.hasOwnProperty(i)) {
+            var element = roleList[i];
+            var name = element.roleName;
+            var value = element.roleId;
+            role_select.append($('<option value="' + value + '">' + name + '</option>'));
+          }
+        }
+        form.render('select');
+      };
+      function errorCallback() {
+        layer.msg("与服务器通信异常！");
+      }
+      sendAjaxRequest("POST", "/getRoleList.json", "json", JSON.stringify({ "userInfo": userInfo }), successCallback, errorCallback);
 
 
       var orgId = RequestParameter()["orgId"];
