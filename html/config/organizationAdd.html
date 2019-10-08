@@ -181,8 +181,8 @@
         var formData = data.field;
         formData.userInfo = userInfo;
         formData.parentOrgId = parseInt(formData.parentOrgId);
-        formData.provinceId = parseInt(provinceId);
-        formData.cityId = parseInt(cityId);
+        formData.provinceId = parseInt(formData.provinceId);
+        formData.cityId = parseInt(formData.cityId);
         // 提交
         sendSubmitRequest("/orgAdd.json", JSON.stringify(formData));
         return false;

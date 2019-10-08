@@ -166,10 +166,38 @@
         async: true,
         success: function (res) {
           if (res.resFlag == "N") {
+
+            //自动加载市默认数据
+            var provinceId = parseInt(res.orgTreeInfo.provinceId);
+            var cityId = res.orgTreeInfo.cityId;
+            if (provinceId != null) {
+              sendAjaxRequest("POST", "/getCityList.json", "json", JSON.stringify({ "provinceId": provinceId }), getCitySuccess);
+              function getCitySuccess(res) {
+                $("#cityId").empty();
+                var cityList = res.cityList;
+                if (res.resFlag = "N") {
+                  for (var i in cityList) {
+                    if (cityList.hasOwnProperty(i)) {
+                      var city = cityList[i];
+                      if (city.id == cityId) {
+                        $("#cityId").append($('<option  selected value="' + city.id + '">' + city.name + '</option>'));
+                      } else {
+                        $("#cityId").append($('<option value="' + city.id + '">' + city.name + '</option>'));
+
+                      }
+                    }
+                  }
+                  form.render('', 'city');
+                } else {
+                  layer.msg(res.resMsg, function () { });
+                }
+              }
+            }
+
+            //加载表单默认数据
             form.val('organization-detail', {
               "mobile": res.orgTreeInfo.mobile,
               "principal": res.orgTreeInfo.principal,
-              "cityId": res.orgTreeInfo.cityId,
               "provinceId": res.orgTreeInfo.provinceId,
               "orgId": res.orgTreeInfo.orgId,
               "orgName": res.orgTreeInfo.orgName,
@@ -210,10 +238,11 @@
       form.on('submit(formSubmit)', function (data) {
         var formData = data.field;
         formData.userInfo = userInfo;
-        //TODO  省市由于数据不全，暂时无法处理
-        formData.cityId = 320400;
-        formData.provinceId = 320200;
+        formData.provinceId = parseInt(formData.provinceId);
+        formData.cityId = parseInt(formData.cityId);
         formData.orgId = parseInt(formData.orgId);
+
+
         //提交
         sendSubmitRequest("/orgUpdate.json", JSON.stringify(formData));
         return false;
