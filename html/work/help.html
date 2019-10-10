@@ -1,25 +1,156 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        .container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+
+        }
+    </style>
 </head>
 
 <body>
-    <h1>用户基础操作 / 帮助与文档</h1>
+    <div class="container" id="container">
+        <ul class="layui-nav layui-bg-green" lay-filter="">
+            <li class="layui-nav-item">
+                <a href="javascript:;">基础功能说明</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="#1-1">登陆、登出</a></dd>
+                    <dd><a href="#1-2">个人信息</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">用户基础信息</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="">用户信息</a></dd>
+                    <dd><a href="">角色信息</a></dd>
+                    <dd><a href="">机构信息</a></dd>
+                    <dd><a href="">菜单信息</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">用户基础操作</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="">设备预警</a></dd>
+                    <dd><a href="">系统消息</a></dd>
+                    <dd><a href="">站内信</a></dd>
+                    <dd><a href="">帮助文档</a></dd>
+                    <dd><a href="">用户相关操作</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">全局监控</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="">地图展示</a></dd>
+                    <dd><a href="">大屏展示</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">电瓶车充电站</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="">管理</a></dd>
+                    <dd><a href="">订单</a></dd>
+                    <dd><a href="">订单处理</a></dd>
+                    <dd><a href="">版本管理</a></dd>
+                    <dd><a href="">消费管理</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">充值机</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="">管理</a></dd>
+                    <dd><a href="">订单</a></dd>
+                    <dd><a href="">版本管理</a></dd>
+                    <dd><a href="">包月充值标准</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">车库系统</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="">车库维护</a></dd>
+                    <dd><a href="">门禁维护</a></dd>
+                    <dd><a href="">充电桩维护</a></dd>
+                    <dd><a href="">监控维护</a></dd>
+                    <dd><a href="">车位维护</a></dd>
+                    <dd><a href="">远程读表</a></dd>
+                    <dd><a href="">智慧用电</a></dd>
+                    <dd><a href="">日常管理</a></dd>
+                    <dd><a href="">版本管理</a></dd>
+                    <dd><a href="">订单管理</a></dd>
+                    <dd><a href="">充值订单</a></dd>
+                    <dd><a href="">车位类别维护</a></dd>
+                    <dd><a href="">消费标准维护</a></dd>
+                    <dd><a href="">小区管理</a></dd>
+                    <dd><a href="">车库备忘录</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <div style="height: 70px;width:100%;"></div>
+    <div style="margin-left: 5px;font-family:微软雅黑;font-size:16px;line-height: 30px;">
+        <div id="1-1">
+            <h3><strong>基础功能说明 / 登陆&插件下载</strong></h3>
+            <p>
+                打开浏览器，输入系统地址<a target="_blank"
+                    href="http://61.160.234.13:9911/login.html#">http://61.160.234.13:9911/login.html#</a>
+                进入系统</br>
+                <img src="../../img/help-documents-imgs/登陆&插件下载.png" style="width: 100%;height:600px">
+                <p>
+                    点击<em>监控插件下载</em>，即可下载视频监控插件。输入用户名和密码，点击登陆，进入系统。<br>
+                </p>
+            </p>
+            <h3><strong>基础功能说明 / 退出</strong></h3>
+            <p>
+                如需切换账号或者退出系统，点击退出按钮即可。
+                <img src="../../img/help-documents-imgs/退出.png" style="width: 100%;height:150px">
+            </p>
+        </div>
+        <div id="1-2">
+            <h3><strong>基础功能说明 / 个人信息</strong></h3>
+            <p>
+                点击头像，即可显示个人信息相关操作。
+                <img src="../../img/help-documents-imgs/个人信息.png" style="width: 100%;height:200px">
+                点击用户详情，可查看用户基本信息。
+                <img src="../../img/help-documents-imgs/用户详情.png" style="width: 100%;height:600px">
+                点击密码修改，可修改系统登陆密码。<em>重新登陆方可生效</em>
+                <img src="../../img/help-documents-imgs/修改密码.png" style="width: 100%;height:600px">
+            </p>
+        </div>
+    </div>
 
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+
+    </script>
 </body>
 
 </html>
