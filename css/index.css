@@ -55,6 +55,7 @@ nav.navbar .nav-link.logout i {
 /* 主体内容区 */
 .content-inner {
   min-height: calc(100vh - 58px);
+  background-image: url(../img/garage/blank.jpg);
 }
 
 /* 主题切换 */

@@ -10,10 +10,6 @@
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <style>
-        body {
-            background-color: #F5F5F5;
-        }
-
         p {
             line-height: 35px;
         }
@@ -25,13 +21,16 @@
         }
 
         .caller-item {
+            height: 50px;
+            width: 97%;
+            border-radius: 2px;
             margin: 10px 0;
             padding: 25px 0;
             overflow: hidden;
             border-bottom: 1px solid #e0e0e0;
             font-family: 微软雅黑;
             font-size: 16px;
-            background-color: white;
+            background-color: #F5F5F5;
         }
 
         .caller-item:hover {
@@ -55,89 +54,174 @@
             float: right;
             margin-top: -50px;
         }
+
+        .card {
+            width: 98%;
+            min-height: 25vh;
+        }
+
+        .card .card-waraning {
+            width: 25%;
+            height: 150px;
+            margin: 10px 0 0 6%;
+            float: left;
+            border-radius: 10px;
+        }
+
+        .card .card-waraning i {
+            font-size: 54px;
+            color: #fff;
+            display: block;
+            padding: 12% 0 0 18%;
+            width: 54px;
+        }
+
+        .card .card-waraning p {
+            font-size: 28px;
+            color: #fff;
+            margin: -15% 40%;
+        }
     </style>
 </head>
 
 <body>
-    <div class="caller-container">
-        <div class="caller-item">
-            <div class="caller-main caller-fl">
-                <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1 小时前</em>
-                </p>
-                <p class="caller-adds"><i
-                        class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
-                </p>
-            </div>
-            <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
-                <i class="layui-icon layui-icon-flag"></i>
-                标记已处理
-            </button>
+    <div class="card">
+        <div id="total-Warning" class="card-waraning" style="background:#57C8F2">
+            <span>
+                <i class="layui-icon layui-icon-form"></i>
+                <p><strong>342</strong></p>
+                <p style=" margin: 13% 0; font-size: 18px; top: 15%; margin-left: 34%;"><strong>累计预警信息</strong></p>
+            </span>
+
         </div>
-        <div class="caller-item">
-            <div class="caller-main caller-fl">
-                <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1 小时前</em>
-                </p>
-                <p class="caller-adds"><i
-                        class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
-                </p>
-            </div>
-            <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
-                <i class="layui-icon layui-icon-flag"></i>
-                标记已处理
-            </button>
-        </div>
-        <div class="caller-item">
-            <div class="caller-main caller-fl">
-                <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1 小时前</em>
-                </p>
-                <p class="caller-adds"><i
-                        class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
-                </p>
-            </div>
-            <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
-                <i class="layui-icon layui-icon-flag"></i>
-                标记已处理
-            </button>
-        </div>
-        <div class="caller-item">
-            <div class="caller-main caller-fl">
-                <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1 小时前</em>
-                </p>
-                <p class="caller-adds"><i
-                        class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
-                </p>
-            </div>
-            <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
-                <i class="layui-icon layui-icon-flag"></i>
-                标记已处理
-            </button>
-        </div>
-        <div class="caller-item">
-            <div class="caller-main caller-fl">
-                <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1 小时前</em>
-                </p>
-                <p class="caller-adds"><i
-                        class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
-                </p>
-            </div>
-            <button class="layui-btn layui-btn-sm caller-fr">
+        <div id="handed-Warning" class="card-waraning" style="background:#23CA85;">
+            <span>
                 <i class="layui-icon layui-icon-ok"></i>
-                已处理
-            </button>
+                <p><strong>342</strong></p>
+                <p style=" margin: 13% 0; font-size: 18px; top: 15%; margin-left: 34%;"><strong>已处理预警信息</strong></p>
+            </span>
+        </div>
+        <div id="Untreate-dWarning" class="card-waraning" style="background:#F64535">
+            <span>
+                <i class="layui-icon layui-icon-notice"></i>
+                <p><strong>342</strong></p>
+                <p style=" margin: 13% 0; font-size: 18px; top: 15%; margin-left: 34%;"><strong>未处理警信息</strong></p>
+            </span>
+        </div>
+
+    </div>
+    <div class="caller-container">
+        <div class="layui-row">
+            <div class="layui-col-md8">
+                <div class="caller-item">
+                    <div class="caller-main caller-fl">
+                        <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1
+                                小时前</em>
+                        </p>
+                        <p class="caller-adds"><i
+                                class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
+                        </p>
+                    </div>
+                    <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
+                        <i class="layui-icon layui-icon-flag"></i>
+                        标记已处理
+                    </button>
+                </div>
+                <div class="caller-item">
+                    <div class="caller-main caller-fl">
+                        <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1
+                                小时前</em>
+                        </p>
+                        <p class="caller-adds"><i
+                                class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
+                        </p>
+                    </div>
+                    <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
+                        <i class="layui-icon layui-icon-flag"></i>
+                        标记已处理
+                    </button>
+                </div>
+                <div class="caller-item">
+                    <div class="caller-main caller-fl">
+                        <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1
+                                小时前</em>
+                        </p>
+                        <p class="caller-adds"><i
+                                class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
+                        </p>
+                    </div>
+                    <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
+                        <i class="layui-icon layui-icon-flag"></i>
+                        标记已处理
+                    </button>
+                </div>
+                <div class="caller-item">
+                    <div class="caller-main caller-fl">
+                        <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1
+                                小时前</em>
+                        </p>
+                        <p class="caller-adds"><i
+                                class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
+                        </p>
+                    </div>
+                    <button class="layui-btn layui-btn-sm layui-btn-warm caller-fr">
+                        <i class="layui-icon layui-icon-flag"></i>
+                        标记已处理
+                    </button>
+                </div>
+                <div class="caller-item">
+                    <div class="caller-main caller-fl">
+                        <p><i class="layui-icon layui-icon-log"></i><strong>&nbsp;&nbsp;&nbsp;预警时间：</strong> <em>最近联系：1
+                                小时前</em>
+                        </p>
+                        <p class="caller-adds"><i
+                                class="layui-icon layui-icon-align-left"></i><strong>&nbsp;&nbsp;&nbsp;预警消息：</strong>清潭路101号车库开门异常，请及时处理。
+                        </p>
+                    </div>
+                    <button class="layui-btn layui-btn-sm caller-fr">
+                        <i class="layui-icon layui-icon-ok"></i>
+                        已处理
+                    </button>
+                </div>
+                <div>
+                    <button class="layui-btn layui-btn-lg" style="position: fixed; bottom: 2px;left: 25%;">
+                        点击加载更多...
+                    </button>
+                </div>
+            </div>
+            <div class="layui-col-md4" style="background:#F5F5F5">
+                <span style="    padding-top: 13px;display: block;font-size: 20px;">
+                    累计预警车库排行榜<em>（近一个月）</em>
+                    <hr>
+                </span>
+                <div style="font-size: 16px;">
+                    <p style="color:red">丽华一村5号车库 <em style=" padding-left: 60%;">32次</em></p>
+                    <p style="color:red">丽华二村8号车库 <em style=" padding-left: 60%;">30次</em></p>
+                    <p style="color:red">丽华一村1号车库 <em style=" padding-left: 60%;">31次</em></p>
+                    <p>清潭六村5号车库 <em style=" padding-left: 60%;">29次</em></p>
+                    <p>清凉新村1号车库 <em style=" padding-left: 60%;">28次</em></p>
+                    <p>茶山公寓7号车库 <em style=" padding-left: 60%;">20次</em></p>
+                    <p>富强新村1号车库 <em style=" padding-left: 60%;">17次</em></p>
+                    <p>清凉东村2号车库 <em style=" padding-left: 60%;">16次</em></p>
+                    <p>朝阳三村5号车库 <em style=" padding-left: 60%;">10次</em></p>
+                    <p>朝阳三村9号车库 <em style=" padding-left: 60%;">8次</em></p>
+                    <p>清潭6村1号车库 <em style=" padding-left: 60%;">6次</em></p>
+                    <p>工人新村2号车库 <em style=" padding-left: 60%;">5次</em></p>
+                    <p>红梅东村3号车库 <em style=" padding-left: 60%;">3次</em></p>
+                    <p>红梅新村4号车库 <em style=" padding-left: 60%;">2次</em></p>
+                </div>
+
+
+            </div>
         </div>
 
 
-    </div>
-    <div>
-        <button class="layui-btn layui-btn-lg" style="position: fixed; bottom: 2px;left: 47%;">
-            点击加载更多...
-        </button>
-    </div>
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
-    <script src="../../js/common.js"></script>
+
+        <!-- js插件 -->
+        <script src="../../vendor/jquery/jquery.min.js"></script>
+        <script src="../../vendor/layui/layui.js"></script>
+        <script src="../../js/front.js"></script>
+        <script src="../../js/common.js"></script>
 </body>
 
 </html>
