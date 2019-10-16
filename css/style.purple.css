@@ -1976,23 +1976,13 @@ input.input-material.is-invalid~label {
 *     LOGIN PAGE
 * ==========================================================
 */
-
 .login-page {
   position: relative;
-}
-
-.login-page::before {
-  content: "";
+  background-color: white;
+  background-image: url(../img/login/login.jpg);
   width: 100%;
-  height: 100%;
-  display: block;
-  z-index: -1;
-  background: url(../img/bg.jpg);
-  background-size: cover;
-  -webkit-filter: blur(10px);
-  filter: blur(10px);
-  z-index: 1;
-  position: absolute;
+  min-height: 50vh;
+  background-repeat: no-repeat;
   top: 0;
   right: 0;
 }

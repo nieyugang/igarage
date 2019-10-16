@@ -414,10 +414,10 @@ input {
 */
 
 nav.side-navbar {
-  background: #fff;
+  background: #304057;
   min-width: 250px;
   max-width: 250px;
-  color: #686a76;
+  color: #fff;
   -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   z-index: 9;
@@ -444,7 +444,7 @@ nav.side-navbar a[data-toggle="collapse"]::before {
 }
 
 nav.side-navbar a[aria-expanded="true"] {
-  background: #eef5f9;
+  background: #1F3042;
 }
 
 nav.side-navbar a[aria-expanded="true"]::before {
@@ -472,7 +472,7 @@ nav.side-navbar .title {
 }
 
 nav.side-navbar .title h1 {
-  color: #333;
+  color: #fff;
 }
 
 nav.side-navbar .title p {
@@ -486,7 +486,7 @@ nav.side-navbar span.heading {
   text-transform: uppercase;
   font-weight: 400;
   margin-left: 20px;
-  color: #ccc;
+  color: #fff;
   font-size: 0.8em;
 }
 
@@ -514,7 +514,7 @@ nav.side-navbar ul li a:hover {
 
 nav.side-navbar ul li li a {
   padding-left: 50px;
-  background: #eef5f9;
+  background: #1F3042;
 }
 
 nav.side-navbar ul li.active > a {
@@ -696,7 +696,7 @@ nav.side-navbar.shrinked .sidebar-header .title {
 */
 
 nav.navbar {
-  background: #2f333e;
+  background: #1F3042;
   padding-top: 15px;
   padding-bottom: 15px;
   color: #fff;
@@ -1988,20 +1988,11 @@ input.input-material.is-invalid ~ label {
 
 .login-page {
   position: relative;
-}
-
-.login-page::before {
-  content: "";
+  background-color: white;
+  background-image: url(../img/login/login.jpg);
   width: 100%;
-  height: 100%;
-  display: block;
-  z-index: -1;
-  background: url(../img/bg.jpg);
-  background-size: cover;
-  -webkit-filter: blur(10px);
-  filter: blur(10px);
-  z-index: 1;
-  position: absolute;
+  min-height: 50vh;
+  background-repeat: no-repeat;
   top: 0;
   right: 0;
 }
@@ -2133,8 +2124,8 @@ STYLE SWITCHER FOR DEMO
   color: #495057;
 }
 
-/* ========================================= 
-   THEMING OF BOOTSTRAP COMPONENTS           
+/* =========================================
+   THEMING OF BOOTSTRAP COMPONENTS
    ========================================= */
 
 /*
@@ -2980,7 +2971,7 @@ STYLE SWITCHER FOR DEMO
 }
 
 /*
- * 3. TYPE  
+ * 3. TYPE
  */
 
 body {
