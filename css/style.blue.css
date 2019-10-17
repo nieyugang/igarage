@@ -2077,7 +2077,8 @@ input.input-material.is-invalid ~ label {
   z-index: 9999;
   position: absolute;
   bottom: 0;
-  left: 42vw;
+  margin: 0 auto;
+  text-align: center;
   color: #fff;
 }
 

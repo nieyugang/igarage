@@ -21,7 +21,7 @@ body {
 }
 
 /* iframe tab栏 */
-#_content_inner_ .layui-tab .layui-tab-title .layui-this:after  {
+#_content_inner_ .layui-tab .layui-tab-title .layui-this:after {
   border-top: 2px solid #379392 !important;
 }
 
@@ -1990,6 +1990,7 @@ input.input-material.is-invalid~label {
   top: 0;
   right: 0;
 }
+
 .login-page .container {
   padding: 0;
   margin: 0;
@@ -2073,7 +2074,8 @@ input.input-material.is-invalid~label {
   z-index: 9999;
   position: fixed;
   bottom: 8px;
-  left: 42vw;
+  margin: 0 auto;
+  text-align: center;
   color: #848484;
 }
 
