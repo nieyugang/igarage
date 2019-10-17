@@ -1,16 +1,17 @@
 body {
   font-family: "Microsoft Yahei", Arial, sans-serif;
+  font-size: 0.9rem;
 }
 .page {
   background-color: #fff;
 }
 /* logo */
 .page .header .navbar {
-  padding: 4px 0;
+  padding: 2px 0;
 }
 #logo_header {
-  margin-right: 62px;
-  margin-left: 20px;
+  margin-right: 4vw;
+  margin-left: 0vw;
 }
 #logo_header img:first-child {
   height: 40px;
@@ -55,7 +56,11 @@ nav.navbar .nav-link.logout i {
 /* 主体内容区 */
 .content-inner {
   min-height: calc(100vh - 58px);
-  background-image: url(../img/garage/blank.jpg);
+  background: url(../img/garage/blank.jpg) no-repeat center center;
+  background-position-x: left;
+  background-position-y: center;
+  background-size: cover;
+  width: 100vw;
 }
 
 /* 主题切换 */

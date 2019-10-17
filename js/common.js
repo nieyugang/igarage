@@ -113,11 +113,11 @@ function ajaxError(e, jqxhr, settings, exception) {
  * @param {*} done table加载完成执行的js
  * @returns
  */
-function initTable(table, title, elem, limit, url, where, parseData, cols, toolbar, done) {
+function initTable(table, title, elem, limit, url, where, parseData, cols, toolbar, done, height) {
     return table.render({
         title: title == "" ? "列表信息" : title,
         elem: '#' + elem,
-        height: 'full-300',
+        height: 'full-160',
         method: 'POST',
         contentType: 'application/json',
         limit: limit,

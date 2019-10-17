@@ -1,7 +1,7 @@
 /** layuiAdmin.pro-v1.2.1 LPPL License By http://www.layui.com/admin/ */
 #LAY_app,
 body,
-html {
+html body {
   height: 100%
 }
 

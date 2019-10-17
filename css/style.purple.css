@@ -411,10 +411,9 @@ input {
 
 nav.side-navbar {
   background: #304057;
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 13vw;
   color: #B4C1D1;
-  font-size: 18px;
+  font-size: 1.2rem;
   -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   z-index: 9;
@@ -456,7 +455,7 @@ nav.side-navbar a i {
 }
 
 nav.side-navbar .sidebar-header {
-  padding: 30px 15px;
+  padding: 30px 12px;
 }
 
 nav.side-navbar .avatar {
@@ -533,8 +532,8 @@ nav.side-navbar ul li ul {
 }
 
 nav.side-navbar.shrinked {
-  min-width: 90px;
-  max-width: 90px;
+  min-width: 6vw;
+  max-width: 6vw;
   text-align: center;
 }
 
@@ -1979,9 +1978,9 @@ input.input-material.is-invalid~label {
 .login-page {
   position: relative;
   background-color: white;
-  background-image: url(../img/login/login.jpg);
+  /* background-image: url(../img/login/login.jpg); */
   width: 100%;
-  min-height: 50vh;
+  /* min-height: 50vh; */
   background-repeat: no-repeat;
   top: 0;
   right: 0;
@@ -1990,7 +1989,6 @@ input.input-material.is-invalid~label {
 .login-page .container {
   min-height: 100vh;
   z-index: 999;
-  padding: 20px;
   position: relative;
 }
 
@@ -1998,7 +1996,6 @@ input.input-material.is-invalid~label {
   width: 100%;
   border-radius: 5px;
   overflow: hidden;
-  margin-bottom: 50px;
 }
 
 .login-page .form-holder .info,
@@ -2065,10 +2062,10 @@ input.input-material.is-invalid~label {
 .login-page .copyrights {
   width: 100%;
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  left: 0;
-  color: #fff;
+  left: 42vw;
+  color: #848484;
 }
 
 @media (max-width: 991px) {
