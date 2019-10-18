@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,16 +11,582 @@
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <style>
+        .main {
+            width: 100vw;
+            height: 100vh;
+            background: url('../../img/bg.jpg') no-repeat center center;
+            background-position-x: left;
+            background-size: cover;
+        }
+
+        .equipment-log p {
+            display: block;
+            background: #112D59;
+            width: 24vw;
+            font-size: 14px;
+            margin: 10px 0;
+            padding-left: 1vw;
+        }
+
+        .equipment-log span {
+            display: block;
+            text-align: center;
+            color: #D8EFFF;
+            font-size: 15px;
+            font-weight: bolder;
+            line-height: 5vh;
+        }
+
+        .equipment-warning {
+            background: #0e2147;
+            color: #fff;
+        }
+
+        .equipment-warning span {
+            display: block;
+            text-align: center;
+            color: #D8EFFF;
+            font-size: 15px;
+            font-weight: bolder;
+            line-height: 5vh;
+        }
+
+        .equipment-warning p {
+            display: block;
+
+            width: 24vw;
+            font-size: 14px;
+            margin: 10px 0;
+            padding-left: 1vw;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>全局监控 / 大数据监控</h1>
+    <!-- 主体内容区 -->
+    <div class="main">
+        <div class="layui-container " style=" width: 100vw;height: 100vh;">
+            <div class="layui-row layui-col-space5">
+                <div class="layui-col-md3">
+                    <div>
+                        <div class="equipment-province" id="equipment-province"
+                            style="height: 50vh;margin: 1.5vh 0; border-radius: 5px;">
+                        </div>
+                        <div class="equipment-log" id="equipment-log"
+                            style="height: 45vh;background: #0e2147;color: #739AD2;">
+                            <span>设备维护日志</span>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                            <p>2019年9月25日清潭路10号车库开门异常！&nbsp;&nbsp;已处理&nbsp;&nbsp;张二华</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md6">
+                    <div>
+                        <div class="map" id="map" style=" height: 96.5vh;margin: 1.5vh 0;">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md3">
+                    <div>
+                        <div class="equipment-warning" id="equipment-warning"
+                            style="border: 1px solid black;height: 50vh;margin: 1.5vh 0;">
+                            <span>设备预警信息</span>
+                            <div>
+                                <p>2018-09-23 12：10&nbsp;&nbsp;&nbsp;清凉新村2社区1号车库</p>
+                                <p>预警消息：开门异常</p>
+                                <p>处理进度：</p>
+                                <div class="layui-progress" lay-showPercent="yes" title="未处理">
+                                   <div class="layui-progress-bar layui-bg-red" lay-percent="30%" ></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p>2018-09-23 12：10&nbsp;&nbsp;&nbsp;清凉新村2社区1号车库</p>
+                                <p>预警消息：开门异常</p>
+                                <p>处理进度：</p>
+                                <div class="layui-progress" lay-showPercent="yes" title="正在处理">
+                                    <div class="layui-progress-bar layui-bg-orange" lay-percent="50%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p>2018-09-23 12：10&nbsp;&nbsp;&nbsp;清凉新村2社区1号车库</p>
+                                <p>预警消息：开门异常</p>
+                                <p>处理进度：</p>
+                                <div class="layui-progress" lay-showPercent="yes" title="已处理">
+                                    <div class="layui-progress-bar layui-bg-green" lay-percent="100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Patrol-warning" id="Patrol-warning" style="height: 45vh;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- js插件 -->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../vendor/layui/layui.js"></script>
     <script src="../../js/front.js"></script>
+
+    <!-- echar js -->
+    <script src="../../vendor/echarts/echarts.min.js"></script>
+    <script src="../../vendor/echarts/customed.js"></script>
+
+    <script>
+        //加载模块
+        layui.use('element', function () {
+            var layer = layui.layer;
+            var $ = layui.$;
+            var element = layui.element;
+
+            var equipment_province_dom = document.getElementById("equipment-province");
+            // 基于准备好的dom，初始化echarts实例并指定customed主题
+            var equipment_province_Chart = echarts.init(equipment_province_dom, "customed");
+
+            var data = [78, 75, 70, 68, 63, 57, 50, 48, 45, 20];
+            var titlename = ['北京', '上海', '广州', '深圳', '浙江', '江苏', '安徽', '山东', '西藏', '内蒙库'];
+            var myColor = ['#1089E7', '#F57474', '#56D0E3', '#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6', '#F8B448', '#8B78F6'];
+            var equipment_province_option = {
+                backgroundColor: '#0e2147',
+                title: {
+                    text: '各省设备数量top10',
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 15,
+                        color: '#D8EFFF'
+                    },
+                    // left: '6%',
+                    top: '3%'
+                },
+                //图标位置
+                grid: {
+                    // top: '20%',
+                    left: '35%'
+
+                },
+                xAxis: {
+                    show: false
+                },
+                yAxis: [{
+                    show: true,
+                    data: titlename,
+                    inverse: true,
+                    axisLine: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        color: '#fff',
+                        formatter: function (value, index) {
+                            return [
+                                '{lg|' + (index + 1) + '} ' + '{title|' + value + '} '
+                            ].join('\n')
+                        },
+                        rich: {
+                            lg: {
+                                backgroundColor: '#8d7fec',
+                                color: '#fff',
+                                borderRadius: 15,
+                                padding: 2,
+                                align: 'center',
+                                width: 15,
+                                height: 15
+                            },
+                            title: {
+                                backgroundColor: '#8d7fec',
+                                color: '#fff',
+                                width: 77,
+                                align: 'left',
+                                borderRadius: 5,
+                                padding: 5,
+                            }
+                        }
+                    },
+                }],
+                series: [{
+                    name: '条',
+                    type: 'bar',
+                    yAxisIndex: 0,
+                    data: data,
+                    barWidth: 10,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: '16',
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            barBorderRadius: 20,
+                            color: function (params) {
+                                var num = myColor.length;
+                                return myColor[params.dataIndex % num]
+                            },
+                            // 渐变色
+                            // color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                            // offset: 0,
+                            // color: 'rgba(0,255,0)'
+                            // }, {
+                            // offset: 1,
+                            // color: 'rgb(215 ,255,0)'
+                            // }]),
+
+                        }
+                    },
+
+                },
+                ]
+            };
+            equipment_province_Chart.setOption(equipment_province_option);
+
+            //地图
+            var map_dom = document.getElementById("map");
+            // 基于准备好的dom，初始化echarts实例并指定customed主题
+            var map_Chart = echarts.init(map_dom, "customed");
+
+            var uploadedDataURL = "../../vendor/echarts/changzhou.json";
+
+            $.getJSON(uploadedDataURL, function (geoJson) {
+                echarts.registerMap('jiangxi', geoJson);
+                var geoCoordMap = {
+                    '武进区': [119.930987, 31.646525],
+                    '金坛区': [119.545793, 31.695696],
+                    '天宁区': [120.041299, 31.814766],
+                    '钟楼区': [119.870477, 31.805437],
+                    '新北区': [119.884203, 31.933374],
+                    '溧阳市': [119.329338, 31.44736],
+                }
+                var data = [
+                    { name: '武进区', value: 199 },
+                    { name: '金坛区', value: 79 },
+                    { name: '天宁区', value: 100 },
+                    { name: '钟楼区', value: 200 },
+                    { name: '新北区', value: 150 },
+                    { name: '溧阳市', value: 360 },
+                ];
+                var max = 480, min = 9; // todo
+                var maxSize4Pin = 100, minSize4Pin = 20;
+
+                var convertData = function (data) {
+                    var res = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var geoCoord = geoCoordMap[data[i].name];
+                        if (geoCoord) {
+                            res.push({
+                                name: data[i].name,
+                                value: geoCoord.concat(data[i].value)
+                            });
+                        }
+                    }
+                    return res;
+                };
+
+
+                var map_option = {
+                    backgroundColor: '#0e2147',
+                    title: {
+                        text: '在线设备 - 常州市',
+                        subtext: '',
+                        x: 'center',
+                        textStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            if (typeof (params.value)[2] == "undefined") {
+                                return params.name + ' : ' + params.value + '台';
+                            } else {
+                                return params.name + ' : ' + params.value[2] + '台';
+                            }
+                        }
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        y: 'bottom',
+                        x: 'right',
+                        data: ['credit_pm2.5'],
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    },
+                    visualMap: {
+                        show: false,
+                        min: 0,
+                        max: 500,
+                        left: 'left',
+                        top: 'bottom',
+                        text: ['高', '低'], // 文本，默认为数值文本
+                        calculable: true,
+                        seriesIndex: [1],
+                        inRange: {
+                            // color: ['#3B5077', '#031525'] // 蓝黑
+                            // color: ['#ffc0cb', '#800080'] // 红紫
+                            // color: ['#3C3B3F', '#605C3C'] // 黑绿
+                            // color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
+                            // color: ['#23074d', '#cc5333'] // 紫红
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            color: ['#1488CC', '#2B32B2'] // 浅蓝
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+
+                        }
+                    },
+                    // toolbox: {
+                    //     show: true,
+                    //     orient: 'vertical',
+                    //     left: 'right',
+                    //     top: 'center',
+                    //     feature: {
+                    //             dataView: {readOnly: false},
+                    //             restore: {},
+                    //             saveAsImage: {}
+                    //             }
+                    // },
+                    geo: {
+                        show: true,
+                        map: 'jiangxi',
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: false,
+                            }
+                        },
+                        roam: true,
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#031525',
+                                borderColor: '#3B5077',
+                            },
+                            emphasis: {
+                                areaColor: '#2B91B7',
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'credit_pm2.5',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data: convertData(data),
+                            symbolSize: function (val) {
+                                return val[2] / 10;
+                            },
+                            label: {
+                                normal: {
+                                    formatter: '{b}',
+                                    position: 'right',
+                                    show: true
+                                },
+                                emphasis: {
+                                    show: true
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#05C3F9'
+                                }
+                            }
+                        },
+                        {
+                            type: 'map',
+                            map: 'jiangxi',
+                            geoIndex: 0,
+                            aspectScale: 0.75, //长宽比
+                            showLegendSymbol: false, // 存在legend时显示
+                            label: {
+                                normal: {
+                                    show: false
+                                },
+                                emphasis: {
+                                    show: false,
+                                    textStyle: {
+                                        color: '#fff'
+                                    }
+                                }
+                            },
+                            roam: true,
+                            itemStyle: {
+                                normal: {
+                                    areaColor: '#031525',
+                                    borderColor: '#3B5077',
+                                },
+                                emphasis: {
+                                    areaColor: '#2B91B7'
+                                }
+                            },
+                            animation: false,
+                            data: data
+                        },
+                        {
+                            name: '点',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            symbol: 'pin',
+                            symbolSize: function (val) {
+                                var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                                var b = minSize4Pin - a * min;
+                                b = maxSize4Pin - a * max;
+                                return a * val[2] + b;
+                            },
+                            label: {
+                                normal: {
+                                    show: true,
+                                    formatter: function (param) {
+                                        return param.data.value[2];
+                                    },
+                                    textStyle: {
+                                        color: '#fff',
+                                        fontSize: 9,
+                                    }
+                                },
+
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#F62157', //标志颜色
+                                }
+                            },
+                            zlevel: 6,
+                            data: convertData(data),
+                        },
+                        {
+                            name: 'Top 5',
+                            type: 'effectScatter',
+                            coordinateSystem: 'geo',
+                            data: convertData(data.sort(function (a, b) {
+                                return b.value - a.value;
+                            }).slice(0, 5)),
+                            symbolSize: function (val) {
+                                return val[2] / 10;
+                            },
+                            showEffectOn: 'render',
+                            rippleEffect: {
+                                brushType: 'stroke'
+                            },
+                            hoverAnimation: true,
+                            label: {
+                                normal: {
+                                    formatter: '{b}',
+                                    position: 'right',
+                                    show: true
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#05C3F9',
+                                    shadowBlur: 10,
+                                    shadowColor: '#05C3F9'
+                                }
+                            },
+                            zlevel: 1
+                        },
+
+                    ]
+                };
+                map_Chart.setOption(map_option);
+            });
+
+
+
+
+            // 巡查隐患统计 Patrol-warning
+            var Patrol_warning_dom = document.getElementById("Patrol-warning");
+            // 基于准备好的dom，初始化echarts实例并指定customed主题
+            var Patrol_warningp_Chart = echarts.init(Patrol_warning_dom, "customed");
+
+            var Patrol_warningp_option = {
+                backgroundColor: '#0e2147',
+                title: {
+                    text: '隐患排查统计',
+                    // subtext: '纯属虚构'
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 15,
+                        color: '#D8EFFF'
+                    },
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                // legend: {
+                //     data: ['巡查量', '故障量']
+                // },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                        axisLabel: {
+                            color: '#FFF'
+                        }
+                    }
+
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLabel: {
+                            color: '#FFF'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '巡查量',
+                        type: 'bar',
+                        data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' }
+                            ]
+                        }
+                    },
+                    {
+                        name: '发现隐患',
+                        type: 'bar',
+                        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    }
+                ]
+            };
+            Patrol_warningp_Chart.setOption(Patrol_warningp_option);
+
+
+        });
+
+    </script>
 </body>
 
 </html>

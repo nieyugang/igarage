@@ -117,7 +117,7 @@ function initTable(table, title, elem, limit, url, where, parseData, cols, toolb
     return table.render({
         title: title == "" ? "列表信息" : title,
         elem: '#' + elem,
-        height: 'full-160',
+
         method: 'POST',
         contentType: 'application/json',
         limit: limit,
