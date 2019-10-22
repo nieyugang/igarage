@@ -2295,6 +2295,16 @@ hr {
     text-align: left
 }
 
+.layui-form-label-left {
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    font-weight: 400;
+    min-width: 60px;
+    line-height: 20px;
+    text-align: left
+}
+
 .layui-form-label-left-col-7 {
     float: left;
     display: block;
@@ -2349,7 +2359,6 @@ hr {
     float: left;
     display: block;
     padding: 9px 15px;
-    width: 30%;
     font-weight: 400;
     line-height: 20px;
     text-align: right
