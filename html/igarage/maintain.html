@@ -418,6 +418,7 @@
                     maintainInfo = res.data[0];
                     theLocation(res.data[0].ing, res.data[0].lat, res.data[0].garageName);
                     showMaintain(res.data[0]);
+                    $("#maintainInfoDetails").show();
                 } else {
                     $("#maintainInfoDetails").hide();
                 }
@@ -544,7 +545,6 @@
                     } else {
                         map.clearOverlays();
                         tableReload(tableIns, {orgId: parseInt(childOrg.orgId)})
-                        $("#maintainInfoDetails").show();
                         $("#editMaintainForm").hide();
                         $("#showMaintain").show()
                     }
@@ -564,21 +564,9 @@
         form.on('select(threeTierAgent)', function (data) {
             map.clearOverlays();
             tableReload(tableIns, {orgId: parseInt(data.value)})
-            $("#maintainInfoDetails").show();
             $("#editMaintainForm").hide();
             $("#showMaintain").show()
         });
-
-        function clickOrg(level, orgId) {
-            map.clearOverlays();
-            if (level === 3) {
-                $("#maintainInfoDetails").show();
-            } else {
-                $("#maintainInfoDetails").hide();
-            }
-            $("#editMaintainForm").hide();
-            $("#showMaintain").show()
-        }
 
 
         //监听行工具事件
