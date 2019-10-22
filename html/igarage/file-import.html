@@ -35,7 +35,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-input">
-                    <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="submit">提交</button>
+                    <button type="button" class="layui-btn" lay-filter="submit" id="submit">提交</button>
                     <button type="button" class="layui-btn" lay-filter="cancel" id="cancel">取消</button>
                 </div>
             </div>
@@ -55,8 +55,17 @@
         var form = layui.form
             , $ = layui.jquery;
 
-        form.on('submit(formSubmit)', function (data) {
-            return false;
+        $(document).on('click', '#submit', function () {
+            var filestr = $("#infoArea").val();
+            if(filestr == '') return false;
+            var filedata = JSON.parse($("#infoArea").val());
+            for(var tmp in filedata){
+                console.log(JSON.stringify(tmp));
+            }              
+            window.parent.layer.msg("载入成功！");
+            setTimeout(function () {
+                window.parent.layer.closeAll();//关闭弹窗
+            }, 1000);          
         });
 
         $(document).on('click', '#cancel', function () {

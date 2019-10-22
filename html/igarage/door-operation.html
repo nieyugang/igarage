@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="" id="layui-theme-stylesheet">
+    <style>
+        .bright{ background:#00FFFF; }
+    </style>
 
 </head>
 
@@ -20,7 +23,7 @@
         <form class="layui-form" action="">
 
             <div class="layui-form-item">
-                <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width:300px;">
                     <select name="igarageId" id="igarageId">
                     </select>
                 </div>
@@ -28,38 +31,15 @@
             <div class="layui-form-item">
 
                 <div class="layui-carousel layui-col-xs6">
-                    <ul class="layui-row layui-col-space10">
-                        <li class="layui-col-xs3">
-                            <a lay-href="home/homepage1.html">
-                                <img src="../../img/door.png" alt="" style="width:100%;">
-                                <cite>1号门</cite>
-                            </a>
-                        </li>
-                        <!--<li class="layui-col-xs3">-->
-                            <!--<a lay-href="home/homepage1.html">-->
-                                <!--<img src="../../img/door.png" alt="" style="width:100%;">-->
-                                <!--<cite>2号门</cite>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li class="layui-col-xs3">-->
-                            <!--<a lay-href="home/homepage1.html">-->
-                                <!--<img src="../../img/door.png" alt="" style="width:100%;">-->
-                                <!--<cite>3号门</cite>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li class="layui-col-xs3">-->
-                            <!--<a lay-href="home/homepage1.html">-->
-                                <!--<img src="../../img/door.png" alt="" style="width:100%;">-->
-                                <!--<cite>4号门</cite>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                    <ul class="layui-row layui-col-space10 door_list">
+                        
                     </ul>
                 </div>
 
                 <div class="layui-carousel layui-col-xs6">
                     <ul class="layui-row layui-col-space10">
                         <li class="layui-col-xs3">
-                            <button type="button" class="layui-btn" id="setParam">设置参数</button>
+                            <button type="button" class="layui-btn" id="getParam">查看参数</button>
                         </li>
                         <li class="layui-col-xs3">
                             <button type="button" class="layui-btn" id="openDoor">远程开门</button>
@@ -67,16 +47,29 @@
                         <li class="layui-col-xs3">
                             <button type="button" class="layui-btn" id="getCard">远程读卡</button>
                         </li>
-                        <li class="layui-col-xs3">
-                            <button type="button" class="layui-btn" id="cardInfo">卡授权信息</button>
+                        <li class="layui-col-xs3"></li>
+                    </ul>
+                    <br><br><br><br><br><br><br>
+                    <ul class="layui-row layui-col-space10">
+                        <li class="layui-col-xs2">
+                            <lable class="layui-form-label">卡号:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</lable>
                         </li>
+                        <li class="layui-col-xs4">
+                            <input type="text" name="cardNo" id="cardNo" lay-verify="number" class="layui-input">
+                        </li>
+                        <li class="layui-col-xs3">
+                            <button type="button" class="layui-btn" id="getCardAuth">卡授权信息</button>
+                        </li>
+                        <li class="layui-col-xs3"></li>
                     </ul>
                 </div>
             </div>
 
 
         </form>
-        <table id="table_card" lay-filter="table_card"></table>
+        <div id="table_div" style="display:none"><table id="table_arg" lay-filter="table_arg"></table></div>
+        <div><table id="table_card" lay-filter="table_card"></table></div>
+        
 
     </div>
 
@@ -89,69 +82,200 @@
 
     <!-- js funcitons -->
     <script>
-        layui.config({
-            version: '1566370370424' //为了更新 js 缓存，可忽略
-        });
+        var baseUrl = "/hqigservice";
         layui.use( ['table','form'], function () {
             var table = layui.table
                 ,form = layui.form;
 
-            layer.ready(function(){
-                var igarageId = RequestParameter()["igarageId"];
-                var igarageName = decodeURIComponent(RequestParameter()["igarageName"]);
+            var igarageId = RequestParameter()["igarageId"];
+            var igarageName = decodeURIComponent(RequestParameter()["igarageName"]);
+            var sn = "",ip="";
+            $.ajax({
+                url: baseUrl + '/getAccessControllerList.json',
+                type: 'POST',
+                data: JSON.stringify({
+                    "userInfo": userInfo,
+                    "garageId": parseInt(igarageId)     
+                }),
+                contentType: "application/json",
+                dataType: 'json',
+                async: false,
+                success: function (res) {
+                    sn = res.accessControllerInfoList[0].sn;
+                    ip = res.accessControllerInfoList[0].ip;
+                },
+                error: function () {
+                    layer.msg(res.resFlag, { icon: 2 });
+                }
+            });
+
+
+            layer.ready(function(){                
                 $("#igarageId").val(igarageId);
                 $("#igarageId").append('<option value="' + igarageId + '">' + igarageName + '</option>');
                 form.render('select');
+
+                $.ajax({
+                    url: baseUrl + '/getAccessDoorList.json',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        "userInfo": userInfo,
+                        "acId": 3     
+                    }),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    async: true,
+                    success: function (res) {
+                        var rowTemplate = "";
+                        var i = 0;
+                        $.each(res.accessDoorInfoList,function(idx,item){
+                            if(item.enable == 1){
+                                rowTemplate=rowTemplate
+                                +"<li class='layui-col-xs3 li-door "+(i==0?"bright":"")+"' title='"+item.doorNo+"'>"
+                                +"<a lay-href=''>"
+                                +"<img src='../../img/door.png' alt='' style='width:100%;'>"
+                                +"<cite>"+item.doorName+"</cite>"
+                                +"</li>"
+                                ;
+                                i++;
+                            } 
+                        });
+                    
+                        $(".door_list").html(rowTemplate);
+                    },
+                    error: function () {
+                        layer.msg(res.resFlag, { icon: 2 });
+                    }
+                });
             });
 
-            table.render({
-                elem: '#table_card'
-                ,url: './json/demoCard.json'
-                ,contentType: 'application/json'
-                ,page: { //详细参数可参考 laypage 组件文档
-                    curr: 5
-                    ,groups: 1
-                    ,first: false
-                    ,last: false
-                    ,layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+            initTable(table, "门禁卡授权信息表", "table_card", 10, '/wiegandGetAuthList.json',
+            { "userInfo": userInfo,"ip": ip,"sn": parseInt(sn)},
+            function (res) {
+                return {
+                    code: 0,
+                    msg: "",
+                    count: res.total,
+                    data: res.authList
+                };
+            },[[
+                {field:'cardNo', title:'卡号'}
+                ,{field:'sn', title:'SN'}
+                ,{field:'begDate', title:'开始时间'}
+                ,{field:'endDate', title:'结束时间'}
+                ,{field:'door1', title:'1号门',templet: function(x){
+                    return x.door1>0 ? '已授权': '未授权';
+                }}
+                ,{field:'door2', title:'2号门',templet: function(x){
+                    return x.door2>0 ? '已授权': '未授权';
+                }}
+                ,{field:'door3', title:'3号门',templet: function(x){
+                    return x.door3>0 ? '已授权': '未授权';
+                }}
+                ,{field:'door4', title:'4号门',templet: function(x){
+                    return x.door4>0 ? '已授权': '未授权';
+                }}
+            ]]); 
+
+            $(document).on('click','#getParam',function(){
+                $("#table_div").attr("style","display:''");
+                initNotPageTable(table, "table_arg", '/wiegandGetDoorStateList.json',
+                { "userInfo": userInfo,"ip": ip,"sn": parseInt(sn)},
+                function (res) {
+                    return {
+                        code: 0,
+                        msg: "",
+                        count: res.total,
+                        data: res.argList
+                    };
+                },[[
+                    {field:'sn', title:'SN', width:120}
+                    ,{field:'accessTime', title:'控制器时间', width:250}
+                    ,{field:'serverTime', title:'服务器时间', width:250}
+                    ,{field:'doorNo', title:'门号'}
+                    ,{field:'doorState', title:'状态',templet: function(x){
+                        return x.doorState=3 ? '在线': x.doorState=2 ? '常闭' : x.doorState=1 ? '常开' : '';
+                    }}
+                    ,{field:'doorDelay', title:'开门持续时间'}
+                ]]);
+            });  
+
+            $(document).on('click','#getCardAuth',function(){
+                var cardNo = $('#cardNo').val();
+                $("#table_div").attr("style","display:none");
+                if(cardNo != ''){
+                    table.reload("table_card",{
+                        url:baseUrl + '/wiegandGetAuth.json',
+                        where:{ "userInfo": userInfo,"ip": ip,"sn": parseInt(sn),"cardNo":parseInt(cardNo)}                       
+                    })
+                }else{
+                    table.reload("table_card",{
+                        url:baseUrl + '/wiegandGetAuthList.json',
+                        where:{ "userInfo": userInfo,"ip": ip,"sn": parseInt(sn)}                        
+                    })
                 }
-                //,height: 300
-                ,cellMinWidth: 80
-                //,skin: 'line'
-                ,toolbar: true
-                ,cols: [[
-                    {field:'cardnum', title:'卡号'}
-                    // ,{field:'username', title:'用户'}
-                    ,{field:'begdate', title:'开始时间'}
-                    ,{field:'enddate', title:'结束时间'}
-                    ,{field:'door1', title:'1号门',templet: function(x){
-                            return x.door1>0 ? '已授权': '未授权';
-                        }}
-                    ,{field:'door2', title:'2号门',templet: function(x){
-                            return x.door2>0 ? '已授权': '未授权';
-                        }}
-                    ,{field:'door3', title:'3号门',templet: function(x){
-                            return x.door3>0 ? '已授权': '未授权';
-                        }}
-                    ,{field:'door4', title:'4号门',templet: function(x){
-                            return x.door4>0 ? '已授权': '未授权';
-                        }}
-                    // ,{title:'操作', align:'center', toolbar: '#barCard'}
-                ]]
+                
+            });   
+
+            $(document).on('click','.li-door',function(){
+                $(".li-door").removeClass("bright");
+                $(this).addClass("bright");
+            });    
+
+            $(document).on('click','#openDoor',function(){
+                var doorno = $(".bright").attr("title");
+                $.ajax({
+                    url: baseUrl + '/wiegandOpenDoor.json',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        "userInfo": userInfo,
+                        "ip": ip,
+                        "sn": parseInt(sn),
+                        "doorNo": parseInt(doorno)     
+                    }),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    async: true,
+                    success: function (res) {
+                        if (res.resFlag == "N") {
+                            layer.msg("远程开门成功!", { icon: 1 });
+                        } else {
+                            layer.msg(res.resFlag, { icon: 2 });
+                        }
+                    },
+                    error: function () {
+                        layer.msg(res.resFlag, { icon: 2 });
+                    }
+                });
             });
-        });
 
-        $(document).on('click','#setParam',function(){
-            layer.msg("设置参数成功!");
-        });
+            $(document).on('click','#getCard',function(){
+                $.ajax({
+                    url: baseUrl + '/wiegandGetAccess.json',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        "userInfo": userInfo,
+                        "ip": ip,
+                        "sn": parseInt(sn),  
+                    }),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    async: true,
+                    success: function (res) {
+                        if (res.resFlag == "N") {
+                            layer.msg(res.cardno, { icon: 1 });
+                        } else {
+                            layer.msg(res.resFlag, { icon: 2 });
+                        }
+                    },
+                    error: function () {
+                        layer.msg(res.resFlag, { icon: 2 });
+                    }
+                });
+            });  
+        });     
 
-        $(document).on('click','#openDoor',function(){
-            layer.msg("远程开门成功!");
-        });
-
-        $(document).on('click','#getCard',function(){
-            layer.msg("远程读卡成功!");
-        });
+        
 
     </script>
 </body>

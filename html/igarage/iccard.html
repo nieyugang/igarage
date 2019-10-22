@@ -16,12 +16,13 @@
     <form class="layui-form" action="">
 
         <div class="layui-form-item">
-            <div class="layui-input-inline">
+            <div class="layui-input-inline" style="width:300px;">
                 <select name="igarageId" id="igarageId">
                 </select>
             </div>
-        </div>
-
+        </div> 
+    </form>  
+    <form class="layui-form" action="" lay-filter="searchForm" id="searchForm">  
         <div class="layui-form-item">
             <div class="layui-input-inline">
                 <label class="layui-form-label" style="width:25%;">从：</label>
@@ -33,14 +34,14 @@
             </div>
             <div class="layui-input-inline">
                 <label class="layui-form-label"  style="width:45%;">姓名：</label>
-                <input type="text" name="userName" lay-verify="userName" autocomplete="off" class="layui-input" style="width:55%;">
+                <input type="text" name="userName" id="userName" lay-verify="userName" autocomplete="off" class="layui-input" style="width:55%;">
             </div>
             <div class="layui-input-inline">
                 <label class="layui-form-label"  style="width:45%;">卡号：</label>
-                <input type="text" name="cardNum" lay-verify="cardNum" autocomplete="off" class="layui-input" style="width:55%;">
+                <input type="text" name="cardNo" id="cardNo" lay-verify="cardNum" autocomplete="off" class="layui-input" style="width:55%;">
             </div>
             <div class="layui-input-inline">
-                <button type="button" class="layui-btn">查询</button>
+                <button type="button" class="layui-btn" lay-filter="search" id="search">查询</button>
             </div>
             <input id="cardId" value="aa" type="hidden"/>
         </div>
@@ -102,7 +103,7 @@
                     return {
                         code: 0,
                         msg: "",
-                        count:  res.rows ? res.rows.length : 0,
+                        count:  res.records,
                         data: res.rows
                     };
                 },
@@ -111,7 +112,7 @@
                 cols: [[
                     { type: 'radio', fixed: 'left'},
                     { type: 'numbers', title: '序号', align: 'center' },
-                    {field:'cardId', title:'用户编号'},
+                    // {field:'cardId', title:'用户编号'},
                     {field:'customerName', title:'用户名'},
                     {field:'cardNo', title:'卡号'},
                     {field:'mobile', title:'联系方式'},
@@ -149,7 +150,40 @@
                         }
                         break;
                     case 'userLoss':
-                        layer.msg("Loss");
+                    if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else if (data.length > 1) {
+                            layer.msg('只能同时操作一个', function () { });
+                        } else {
+                            if(data[0].status === 0){
+                                layer.confirm('确定该卡用户需要挂失操作吗？', function () {
+                                    $.ajax({
+                                        url: baseUrl + '/parkingCardReportLoss.json',
+                                        type: 'POST',
+                                        data: JSON.stringify({
+                                            "userInfo": userInfo,
+                                            "cardId": parseInt(data[0].cardId)     
+                                        }),
+                                        contentType: "application/json",
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function (res) {
+                                            if (res.resFlag == "N") {
+                                                layer.msg('操作成功', {icon: 1});
+                                                table.reload('table_iccard');
+                                            }else{
+                                                layer.msg('操作失败', {icon: 2});
+                                            }
+                                        },
+                                        error: function () {
+                                            layer.msg(res.resFlag, { icon: 2 });
+                                        }
+                                    });
+                                });
+                            }else{
+                                layer.msg(' 该卡用户状态异常,不能挂失', {icon: 2});
+                            }
+                        }
                         break;
                     case 'icImport':
                         layer.open({
@@ -164,6 +198,18 @@
                         });
                         break;
                 };
+            });
+
+            layui.$('#search').on('click', function(){           
+                table.reload('table_iccard',{
+                    where: {
+                        beginDate : ($('#begDate').val() == "")?null:$('#begDate').val(),
+                        endDate : ($('#endDate').val() == "")?null:$('#endDate').val(),
+                        customerName : ($('#userName').val() == "")?null:$('#userName').val(),
+                        cardNo : ($('#cardNo').val() == "")?null:$('#cardNo').val()
+                    }
+                });
+
             });
         });
 

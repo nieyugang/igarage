@@ -15,54 +15,63 @@
 
 <body>
 <!-- 主体内容区 -->
-<form class="layui-form" style="padding: 20px 30px 0 0;" action="" lay-filter="card-detail">
+<form class="layui-form" style="padding: 20px 30px 0 0;" action="" lay-filter="access-detail">
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width:150px;">卡号:</label>
+        <label class="layui-form-label" style="width:150px;">控制器编号:</label>
         <div class="layui-input-block"  style="margin-left:150px;">
-            <input type="text" name="cardNo" class="layui-input" value="" readonly>
+            <input type="text" name="acId" class="layui-input" value="" readonly>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" style="width:150px;">用户名:</label>
-        <div class="layui-input-block"  style="margin-left:150px;">
-            <input type="text" name="customerName" class="layui-input" value="" readonly>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="width:150px;">联系方式:</label>
+        <label class="layui-form-label" style="width:150px;">控制器类型:</label>
         <div class="layui-input-block" style="margin-left:150px;">
-            <input type="text" name="mobile" required  lay-verify="required" autocomplete="off" class="layui-input">
+            <select name="acType">
+                <option value="1">单门双向控制器</option>
+                <option value="2">四门单向控制器</option>
+            </select>
         </div>
     </div>
     <div class="layui-form-item">
-        <lable class="layui-form-label" style="width:150px;">地址:</lable>
+        <label class="layui-form-label" style="width:150px;">产品序列号SN:</label>
         <div class="layui-input-block" style="margin-left:150px;">
-            <input type="text" name="address" required  lay-verify="required" autocomplete="off" class="layui-input">
+            <input type="text" name="sn" required  lay-verify="required|number" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <lable class="layui-form-label" style="width:150px;">车位名称:</lable>
+        <lable class="layui-form-label" style="width:150px;">IP:</lable>
         <div class="layui-input-block" style="margin-left:150px;">
-            <input type="text" name="spaceName" required  lay-verify="required" autocomplete="off" class="layui-input">
+            <input type="text" name="ip" required  lay-verify="required" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <lable class="layui-form-label" style="width:150px;">开始时间:</lable>
+        <label class="layui-form-label" style="width:150px;">PORT:</label>
         <div class="layui-input-block" style="margin-left:150px;">
-            <input type="text" name="startTime" id="startTime"  required  lay-verify="date" autocomplete="off" class="layui-input">
+            <input type="text" name="port" required  lay-verify="required|number" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <lable class="layui-form-label" style="width:150px;">结束时间:</lable>
+        <label class="layui-form-label" style="width:150px;">默认网关:</label>
         <div class="layui-input-block" style="margin-left:150px;">
-            <input type="text" name="endTime" id="endTime" required  lay-verify="date" autocomplete="off" class="layui-input">
+            <input type="text" name="gateway" required  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">子网掩码:</label>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="mask" required  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">说明:</label>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <input type="text" name="remark" required  lay-verify="required" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="submit">提交</button>
-            <button type="button" class="layui-btn" lay-filter="cancel" id="cancel">取消</button>
+            <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="submit">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
@@ -75,44 +84,32 @@
 <script src="../../js/front.js"></script>
 <!-- js funcitons -->
 <script>
-    layui.use(['form','table','element','jquery','laydate'], function() {
+    layui.use(['form','table','element','jquery'], function() {
         var table = layui.table
             , form = layui.form
             , layer = layui.layer
             , element = layui.element
-            , $ = layui.jquery
-            ,laydate = layui.laydate;
+            , $ = layui.jquery;
 
-        //日期
-        laydate.render({
-            elem: '#startTime'
-            ,type: 'datetime'
-            ,trigger : 'click'
-        });
-        laydate.render({
-            elem: '#endTime'
-            ,type: 'datetime'
-            ,trigger : 'click'
-        });
-
-        if(parent.$("#cardId").val() != ""){
-            var cardInfo = JSON.parse(parent.$("#cardId").val());
-            form.val('card-detail', {
-                "cardNo": cardInfo.cardNo,
-                "customerName": cardInfo.customerName,
-                "mobile": cardInfo.mobile,
-                "address": cardInfo.address,
-                "spaceName":cardInfo.spaceName,
-                "startTime": cardInfo.startTime,
-                "endTime":cardInfo.endTime
+        if(parent.$("#accessId").val() != ""){
+            var accessInfo = JSON.parse(parent.$("#accessId").val());
+            form.val('access-detail', {
+                "acId": accessInfo.acId,
+                "acType": accessInfo.acType,
+                "sn": accessInfo.sn,
+                "ip": accessInfo.ip,
+                "port":accessInfo.port,
+                "gateway":accessInfo.gateway,
+                "mask":accessInfo.mask,
+                "remark":accessInfo.remark
             });
+            form.render('select');
         }
 
         //监听提交
         form.on('submit(formSubmit)', function (data) {
             var formData = data.field;// JSON.stringify(data.field);
             formData.userInfo = userInfo;
-            return false;
 
             var garageId = parent.$("#igarageId").val();
             formData.garageId = parseInt(garageId);
@@ -150,11 +147,7 @@
 
             });
             return false;
-        });
-
-        $(document).on('click','#cancel',function() {
-            window.parent.layer.closeAll();//关闭弹窗
-        });
+        })
     })
 </script>
 </body>

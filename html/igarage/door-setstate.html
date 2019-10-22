@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+</head>
+
+<body>
+<!-- 主体内容区 -->
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>设置门状态</legend>
+    <form class="layui-form" style="padding: 20px 30px 0 0;" action="" lay-filter="receive-info">
+
+        <div class="layui-form-item">
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label">1号门:</lable>
+                <div class="layui-input-block">
+                    <input type="text" name="door1" required  lay-verify="required" autocomplete="off" class="layui-input" value="1号门">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <input type="checkbox" name="doorUse1" lay-skin="switch" lay-text="启用|禁用">
+            </div>
+            <div class="layui-carousel layui-col-xs4">
+                <input type="radio" name="doorState1" value="3" title="在线" checked="">
+                <input type="radio" name="doorState1" value="1" title="常开">
+                <input type="radio" name="doorState1" value="2" title="常关">
+            </div>
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDealy1" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+        </div>  
+        
+        <div class="layui-form-item">
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label">2号门:</lable>
+                <div class="layui-input-block">
+                    <input type="text" name="door2" required  lay-verify="required" autocomplete="off" class="layui-input" value="2号门">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <input type="checkbox" name="doorUse2" lay-skin="switch" lay-text="启用|禁用">
+            </div>
+            <div class="layui-carousel layui-col-xs4">
+                <input type="radio" name="doorState2" value="3" title="在线" checked="">
+                <input type="radio" name="doorState2" value="1" title="常开">
+                <input type="radio" name="doorState2" value="2" title="常关">
+            </div>
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDealy2" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label">3号门:</lable>
+                <div class="layui-input-block">
+                    <input type="text" name="door3" required  lay-verify="required" autocomplete="off" class="layui-input" value="3号门">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <input type="checkbox" name="doorUse3" lay-skin="switch" lay-text="启用|禁用">
+            </div>
+            <div class="layui-carousel layui-col-xs4">
+                <input type="radio" name="doorState3" value="3" title="在线" checked="">
+                <input type="radio" name="doorState3" value="1" title="常开">
+                <input type="radio" name="doorState3" value="2" title="常关">
+            </div>
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDealy3" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+        </div> 
+
+        <div class="layui-form-item">
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label">4号门:</lable>
+                <div class="layui-input-block">
+                    <input type="text" name="door4" required  lay-verify="required" autocomplete="off" class="layui-input" value="4号门">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <input type="checkbox" name="doorUse4" lay-skin="switch" lay-text="启用|禁用">
+            </div>
+            <div class="layui-carousel layui-col-xs4">
+                <input type="radio" name="doorState4" value="3" title="在线" checked="">
+                <input type="radio" name="doorState4" value="1" title="常开">
+                <input type="radio" name="doorState4" value="2" title="常关">
+            </div>
+            <div class="layui-carousel layui-col-xs3">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDealy4" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+        </div> 
+        
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="submit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</fieldset>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../vendor/layui/layui.js"></script>
+<script src="../../js/front.js"></script>
+<!-- js funcitons -->
+<script>
+    var backServiceUrl = "/hqigservice";
+    layui.use(['form','element','jquery'], function() {
+        var form = layui.form
+            , layer = layui.layer
+            , element = layui.element
+            , $ = layui.jquery;
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {
+            var checkStatus = parent.layui.table.checkStatus("table_door");
+            var tableData = checkStatus.data; //获取选中的数据 
+
+            var formData = data.field;// JSON.stringify(data.field);
+            formData.userInfo = userInfo;
+            formData.ip = tableData[0].ip;
+            formData.sn = parseInt(tableData[0].sn);
+            formData.receivePort = parseInt(formData.receivePort);
+            formData.receiveDealy = parseInt(formData.receiveDealy);
+            // 提交
+            $.ajax({
+                url: backServiceUrl + "/setReceiveIp.json",
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formData),
+                success: function (res) {
+                    if (res.resFlag == "N") {
+                        layer.msg('操作成功', {icon: 1});
+                        setTimeout(function () {
+                            window.parent.layer.closeAll();//关闭弹窗
+                        }, 1000);
+                        // window.parent.layui.table.reload("table_door")
+                    } else {
+                        layer.msg('通信异常', {icon: 2});
+                    }
+                },
+                error: function () {
+                    layer.msg('通信异常', {icon: 2});
+                }
+            });
+            return false;
+        })
+    })
+</script>
+</body>
+
+</html>
