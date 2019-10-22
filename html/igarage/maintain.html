@@ -561,7 +561,7 @@
             selectOrg(3, parseInt(data.value));
         });
 
-        form.on('select(twoTierAgent)', function (data) {
+        form.on('select(threeTierAgent)', function (data) {
             map.clearOverlays();
             tableReload(tableIns, {orgId: parseInt(data.value)})
             $("#maintainInfoDetails").show();
