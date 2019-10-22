@@ -143,6 +143,41 @@ function clickLogin(szIP, szPort, szUsername, szPassword) {
 	}
 }
 
+/**
+ * 门禁登陆、预览
+ * @param {*} szIP 设备IP
+ * @param {*} szPort 设备端口
+ * @param {*} szUsername 设备登陆名
+ * @param {*} szPassword 设备登陆密码
+ * @param {*} i 门禁对应的摄像头通道
+ */
+function door_clickLogin(szIP, szPort, szUsername, szPassword,door_camera_index) {
+	var szIP = szIP,
+		szPort = szPort,
+		szUsername = szUsername,
+		szPassword = szPassword;
+
+	if ("" == szIP || "" == szPort) {
+		return;
+	}
+
+	var iRet = WebVideoCtrl.I_Login(szIP, 1, szPort, szUsername, szPassword, {
+		success: function (xmlDoc) {
+			changeWndNum(1);//设置窗口大小
+			setTimeout(function() {
+				clickStartRealPlay(szIP, door_camera_index);
+			}, 100);
+		},
+		error: function () {
+			layer.tips('登陆失败，请刷新页面重试', '#camare-preview', { tips: [1, '#FF5722'], });
+		}
+	});
+
+	if (-1 == iRet) {
+		layer.tips('已登录过！', '#camare-preview', { tips: [1, '#009688'], });
+	}
+}
+
 // 退出
 function clickLogout(szIP) {
 	var szIP = szIP,
@@ -189,15 +224,6 @@ function getChannelInfo(szIP) {
 			} else if (type > 6 && type < 16) {
 				changeWndNum(4);
 			}
-			$.each(oChannels, function (i) {
-				var id = $(this).find("id").eq(0).text(),
-					name = $(this).find("name").eq(0).text();
-				if ("" == name) {
-					name = "Camera " + (i < 9 ? "0" + (i + 1) : (i + 1));
-				}
-				oSel.append("<option value='" + id + "' bZero='false'>" + name + "</option>");
-			});
-			showOPInfo(szIP + " 获取模拟通道成功！");
 		},
 		error: function () {
 			showOPInfo(szIP + " 获取模拟通道失败！");
@@ -267,6 +293,7 @@ function clickGetDigitalChannelInfo() {
 		}
 	});
 }
+
 
 // 开始预览
 function clickStartRealPlay(szIP, iChannelID) {

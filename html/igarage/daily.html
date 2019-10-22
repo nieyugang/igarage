@@ -244,7 +244,7 @@
                                 </div>
                                 <div class="layui-tab-item">
                                     <div class="layui-form-item" style="text-align: center">
-                                        <button type="button" class="layui-btn" title="远程开门"><i class="fa fa-key"
+                                        <button type="button" class="layui-btn" title="远程开门"  id="door_camare-preview" ><i class="fa fa-key"
                                                                                                 aria-hidden="true"></i>
                                         </button>
                                         <!-- 增加 id="camare-preview"   ********creator：  yugang.nie start ******  -->
@@ -2739,7 +2739,7 @@
                     szPassword = cameraInfo.password;
                     layui.element.tabChange('maintainMapInfo_tab', 'camare_tab');
                     clickLogin(szIP, szPort, szUsername, szPassword);
-                    // clickLogin("192.168.1.99", '80', 'admin', '123456789a');
+                    // door_clickLogin("192.168.1.99", '80', 'admin', '123456789a',1);//打开门禁对应的摄像头
                 } else {
                     layer.tips('该车库下没有摄像头', '#camare-preview', {tips: [1, '#FFB800'],});
                 }
