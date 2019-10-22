@@ -123,7 +123,7 @@
       var $scroll_wrap = $("#_hx_scroll_wrap");
       var $scroll = $("#_hx_scroll");
       //document.body.clientHeight 可视区屏幕高度
-      $content.css("height", document.body.clientHeight - $("#_hx_slidebar_header_").outerHeight(true) - $("#_hx_header_").outerHeight(true) + "px");
+      $content.css("height", document.body.clientHeight - $("#_hx_slidebar_header_").outerHeight(true) - $("#_hx_header_").outerHeight(true)+4 + "px");
       $scroll_wrap.css("height", $content.height());
       // 点击侧边菜单栏
       $("#hx-slideMenu").on("click", ".list-unstyled li a", function () {
