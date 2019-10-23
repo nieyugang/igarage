@@ -9,102 +9,114 @@
     <meta name="robots" content="all,follow">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+<!--    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">-->
 </head>
 
 <body>
+<div class="layui-form layui-row"
+     style="height: 56px; background-color: #ced1d4;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+    <div class="layui-col-md2" style="font-size: 26px; margin-top: 10px; margin-left: 10px"><i
+            class="layui-icon layui-icon-align-center" style="font-size: 24px"></i> 门禁维护
+    </div>
+    <div class="layui-col-md2" style="margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">选择一级代理</div>
+        <div class="layui-col-md7">
+            <select name="firstLevel" id="firstLevel" lay-filter="firstLevel">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">选择二级代理</div>
+        <div class="layui-col-md7">
+            <select name="secondLe  vel" id="secondLevel" lay-filter="secondLevel">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">选择三级代理</div>
+        <div class="layui-col-md7">
+            <select name="areaLevel" id="areaLevel" lay-filter="areaLevel">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+<!--        <div class="layui-col-md5" style="margin-top: 8px">选择三级代理</div>-->
+        <div class="layui-col-md7">
+            <select name="garageList" id="garageList" lay-filter="garageList">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <!--        <div class="layui-form-item">-->
+    <!--            <div class="layui-input-inline" style="width:300px;">-->
+    <!--                <select name="garageList" id="garageList" lay-filter="garageList">-->
+    <!--                </select>-->
+    <!--            </div>-->
+    <!--            <div class="layui-input-inline">-->
+    <!--                <label class="layui-form-label" id="labelOrg" style="width:100%;"></label>-->
+    <!--            </div>-->
+    <!--        </div>-->
+</div>
 <div class="content-inner" style="z-index: 0;  width: 98%;">
     <!-- ===================================================== -->
     <!-- 请在此处编写你的业务代码 -->
     <!-- ===================================================== -->
-    <form class="layui-form" action="">
-        <div class="layui-form-item">
-            <div class="layui-input-inline" style="width:110px;">
-                <lable class="layui-form-label" id="firstLabel">一级代理:</lable>
-            </div>
-            <div class="layui-input-inline" id="firstDiv">
-                <select name="firstLevel" id="firstLevel" lay-filter="firstLevel">
-                </select>
-            </div>
-            <div class="layui-input-inline" style="width:110px;">
-                <lable class="layui-form-label" id="secondLabel">二级代理:</lable>
-            </div>
-            <div class="layui-input-inline" id="secondDiv">
-                <select name="secondLevel" id="secondLevel" lay-filter="secondLevel">
-                </select>
-            </div>
-            <div class="layui-input-inline" style="width:110px;">
-                <lable class="layui-form-label" id="areaLabel">选择小区:</lable>
-            </div>
-            <div class="layui-input-inline">
-                <select name="areaLevel" id="areaLevel" lay-filter="areaLevel">
-                </select>
-            </div>
-        </div>
-        
-        <div class="layui-form-item">
-            <div class="layui-input-inline" style="width:300px;">
-                <select name="garageList" id="garageList" lay-filter="garageList">
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <label class="layui-form-label" id="labelOrg" style="width:100%;"></label>
-            </div>
-        </div>
-    </form>
 
 
-    <div class="layui-row layui-col-space30" style="background-color: #FFFFFF;">
-        
-        <div class="layui-col-md10">
-            <div class="layui-card-body">
-                <table id="table_door" lay-filter="table_door"></table>
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
 
-                <script type="text/html" id="acTpl">
-                    <select lay-ignore>
-                        <option value="1">单门双向控制器</option>
-                        <option value="2">四门单向控制器</option>
-                    </select>
-                </script>
-            </div>
-        </div>
+    <div class="layui-col-md10">
+        <div class="layui-card-body">
+            <table id="table_door" lay-filter="table_door"></table>
 
-        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;">
-            <form class="layui-form" action="">
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="bSetNet" style="width:140px;">设置网络</button>
-                    </div>  
-                </div>  
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="bClearAuth" style="width:140px;">清除权限</button>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="bSetTime" style="width:140px;">设置时间</button>
-                    </div>  
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="bSetDoor" style="width:140px;">设置门</button>
-                    </div>  
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="icCard" style="width:140px;">IC卡用户管理</button>
-                    </div>  
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="access" style="width:140px;">门禁操作</button>
-                    </div>  
-                </div>
-                <input id="accessId" value="aa" type="hidden"/>
-            </form>
+            <script type="text/html" id="acTpl">
+                <select lay-ignore>
+                    <option value="1">单门双向控制器</option>
+                    <option value="2">四门单向控制器</option>
+                </select>
+            </script>
         </div>
     </div>
+
+    <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="bSetNet" style="width:140px;">设置网络</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="bClearAuth" style="width:140px;">清除权限</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="bSetTime" style="width:140px;">设置时间</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="bSetDoor" style="width:140px;">设置门</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="icCard" style="width:140px;">IC卡用户管理</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button type="button" class="layui-btn" id="access" style="width:140px;">门禁操作</button>
+                </div>
+            </div>
+            <input id="accessId" value="aa" type="hidden"/>
+        </form>
+    </div>
+</div>
 </div>
 
 <!-- js插件 -->
@@ -115,33 +127,33 @@
 <script src="../../js/common.js"></script>
 <script>
     var baseUrl = "/hqigservice";
-    
-    layui.use(['table','form','element','layer','laydate','tree'], function () {
-        var table = layui.table
-            ,tree = layui.tree
-            ,layer = layui.layer
-            ,laydate = layui.laydate
-            ,form = layui.form;
 
-        layer.ready(function(){
+    layui.use(['table', 'form', 'element', 'layer', 'laydate', 'tree'], function () {
+        var table = layui.table
+            , tree = layui.tree
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , form = layui.form;
+
+        layer.ready(function () {
             var orgData = getOrgTree(userInfo.orgId);
             var orgLevel = orgData.orgLevel;
             var childData = orgData.childOrgList;
 
-            if(orgLevel == 0){
+            if (orgLevel == 0) {
                 $("#firstLevel").empty();
                 $("#firstLevel").append('<option value="">请选择</option>');
                 $("#secondLevel").empty();
                 $("#secondLevel").append('<option value="">请选择</option>');
                 $("#areaLevel").empty();
                 $("#areaLevel").append('<option value="">请选择</option>');
-                for(var i in childData){
-                    if(!isNaN(i)){
+                for (var i in childData) {
+                    if (!isNaN(i)) {
                         $("#firstLevel").append('<option value="' + childData[i].orgId + '">' + childData[i].orgName + '</option>');
                     }
                 }
                 form.render('select');
-            }else if(orgLevel == 1){
+            } else if (orgLevel == 1) {
                 $("#firstLevel").empty();
                 $("#firstLevel").append('<option value="">请选择</option>');
                 $("#firstLevel").append('<option value="' + orgData.orgId + '">' + orgData.orgName + '</option>');
@@ -150,35 +162,35 @@
                 $("#areaLevel").empty();
                 $("#areaLevel").append('<option value="">请选择</option>');
                 form.render('select');
-            }else if(orgLevel == 2){
-                $("#firstDiv").attr("style","display:none");
-                $("#firstLabel").attr("style","display:none");
+            } else if (orgLevel == 2) {
+                $("#firstDiv").attr("style", "display:none");
+                $("#firstLabel").attr("style", "display:none");
                 $("#secondLevel").empty();
                 $("#secondLevel").append('<option value="">请选择</option>');
                 $("#secondLevel").append('<option value="' + orgData.orgId + '">' + orgData.orgName + '</option>');
                 $("#areaLevel").empty();
                 $("#areaLevel").append('<option value="">请选择</option>');
                 form.render('select');
-            }else if(orgLevel == 3){
-                $("#firstDiv").attr("style","display:none");
-                $("#firstLabel").attr("style","display:none");
-                $("#secondDiv").attr("style","display:none");
-                $("#secondLabel").attr("style","display:none");
+            } else if (orgLevel == 3) {
+                $("#firstDiv").attr("style", "display:none");
+                $("#firstLabel").attr("style", "display:none");
+                $("#secondDiv").attr("style", "display:none");
+                $("#secondLabel").attr("style", "display:none");
                 $("#areaLevel").empty();
                 $("#areaLevel").append('<option value="">请选择</option>');
                 $("#areaLevel").append('<option value="' + orgData.orgId + '">' + orgData.orgName + '</option>');
                 form.render('select');
             }
-        });    
+        });
 
-        form.on('select(firstLevel)', function(data){
+        form.on('select(firstLevel)', function (data) {
             var pid = data.value;
-            if(pid == '') return false;
+            if (pid == '') return false;
             var cdata = getOrgTree(pid).childOrgList;
             $("#secondLevel").empty();
             $("#secondLevel").append('<option value="">请选择</option>');
-            for(var j in cdata){
-                if(!isNaN(j)){
+            for (var j in cdata) {
+                if (!isNaN(j)) {
                     $("#secondLevel").append('<option value="' + cdata[j].orgId + '">' + cdata[j].orgName + '</option>');
                 }
             }
@@ -186,40 +198,40 @@
             $("#secondLevel").click();
         })
 
-        form.on('select(secondLevel)', function(data){
+        form.on('select(secondLevel)', function (data) {
             var pid = data.value;
-            if(pid == '') return false;
+            if (pid == '') return false;
             var adata = getOrgTree(pid).childOrgList;
             $("#areaLevel").empty();
             $("#areaLevel").append('<option value="">请选择</option>');
-            for(var k in adata){
-                if(!isNaN(k)){
+            for (var k in adata) {
+                if (!isNaN(k)) {
                     $("#areaLevel").append('<option value="' + adata[k].orgId + '">' + adata[k].orgName + '</option>');
                 }
             }
             form.render('select');
         })
 
-        form.on('select(areaLevel)', function(data){
-            $("#labelOrg").text("所属机构:  "+$("#areaLevel").find("option:selected").text());
+        form.on('select(areaLevel)', function (data) {
+            $("#labelOrg").text("所属机构:  " + $("#areaLevel").find("option:selected").text());
             $("#garageList").empty();
             var gData = getGarageList(data.value);
-            for(var i in gData){
-                if(!isNaN(i)){
+            for (var i in gData) {
+                if (!isNaN(i)) {
                     $("#garageList").append('<option value="' + gData[i].garageId + '">' + gData[i].garageName + '</option>');
                 }
             }
             form.render('select');
-            table.reload('table_door',{
+            table.reload('table_door', {
                 where: {
                     "userInfo": userInfo,
-                    "garageId": gData.length>0?parseInt(gData[0].garageId):0
+                    "garageId": gData.length > 0 ? parseInt(gData[0].garageId) : 0
                 }
             });
         });
 
         initTable(table, "小区所属门禁信息表", "table_door", 10, '/getAccessControllerList.json',
-            { "userInfo": userInfo,"garageId": parseInt($("#garageList").val())},
+            {"userInfo": userInfo, "garageId": parseInt($("#garageList").val())},
             function (res) {
                 return {
                     code: 0,
@@ -227,40 +239,42 @@
                     count: res.accessControllerInfoList ? res.accessControllerInfoList.length : 0,
                     data: res.accessControllerInfoList
                 };
-            },[[
-                { type: 'radio', fixed: 'left'},
-                { type: 'numbers', title: '序号', align: 'center' },
-                {field:'acType', title:'控制器类型',templet: function(x){
-                    return x.acType>1 ? '四门单向控制器': '单门双向控制器';
-                }},
-                {field:'sn', title:'产品序列号'},
-                {field:'ip', title:'IP'},
-                {field:'port', title:'PORT'},
-                {field:'remark', title:'所在区域'},
+            }, [[
+                {type: 'radio', fixed: 'left'},
+                {type: 'numbers', title: '序号', align: 'center'},
+                {
+                    field: 'acType', title: '控制器类型', templet: function (x) {
+                        return x.acType > 1 ? '四门单向控制器' : '单门双向控制器';
+                    }
+                },
+                {field: 'sn', title: '产品序列号'},
+                {field: 'ip', title: 'IP'},
+                {field: 'port', title: 'PORT'},
+                {field: 'remark', title: '所在区域'},
                 // {field:'mac', title:'所控制的门'}
             ]], 'default');
 
         initTree(tree, "#orgTree", "/getOrgTree.json",
-            JSON.stringify({"userInfo": userInfo,"orgId": 1}),
-            function(obj){
-                $("#labelOrg").text("所属机构:  "+obj.data.title);
+            JSON.stringify({"userInfo": userInfo, "orgId": 1}),
+            function (obj) {
+                $("#labelOrg").text("所属机构:  " + obj.data.title);
                 // layer.msg(JSON.stringify(obj.data.title));
                 $("#garageList").empty();
-                if(obj.data.level > 2){
+                if (obj.data.level > 2) {
                     var gData = getGarageList(obj.data.id);
                     // layer.msg(JSON.stringify(gData));
-                    for(var i in gData){
-                        if(!isNaN(i)){
+                    for (var i in gData) {
+                        if (!isNaN(i)) {
                             $("#garageList").append('<option value="' + gData[i].garageId + '">' + gData[i].garageName + '</option>');
                         }
                     }
-                    table.reload('table_door',{
+                    table.reload('table_door', {
                         where: {
                             "userInfo": userInfo,
-                            "garageId": gData.length>0?parseInt(gData[0].garageId):0
+                            "garageId": gData.length > 0 ? parseInt(gData[0].garageId) : 0
                         }
                     });
-                }else{
+                } else {
                     table.reload('table_door', {
                         where: {
                             "userInfo": userInfo,
@@ -278,7 +292,7 @@
             var layEvet = obj.event;
             switch (layEvet) {
                 case 'add':
-                    $("#accessId").attr("value","");
+                    $("#accessId").attr("value", "");
                     layer.open({
                         type: 2,
                         title: false,
@@ -291,9 +305,10 @@
                     if (data.length === 0) {
                         layer.msg('请选择一行');
                     } else if (data.length > 1) {
-                        layer.msg('只能同时编辑一个', function () { });
+                        layer.msg('只能同时编辑一个', function () {
+                        });
                     } else {
-                        $("#accessId").attr("value",JSON.stringify(data[0]));
+                        $("#accessId").attr("value", JSON.stringify(data[0]));
                         // layer.msg($("#accessId").val());
                         layer.open({
                             type: 2,
@@ -321,27 +336,28 @@
                                 async: true,
                                 success: function (res) {
                                     if (res.resFlag == "N") {
-                                        layer.msg('操作成功', { icon: 1 });
+                                        layer.msg('操作成功', {icon: 1});
                                         setTimeout(function () {
                                             table.reload('table_door');
                                         }, 1000);
                                     } else {
-                                        layer.msg(res.resFlag, { icon: 2 });
+                                        layer.msg(res.resFlag, {icon: 2});
                                     }
                                 },
                                 error: function () {
-                                    layer.msg(res.resFlag, { icon: 2 });
+                                    layer.msg(res.resFlag, {icon: 2});
                                 }
                             });
                         });
                     }
                     break;
-            };
+            }
+            ;
         });
 
-        form.on('select(garageList)', function(data){
+        form.on('select(garageList)', function (data) {
             // layer.msg(JSON.stringify(data));
-            table.reload('table_door',{
+            table.reload('table_door', {
                 where: {
                     "userInfo": userInfo,
                     "garageId": parseInt($("#garageList").val())
@@ -349,7 +365,7 @@
             });
         });
 
-        $(document).on('click','#bSetNet',function(){
+        $(document).on('click', '#bSetNet', function () {
             var checkStatus = table.checkStatus("table_door");
             var data = checkStatus.data; //获取选中的数据
             if (data.length === 0) {
@@ -364,7 +380,7 @@
                 });
             }
         });
-        $(document).on('click','#bClearAuth',function(){
+        $(document).on('click', '#bClearAuth', function () {
             var checkStatus = table.checkStatus("table_door");
             var data = checkStatus.data; //获取选中的数据
             if (data.length === 0) {
@@ -377,26 +393,26 @@
                         data: JSON.stringify({
                             "userInfo": userInfo,
                             "ip": data[0].ip,
-                            "sn": parseInt(data[0].sn)   
+                            "sn": parseInt(data[0].sn)
                         }),
                         contentType: "application/json",
                         dataType: 'json',
                         async: false,
-                        success: function (res) {                        
+                        success: function (res) {
                             if (res.resFlag == "N") {
-                                layer.msg("清除权限成功!", { icon: 1 });
-                            } else if(res.resFlag == "E") {
-                                layer.msg("操作失败！", { icon: 1 });
+                                layer.msg("清除权限成功!", {icon: 1});
+                            } else if (res.resFlag == "E") {
+                                layer.msg("操作失败！", {icon: 1});
                             }
                         },
                         error: function () {
-                            layer.msg("操作失败！", { icon: 1 });
+                            layer.msg("操作失败！", {icon: 1});
                         }
                     });
                 });
             }
         });
-        $(document).on('click','#bSetTime',function(){
+        $(document).on('click', '#bSetTime', function () {
             var checkStatus = table.checkStatus("table_door");
             var data = checkStatus.data; //获取选中的数据
             if (data.length === 0) {
@@ -411,7 +427,7 @@
                 });
             }
         });
-        $(document).on('click','#bSetDoor',function(){
+        $(document).on('click', '#bSetDoor', function () {
             layer.open({
                 type: 2,
                 title: false,
@@ -421,12 +437,12 @@
             });
         });
 
-        $(document).on('click','#access',function(){
-            var options=$("#garageList option:selected");
+        $(document).on('click', '#access', function () {
+            var options = $("#garageList option:selected");
             var garageId = options.val();
-            if(garageId>0){
+            if (garageId > 0) {
                 var data = layui.table.cache.table_door;
-                if(data.length>0){
+                if (data.length > 0) {
                     var elem = window.parent.layui.element;
                     elem.tabDelete("_tab_iframe_", "door-operation.html");
                     elem.tabAdd("_tab_iframe_", {
@@ -439,20 +455,20 @@
                         id: "door-operation.html"
                     });
                     elem.tabChange("_tab_iframe_", "door-operation.html");
-                }else{
+                } else {
                     layer.msg("该车库未设置门禁控制器!");
-                }                            
-            }else{
+                }
+            } else {
                 layer.msg("请选择要管理的车库!");
             }
         });
 
-        $(document).on('click','#icCard',function(){
-            var options=$("#garageList option:selected");
+        $(document).on('click', '#icCard', function () {
+            var options = $("#garageList option:selected");
             var garageId = options.val();
-            if(garageId>0){
+            if (garageId > 0) {
                 var data = layui.table.cache.table_door;
-                if(data.length>0){
+                if (data.length > 0) {
                     var elem = window.parent.layui.element;
                     elem.tabDelete("_tab_iframe_", "iccard.html");
                     elem.tabAdd("_tab_iframe_", {
@@ -465,10 +481,10 @@
                         id: "iccard.html"
                     });
                     elem.tabChange("_tab_iframe_", "iccard.html");
-                }else{
+                } else {
                     layer.msg("该车库未设置门禁控制器!");
-                }  
-            }else{
+                }
+            } else {
                 layer.msg("请选择要管理的车库!");
             }
         });
@@ -481,13 +497,13 @@
                 type: 'POST',
                 data: JSON.stringify({
                     "userInfo": userInfo,
-                    "orgId" : parseInt(orgId)
+                    "orgId": parseInt(orgId)
                 }),
                 contentType: "application/json",
                 dataType: 'json',
                 async: false,
                 success: function (res) {
-                    orgTree =  res.orgTreeInfo;
+                    orgTree = res.orgTreeInfo;
                 },
             });
             return orgTree;
@@ -501,7 +517,7 @@
                 type: 'POST',
                 data: JSON.stringify({
                     "userInfo": userInfo,
-                    "orgId":parseInt(orgId)
+                    "orgId": parseInt(orgId)
                 }),
                 contentType: "application/json",
                 dataType: 'json',
