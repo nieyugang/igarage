@@ -48,23 +48,21 @@
     <!-- ===================================================== -->
     <div class="row" style="background-color: white;">
         <div class="layui-col-md12">
-            <div style="margin-top: 2%;" class="row">
-                <div class="layui-col-md12" id="garageTable"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
-                    <div class="" style="background-color: #848d92">车库列表</div>
-                    <table style="margin: 10px" class="layui-hide" id="maintainTable"
-                           lay-filter="maintainTable"></table>
-                </div>
+            <div class="layui-col-md12" id="garageTable"
+                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
+                <div class="" style="background-color: #848d92">车库列表</div>
+                <table style="margin: 10px" class="layui-hide" id="maintainTable"
+                       lay-filter="maintainTable"></table>
+            </div>
 
-                <div id="deviceContent" class="layui-col-md12"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
-                    <div>
-                        <table class="layui-hide" id="garageChargerTable"
-                               lay-filter="garageChargerTable"></table>
+            <div id="deviceContent" class="layui-col-md12"
+                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
+                <div>
+                    <table class="layui-hide" id="garageChargerTable"
+                           lay-filter="garageChargerTable"></table>
 
-                        <table class="layui-hide" id="garagePlugTable"
-                               lay-filter="garagePlugTable"></table>
-                    </div>
+                    <table class="layui-hide" id="garagePlugTable"
+                           lay-filter="garagePlugTable"></table>
                 </div>
             </div>
         </div>
@@ -93,7 +91,7 @@
 </script>
 
 <script type="text/html" id="garageBar">
-   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">新增充电桩</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">新增充电桩</a>
 </script>
 
 <script type="text/html" id="garageChargerBar">
@@ -203,7 +201,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">设备类型</label>
                     <div class="layui-input-block">
-                        <select name="devType" id="devType" lay-filter="devType" lay-verify="required" lay-reqtext="设备类型不能为空">
+                        <select name="devType" id="devType" lay-filter="devType" lay-verify="required"
+                                lay-reqtext="设备类型不能为空">
                         </select>
                     </div>
                 </div>
@@ -639,7 +638,7 @@
             }
         }
 
-        form.on('select(devType)', function(data){
+        form.on('select(devType)', function (data) {
             garagePlugSelect(data.value);
         });
 
@@ -657,9 +656,9 @@
                     var garagePlugType = garagePlugTypeList[i];
                     $("#devType").append("<option value=" + garagePlugType.id + ">" + garagePlugType.name + "</option>")
                 }
-                if(data){
+                if (data) {
                     garagePlugSelect(data.devType);
-                }else {
+                } else {
                     garagePlugSelect(garagePlugTypeList[0].id);
                 }
 
