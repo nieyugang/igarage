@@ -443,35 +443,34 @@
 </script>
 
 <script type="text/html" id="garageBar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="garageMemo">备忘录</a>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #1989ff" lay-event="garageMemo">备忘录</button>
 </script>
 
 <script type="text/html" id="garageMomeBar">
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
     <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>-->
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+<!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>-->
 </script>
 
 <script type="text/html" id="editBar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500" lay-event="edit">编辑</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
 </script>
 
 <script type="text/html" id="garageChargerBar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addPlug">增加插头</a>
+    <button type="button" class="layui-btn layui-btn layui-btn-normal layui-btn-xs" lay-event="addPlug">增加插头</button>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500" lay-event="edit">编辑</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
 </script>
 
 <script type="text/html" id="parkingSpaceBar">
-
     {{#  if(d.cardId){ }}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="cardInfo">卡信息</a>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #0fc689" lay-event="cardInfo">卡信息</button>
     {{#  } }}
-
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="renewFee">续费</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delay">延期</a>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500" lay-event="edit">编辑</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #ff8a5e" lay-event="renewFee">续费</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #92a3ff" lay-event="delay">延期</button>
 </script>
 
 <script type="text/html" id="cameraEditPage">
