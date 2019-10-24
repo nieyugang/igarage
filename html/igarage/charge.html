@@ -46,7 +46,7 @@
             <input name="garageList" id="garageList" readonly class="layui-input">
         </div>
         <div class="layui-col-md2">
-        <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加充电站</button>
+            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加充电站</button>
         </div>
     </div>
 </div>
@@ -56,16 +56,16 @@
     <!-- ===================================================== -->
     <div class="row" style="background-color: white;">
         <div class="layui-col-md12">
-<!--            <div id="deviceContent" class="layui-col-md12"-->
-<!--                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">-->
-                <div>
-                    <table class="layui-hide" id="garageChargerTable"
-                           lay-filter="garageChargerTable"></table>
+            <!--            <div id="deviceContent" class="layui-col-md12"-->
+            <!--                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">-->
+            <div>
+                <table class="layui-hide" id="garageChargerTable"
+                       lay-filter="garageChargerTable"></table>
 
-                    <table class="layui-hide" id="garagePlugTable"
-                           lay-filter="garagePlugTable"></table>
-                </div>
-<!--            </div>-->
+                <table class="layui-hide" id="garagePlugTable"
+                       lay-filter="garagePlugTable"></table>
+            </div>
+            <!--            </div>-->
         </div>
     </div>
 </div>
@@ -362,7 +362,7 @@
         }
 
         $("#addChargeBtn").click(function () {
-            if(maintainInfo) {
+            if (maintainInfo) {
                 openGarageChargerPage();
             }
         });
@@ -419,7 +419,11 @@
                 if (res.data[0]) {
                     tableReload(garagePlugTableIns, {chargerId: res.data[0].chargerId})
                     garageCharger = res.data[0];
+                } else {
+                    tableReload(garagePlugTableIns, {chargerId: 0})
                 }
+            } else {
+                tableReload(garagePlugTableIns, {chargerId: 0})
             }
         }
 
