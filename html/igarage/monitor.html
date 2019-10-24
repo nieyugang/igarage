@@ -41,6 +41,14 @@
             </select>
         </div>
     </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md10">
+            <input name="garageList" id="garageList" readonly class="layui-input">
+        </div>
+        <div class="layui-col-md2">
+            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加监控</button>
+        </div>
+    </div>
 </div>
 <div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
     <!-- ===================================================== -->
@@ -48,18 +56,9 @@
     <!-- ===================================================== -->
     <div class="row" style="background-color: white;">
         <div class="layui-col-md12">
-            <div class="layui-col-md12" id="garageTable"
-                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
-                <div class="" style="background-color: #848d92">车库列表</div>
-                <table style="margin: 10px" class="layui-hide" id="maintainTable"
-                       lay-filter="maintainTable"></table>
-            </div>
 
-            <div id="deviceContent" class="layui-col-md12"
-                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
-                <div>
-                    <table class="layui-hide" id="cameraTable" lay-filter="cameraTable"></table>
-                </div>
+            <div class="layui-col-md12">
+                <table class="layui-hide" id="cameraTable" lay-filter="cameraTable"></table>
             </div>
         </div>
     </div>
@@ -163,13 +162,14 @@
         src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
 <script>
     var maintainInfo;//车库
-    layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate'], function () {
+    layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate', 'tableSelect'], function () {
         var tree = layui.tree
             , layer = layui.layer
             , table = layui.table
             , element = layui.element
             , $ = layui.jquery
             , form = layui.form
+            , tableSelect = layui.tableSelect
             , laydate = layui.laydate;
         // -----------------------------------页面初始化做的操作----------------------------------
         var cameraTypeList;//监控类型
@@ -191,27 +191,9 @@
 //         ---------------------------车库-------------------------
 
         var garageListCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {type: 'numbers', title: '序号', fixed: 'center'},
             {
                 field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
-            },
-            {
-                field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
-            },
-            {
-                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '操作', width: 160, toolbar: "#garageBar", sort: false, fixed: 'center'
             }
         ]];
 
@@ -224,33 +206,49 @@
             };
         }
 
-        function garageListdone(res, curr, count) {
+        function garageListdone(elem, data) {
             //如果是异步请求数据方式，res即为你接口返回的信息。
             //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-            if (res.data) {
-                if (res.data[0]) {
-                    noPageTableReload(cameraTableIns, {garageId: res.data[0].garageId});
-                }
-                maintainInfo = res.data[0];
+            if (data.data && data.data[0]) {
+                noPageTableReload(cameraTableIns, {garageId: data.data[0].garageId});
+                maintainInfo = data.data[0];
+            } else {
+                maintainInfo = null;
             }
         }
 
-        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
+        selectCheck(0);
 
-        //监听行工具事件
-        table.on('tool(maintainTable)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'add') {
+        function selectCheck(orgId) {
+            tableSelect.render({
+                elem: '#garageList',	//定义输入框input对象
+                checkedKey: 'id', //表格的唯一建值，非常重要，影响到选中状态 必填
+                // searchKey: 'keyword',	//搜索输入框的name值 默认keyword
+                // searchPlaceholder: '关键词搜索',	//搜索输入框的提示文字 默认关键词搜索
+                table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
+                    method: 'POST',
+                    contentType: 'application/json',
+                    limit: 6,
+                    limits: [20, 50, 100],
+                    url: backServiceUrl + "/getGarageList.json",
+                    where: {orgId: orgId},
+                    parseData: res,
+                    request: {
+                        pageName: 'pageNo', //页码的参数名称，默认：page
+                        limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                    },
+                    page: true,
+                    cols: garageListCols,
+                    toolbar: false,
+                },
+                done: garageListdone
+            })
+        }
+
+        $("#addChargeBtn").click(function () {
+            if (maintainInfo) {
                 openCameraEditPage();
             }
-        });
-
-        table.on('row(maintainTable)', function (obj) {
-            var data = obj.data;
-            maintainInfo = data;
-            noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
-            //标注选中样式
-            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
         });
 
 //         ---------------------------监控-------------------------
@@ -415,11 +413,37 @@
                     if (level === 1 || level === 2) {
                         selectOrg(level + 1, childOrg.orgId)
                     } else {
-                        tableReload(tableIns, {orgId: parseInt(childOrg.orgId)})
+                        selectCheck(parseInt(childOrg.orgId))
+                        initCharge(parseInt(childOrg.orgId));
+                        // tableReload(tableIns, {orgId: parseInt(childOrg.orgId)})
                     }
                 }
             }
             form.render();
+        }
+
+        function initCharge(orgId) {
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({
+                "orgId": orgId,
+                "pageNo": 1,
+                "pageSize": 1
+            }), function (res) {
+                if (res.resFlag === 'N') {
+                    if (res.rows && res.rows.length > 0) {
+                        maintainInfo = res.rows[0];
+                        noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
+                        $("#garageList").val(maintainInfo.garageName);
+                    } else {
+                        maintainInfo = null;
+                        noPageTableReload(cameraTableIns, {garageId: 0});
+                        $("#garageList").val("");
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
         }
 
         form.on('select(firstTierAgent)', function (data) {
@@ -431,12 +455,9 @@
         });
 
         form.on('select(threeTierAgent)', function (data) {
-            tableReload(tableIns, {orgId: parseInt(data.value)})
+            initCharge(parseInt(data.value));
+            selectCheck(parseInt(data.value));
         });
-
-        function clickOrg(orgId) {
-            tableReload(tableIns, {orgId: orgId})
-        }
     });
 </script>
 </body>

@@ -330,6 +330,8 @@
             if (data.data && data.data[0]) {
                 noPageTableReload(garageChargerTableIns, {garageId: data.data[0].garageId});
                 maintainInfo = data.data[0];
+            }else {
+                maintainInfo = null;
             }
         }
 
@@ -763,10 +765,11 @@
             sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({"orgId": orgId, "pageNo": 1, "pageSize": 1}), function (res) {
                 if (res.resFlag === 'N') {
                     if(res.rows && res.rows.length > 0){
-                        var garage = res.rows[0];
-                        noPageTableReload(garageChargerTableIns, {garageId: garage.garageId});
-                        $("#garageList").val(garage.garageName);
+                        maintainInfo = res.rows[0];
+                        noPageTableReload(garageChargerTableIns, {garageId: maintainInfo.garageId});
+                        $("#garageList").val(maintainInfo.garageName);
                     }else{
+                        maintainInfo = null;
                         noPageTableReload(garageChargerTableIns, {garageId: 0});
                         $("#garageList").val("");
                     }
