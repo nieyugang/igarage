@@ -751,11 +751,31 @@
                         selectOrg(level + 1, childOrg.orgId)
                     } else {
                         selectCheck(parseInt(childOrg.orgId))
+                        initCharge(parseInt(childOrg.orgId));
                         // tableReload(tableIns, {orgId: parseInt(childOrg.orgId)})
                     }
                 }
             }
             form.render();
+        }
+
+        function initCharge(orgId){
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({"orgId": orgId, "pageNo": 1, "pageSize": 1}), function (res) {
+                if (res.resFlag === 'N') {
+                    if(res.rows && res.rows.length > 0){
+                        var garage = res.rows[0];
+                        noPageTableReload(garageChargerTableIns, {garageId: garage.garageId});
+                        $("#garageList").val(garage.garageName);
+                    }else{
+                        noPageTableReload(garageChargerTableIns, {garageId: 0});
+                        $("#garageList").val("");
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
         }
 
         form.on('select(firstTierAgent)', function (data) {
@@ -768,6 +788,7 @@
 
         form.on('select(threeTierAgent)', function (data) {
             // tableReload(tableIns, {orgId: parseInt(data.value)});
+            initCharge(parseInt(data.value));
             selectCheck(parseInt(data.value));
         });
     });
