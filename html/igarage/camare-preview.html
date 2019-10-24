@@ -23,6 +23,7 @@
 		<tr>
 			<td>
 				<div id="camera-container" style="width: 885px;height:500px;">
+					<!-- <object classid="clsid:54FC7795-1014-4BF6-8BA3-500C61EC1A05" id="EZUIKit" width="400" height="400" name="EZUIKit" ></object> -->
 				</div>
 			</td>
 		</tr>
@@ -39,102 +40,65 @@
 		});
 		//全局变量
 		var gAppKey = "150c6adecae64a4b9dae7dd9717daae8";
-		var gAppSecret = "f98ecf11918ac14c605fbfa71fa83bd2";
 		var gAccessToken;			//accesstoken
 		var size;
 
-		//查询设备状态，在线才可预览/
-		function checkDeviceInfo(gAppKey, gAccessToken, deviceSerial) {
-			var url = "https://open.ys7.com/api/lapp/device/info?accessToken=" + gAccessToken + "&deviceSerial=" + deviceSerial;
-			$.ajax({
-				url: url,
-				type: 'POST',
-				contentType: 'application/x-www-form-urlencoded',
-				dataType: 'json',
-				async: false,
-				success: function (res) {
-					if ("200" == res.code) {
-						//Play();
-						getcameraList(gAppKey, gAccessToken, deviceSerial);
-					} else {
-						layer.msg(res.msg, { icon: 2 });
-					}
-				},
-				error: function () {
-					layer.msg("网络错误", { icon: 2 });
-				}
-			});
-		}
 		//获取设备的通道信息
-		function getcameraList(gAppKey, gAccessToken, deviceSerial) {
-			var url = "https://open.ys7.com/api/lapp/device/camera/list?accessToken=" + gAccessToken + "&deviceSerial=" + deviceSerial;
-			$.ajax({
-				url: url,
-				type: 'POST',
-				contentType: 'application/x-www-form-urlencoded',
-				dataType: 'json',
-				async: false,
-				success: function (res) {
-					if ("200" == res.code) {
-						//添加所有通道播放窗口
-						var containerDom = $("#camera-container");
-						var channelListInfo = res.data;
+		function ready4Preview(gAppKey, gAccessToken, deviceSerial, webCameraList) {
+			//添加所有通道播放窗口
+			var containerDom = $("#camera-container");
+			//定义分屏
+			size = webCameraList.length;
+			var divWidth = 880;
+			var divHeight = 500;
+			var width;
+			var height;
+			if (1 >= size) { //1*1
+				width = divWidth;
+				height = divHeight;
+			} else if (1 < size && size <= 4) { //2*2
+				width = divWidth / 2;
+				height = divHeight / 2;
+			} else if (4 < size && size <= 9) { //3*3
+				width = divWidth / 3;
+				height = divHeight / 3;
+			} else if (9 < size && size <= 16) { //4*4
+				width = divWidth / 4;
+				height = divHeight / 4;
+			} else if (16 < size && size <= 25) { // 5*5
+				width = divWidth / 5;
+				height = divHeight / 5;
+			} else { // 6*6
+				width = divWidth / 6;
+				height = divHeight / 6;
+			}
 
-						//定义分屏
-						size = channelListInfo.length;
-						var divWidth = 880;
-						var divHeight = 500;
-						var width;
-						var height;
-						if (1 >= size) { //1*1
-							width = divWidth;
-							height = divHeight;
-						} else if (1 < size && size <= 4) { //2*2
-							width = divWidth / 2;
-							height = divHeight / 2;
-						} else if (4 < size && size <= 9) { //3*3
-							width = divWidth / 3;
-							height = divHeight / 3;
-						} else if (9 < size && size <= 16) { //4*4
-							width = divWidth / 4;
-							height = divHeight / 4;
-						} else if (16 < size && size <= 25) { // 5*5
-							width = divWidth / 5;
-							height = divHeight / 5;
-						} else { // 6*6
-							width = divWidth / 6;
-							height = divHeight / 6;
-						}
-
-						for (var i in channelListInfo) {
-							if (channelListInfo.hasOwnProperty(i)) {
-								var index = parseInt(i) + 1;
-								containerDom.append($('<object classid="clsid:54FC7795-1014-4BF6-8BA3-500C61EC1A05" id="EZUIKit' + index + '" width="' + width + '" height="' + height + '" 	name="EZUIKit' + index + '"></object>'));
-							}
-						}
-					} else {
-						layer.msg(res.msg, { icon: 2 });
-					}
-				},
-				error: function () {
-					layer.msg("网络错误", { icon: 2 });
+			for (var i in webCameraList) {
+				if (webCameraList.hasOwnProperty(i)) {
+					var element = webCameraList[i];
+					var index = element.channelNo;
+					containerDom.append($('<object classid="clsid:54FC7795-1014-4BF6-8BA3-500C61EC1A05" id="EZUIKit' + index + '" width="' + width + '" height="' + height + '" 	name="EZUIKit' + index + '"></object>'));
 				}
-			});
-			playAll(size, gAppKey, gAccessToken, deviceSerial);
+			}
+			playAll(webCameraList, gAppKey, gAccessToken, deviceSerial);
 		}
 
 		//全部预览
-		function playAll(size, gAppKey, gAccessToken, deviceSerial) {
-			for (var index = 1; index <= size; index++) {
-				var EZUIKitID = "EZUIKit" + index;
-				var ezurl = "ezopen://open.ys7.com/" + deviceSerial + "/" + index + ".hd.live";
-				Play(EZUIKitID, gAppKey, gAccessToken, ezurl);
-
+		function playAll(webCameraList, gAppKey, gAccessToken, deviceSerial) {
+			// var index = layer.load(1, { time: 8 * 1000 });//由于视频流加载有一定时间，此处添加loading，并跟进加载时长设定6s后自动关闭。
+			for (var i in webCameraList) {
+				if (webCameraList.hasOwnProperty(i)) {
+					var element = webCameraList[i];
+					var index = element.channelNo;
+					var EZUIKitID = "EZUIKit" + index;
+					var ezurl = "ezopen://open.ys7.com/" + deviceSerial + "/" + index + ".hd.live";
+					Play(EZUIKitID, gAppKey, gAccessToken, ezurl);
+				}
 			}
 		}
 		//预览函数
 		function Play(EZUIKitID, gAppKey, gAccessToken, ezurl) {
-			// var index = layer.load(1, { time: 8 * 1000 });//由于视频流加载有一定时间，此处添加loading，并跟进加载时长设定6s后自动关闭。
+
 			//得到控件引用
 			var playOcx = document.getElementById(EZUIKitID);
 			if (!playOcx) {
@@ -178,52 +142,37 @@
 			}
 		}
 		//从redis服务器获取token
-		function getAccessTokenFromRedis() {
-			sendAjaxRequest("POST", "/hikGetToken.json", "JSON", {}, successCallback);
+		function hikGetCameraList(deviceSerial) {
+			sendAjaxRequest("POST", "/hikGetCameraList.json", "JSON", JSON.stringify({ "deviceSerial": deviceSerial }), successCallback);
 			function successCallback(res) {
 				if ("N" == res.resFlag) {
-					if (res.token == null) {
-						//redis中不存在则从海康接口动态获取token并存入redis中
-						getAccessTokenFromHikVision();
-					} else {
-						gAccessToken = res.token
-					}
-					checkDeviceInfo(gAppKey, gAccessToken, "691363191");
+					gAccessToken = res.token;
+					var webCameraList = res.webCameraList;
+					ready4Preview(gAppKey, gAccessToken, deviceSerial, webCameraList);
+				} else {
+					layer.msg("播放异常！请检查参数！异常：accessToken", { icon: 2 });
 				}
 			}
 		}
 
-		//预览窗口最大化
-		function maxPreWin(winIndex) {
-			alert(winIndex);
-
-		}
-		//从hikvision服务器获取token
-		function getAccessTokenFromHikVision() {
-			var getAccessTokenUrl = "https://open.ys7.com/api/lapp/token/get?appKey=" + gAppKey + "&appSecret=" + gAppSecret;
-			$.ajax({
-				url: getAccessTokenUrl,
-				type: 'POST',
-				contentType: 'application/x-www-form-urlencoded',
-				dataType: 'json',
-				success: function (res) {
-					if ("200" == res.code) {
-						gAccessToken = res.data.accessToken;
-						sendAjaxRequest("POST", "/hikSetToken.json", "JSON", JSON.stringify({ "token": res.data.accessToken }));//此处成功和异常的不处理整体对功能没有影响。
-					} else {
-						alert("获取token异常！");
-					}
-				},
-				error: function () {
-					alert("网络通信异常");
+		function hikGetCameraByChannelNo(deviceSerial,channelNo) {
+			sendAjaxRequest("POST", "/hikGetCameraList.json", "JSON", JSON.stringify({ "deviceSerial": deviceSerial ,"channelNo":channelNo}), successCallback);
+			function successCallback(res) {
+				if ("N" == res.resFlag) {
+					gAccessToken = res.token;
+					var webCameraList = res.webCameraList;
+					ready4Preview(gAppKey, gAccessToken, deviceSerial, webCameraList);
+				} else {
+					layer.msg("播放异常！请检查参数！异常：accessToken", { icon: 2 });
 				}
-
-			});
+			}
 		}
+
 		window.onload = function () {
 			TestActiveX();
-			// Play("EZUIKit1","150c6adecae64a4b9dae7dd9717daae8","at.47g932qxaj85hc8p0r2lhjckc271rt3u-8z4i5jphjn-0gcqr39-wobgwqamr","ezopen://open.ys7.com/122602365/5.live");
-			getAccessTokenFromRedis();
+			// hikGetCameraList("129088421");
+			hikGetCameraByChannelNo("129088421",5);
+			// Play("EZUIKit","150c6adecae64a4b9dae7dd9717daae8","at.6w4rlrjdbesna7uh0l5i5df89hglh89m-2rt4jubyi3-128sguu-yiehmq0ix","ezopen://open.ys7.com/122602365/5.live");
 		}
 		window.unload = function () {
 			alert("unload");
