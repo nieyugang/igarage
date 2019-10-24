@@ -47,6 +47,7 @@
       code: "modules/code",
       jquery: "modules/jquery",
       mobile: "modules/mobile",
+      tableSelect: "modules/tableSelect",
       "layui.all": "../layui.all"
     };
   n.prototype.cache = o, n.prototype.define = function (e, t) {
