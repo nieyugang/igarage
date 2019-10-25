@@ -19,98 +19,156 @@
     <legend>设置门状态</legend>
     <form class="layui-form" style="padding: 20px 30px 0 0;" action="" lay-filter="receive-info">
 
-        <div class="layui-form-item">
+        <div class="layui-form-item" id="doorDiv1">
             <div class="layui-carousel layui-col-xs3">
                 <lable class="layui-form-label">1号门:</lable>
                 <div class="layui-input-block">
-                    <input type="text" name="door1" required  lay-verify="required" autocomplete="off" class="layui-input" value="1号门">
+                    <input type="text" name="door1" id="door1" autocomplete="off" class="layui-input" value="1号门">
                 </div>
             </div>
             <div class="layui-carousel layui-col-xs2">
-                <input type="checkbox" name="doorUse1" lay-skin="switch" lay-text="启用|禁用">
-            </div>
-            <div class="layui-carousel layui-col-xs4">
-                <input type="radio" name="doorState1" value="3" title="在线" checked="">
-                <input type="radio" name="doorState1" value="1" title="常开">
-                <input type="radio" name="doorState1" value="2" title="常关">
+                <lable class="layui-form-label">启用:</lable>
+                <div class="layui-input-block"><input type="checkbox" name="checkbox1" id="checkbox1" value="1"></div>
             </div>
             <div class="layui-carousel layui-col-xs3">
-                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
-                <div class="layui-input-block" style="margin-left:120px;">
-                    <input type="text" name="doorDealy1" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                <lable class="layui-form-label">状态:</lable>
+                <div class="layui-input-block">
+                    <select name="doorState1">
+                        <option value="3" selected="">在线</option>
+                        <option value="1">常开</option>
+                        <option value="2">常闭</option>
+                    </select>
                 </div>
             </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDelay1" id="doorDelay1" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">视频通道:</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorChannel1" id="doorChannel1" autocomplete="off" class="layui-input" value="0">
+                </div>
+            </div>
+            <input id="flag1" value="0" type="hidden"/>
         </div>  
         
+        <div id="doorDiv2" style="display:none">
         <div class="layui-form-item">
             <div class="layui-carousel layui-col-xs3">
                 <lable class="layui-form-label">2号门:</lable>
                 <div class="layui-input-block">
-                    <input type="text" name="door2" required  lay-verify="required" autocomplete="off" class="layui-input" value="2号门">
+                    <input type="text" name="door2" id="door2" autocomplete="off" class="layui-input" value="2号门">
                 </div>
             </div>
             <div class="layui-carousel layui-col-xs2">
-                <input type="checkbox" name="doorUse2" lay-skin="switch" lay-text="启用|禁用">
-            </div>
-            <div class="layui-carousel layui-col-xs4">
-                <input type="radio" name="doorState2" value="3" title="在线" checked="">
-                <input type="radio" name="doorState2" value="1" title="常开">
-                <input type="radio" name="doorState2" value="2" title="常关">
+                <lable class="layui-form-label">启用:</lable>
+                <div class="layui-input-block"><input type="checkbox" name="checkbox2" id="checkbox2" value="2"></div>
             </div>
             <div class="layui-carousel layui-col-xs3">
-                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
-                <div class="layui-input-block" style="margin-left:120px;">
-                    <input type="text" name="doorDealy2" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                <lable class="layui-form-label">状态:</lable>
+                <div class="layui-input-block">
+                    <select name="doorState2">
+                        <option value="3" selected="">在线</option>
+                        <option value="1">常开</option>
+                        <option value="2">常闭</option>
+                    </select>
                 </div>
             </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDelay2" id="doorDelay2" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">视频通道:</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorChannel2" id="doorChannel2" autocomplete="off" class="layui-input" value="0">
+                </div>
+            </div>
+            <input id="flag2" value="0" type="hidden"/>
+        </div> 
         </div>
         
+        <div id="doorDiv3" style="display:none">
         <div class="layui-form-item">
             <div class="layui-carousel layui-col-xs3">
                 <lable class="layui-form-label">3号门:</lable>
                 <div class="layui-input-block">
-                    <input type="text" name="door3" required  lay-verify="required" autocomplete="off" class="layui-input" value="3号门">
+                    <input type="text" name="door3" id="door3" autocomplete="off" class="layui-input" value="3号门">
                 </div>
             </div>
             <div class="layui-carousel layui-col-xs2">
-                <input type="checkbox" name="doorUse3" lay-skin="switch" lay-text="启用|禁用">
-            </div>
-            <div class="layui-carousel layui-col-xs4">
-                <input type="radio" name="doorState3" value="3" title="在线" checked="">
-                <input type="radio" name="doorState3" value="1" title="常开">
-                <input type="radio" name="doorState3" value="2" title="常关">
+                <lable class="layui-form-label">启用:</lable>
+                <div class="layui-input-block"><input type="checkbox" name="checkbox3" id="checkbox3" value="3"></div>
             </div>
             <div class="layui-carousel layui-col-xs3">
-                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
-                <div class="layui-input-block" style="margin-left:120px;">
-                    <input type="text" name="doorDealy3" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                <lable class="layui-form-label">状态:</lable>
+                <div class="layui-input-block">
+                    <select name="doorState3">
+                        <option value="3" selected="">在线</option>
+                        <option value="1">常开</option>
+                        <option value="2">常闭</option>
+                    </select>
                 </div>
             </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDelay3" id="doorDelay3" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">视频通道:</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorChannel3" id="doorChannel3" autocomplete="off" class="layui-input" value="0">
+                </div>
+            </div>
+            <input id="flag3" value="0" type="hidden"/>
         </div> 
+        </div>
 
+        <div id="doorDiv4" style="display:none">
         <div class="layui-form-item">
             <div class="layui-carousel layui-col-xs3">
                 <lable class="layui-form-label">4号门:</lable>
                 <div class="layui-input-block">
-                    <input type="text" name="door4" required  lay-verify="required" autocomplete="off" class="layui-input" value="4号门">
+                    <input type="text" name="door4" id="door4" autocomplete="off" class="layui-input" value="4号门">
                 </div>
             </div>
             <div class="layui-carousel layui-col-xs2">
-                <input type="checkbox" name="doorUse4" lay-skin="switch" lay-text="启用|禁用">
-            </div>
-            <div class="layui-carousel layui-col-xs4">
-                <input type="radio" name="doorState4" value="3" title="在线" checked="">
-                <input type="radio" name="doorState4" value="1" title="常开">
-                <input type="radio" name="doorState4" value="2" title="常关">
+                <lable class="layui-form-label">启用:</lable>
+                <div class="layui-input-block"><input type="checkbox" name="checkbox4" id="checkbox4" value="4"></div>
             </div>
             <div class="layui-carousel layui-col-xs3">
-                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
-                <div class="layui-input-block" style="margin-left:120px;">
-                    <input type="text" name="doorDealy4" required  lay-verify="required" autocomplete="off" class="layui-input" value="3">
+                <lable class="layui-form-label">状态:</lable>
+                <div class="layui-input-block">
+                    <select name="doorState4">
+                        <option value="3" selected="">在线</option>
+                        <option value="1">常开</option>
+                        <option value="2">常闭</option>
+                    </select>
                 </div>
             </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">开门延迟(s):</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorDelay4" id="doorDelay4" autocomplete="off" class="layui-input" value="3">
+                </div>
+            </div>
+            <div class="layui-carousel layui-col-xs2">
+                <lable class="layui-form-label" style="width:120px;">视频通道:</lable>
+                <div class="layui-input-block" style="margin-left:120px;">
+                    <input type="text" name="doorChannel4" id="doorChannel4" autocomplete="off" class="layui-input" value="0">
+                </div>
+            </div>
+            <input id="flag4" value="0" type="hidden"/>
         </div> 
-        
+        </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit="" lay-filter="formSubmit" id="submit">立即提交</button>
@@ -134,40 +192,227 @@
             , element = layui.element
             , $ = layui.jquery;
 
-        //监听提交
-        form.on('submit(formSubmit)', function (data) {
-            var checkStatus = parent.layui.table.checkStatus("table_door");
-            var tableData = checkStatus.data; //获取选中的数据 
+        var checkStatus = parent.layui.table.checkStatus("table_door");
+        var tableData = checkStatus.data; //获取选中的数据 
 
-            var formData = data.field;// JSON.stringify(data.field);
-            formData.userInfo = userInfo;
-            formData.ip = tableData[0].ip;
-            formData.sn = parseInt(tableData[0].sn);
-            formData.receivePort = parseInt(formData.receivePort);
-            formData.receiveDealy = parseInt(formData.receiveDealy);
-            // 提交
+        layer.ready(function(){
+            var sn = parseInt(tableData[0].sn);
+            if(sn > 200000000){
+                $('#doorDiv2').attr("style","display:''");
+            }
+            if(sn > 300000000){
+                $('#doorDiv3').attr("style","display:''");
+                $('#doorDiv4').attr("style","display:''");
+            }
+
+            var acId = parseInt(tableData[0].acId);
+            
             $.ajax({
-                url: backServiceUrl + "/setReceiveIp.json",
+                url: backServiceUrl + "/getAccessDoorList.json",
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
-                data: JSON.stringify(formData),
+                data: JSON.stringify({
+                    "userInfo":userInfo,
+                    "acId":acId
+                }),
                 success: function (res) {
-                    if (res.resFlag == "N") {
-                        layer.msg('操作成功', {icon: 1});
-                        setTimeout(function () {
-                            window.parent.layer.closeAll();//关闭弹窗
-                        }, 1000);
-                        // window.parent.layui.table.reload("table_door")
-                    } else {
-                        layer.msg('通信异常', {icon: 2});
+                    var doorData = res.accessDoorInfoList;
+
+                    for (var i in doorData) {                        
+                        if (i==0) {
+                            form.val('receive-info', {
+                                "door1":doorData[i].doorName,
+                                "doorDelay1":doorData[i].openDelay,
+                                "doorChannel1":doorData[i].doorChannel,
+                                "doorState1":doorData[i].operateMode+"",
+                                "checkbox1":(doorData[i].enable==1)?true:false
+                            });
+                            $('#flag1').val(doorData[i].doorId);
+                        }else if(i==1){
+                            form.val('receive-info', {
+                                "door2":doorData[i].doorName,
+                                "doorDelay2":doorData[i].openDelay,
+                                "doorChannel2":doorData[i].doorChannel,
+                                "doorState2":doorData[i].operateMode+"",
+                                "checkbox2":(doorData[i].enable==1)?true:false
+                            });
+                            $('#flag2').val(doorData[i].doorId);
+                        }else if(i==2){
+                            form.val('receive-info', {
+                                "door3":doorData[i].doorName,
+                                "doorDelay3":doorData[i].openDelay,
+                                "doorChannel3":doorData[i].doorChannel,
+                                "doorState3":doorData[i].operateMode+"",
+                                "checkbox3":(doorData[i].enable==1)?true:false
+                            });
+                            $('#flag3').val(doorData[i].doorId);
+                        }else if(i==3){
+                            form.val('receive-info', {
+                                "door4":doorData[i].doorName,
+                                "doorDelay4":doorData[i].openDelay,
+                                "doorChannel4":doorData[i].doorChannel,
+                                "doorState4":doorData[i].operateMode+"",
+                                "checkbox4":(doorData[i].enable==1)?true:false
+                            });
+                            $('#flag4').val(doorData[i].doorId);
+                        }
                     }
                 },
                 error: function () {
                     layer.msg('通信异常', {icon: 2});
                 }
-            });
-            return false;
+            });    
+        });
+
+        //监听提交
+        form.on('submit(formSubmit)', function (data) {          
+            var formData = data.field;// JSON.stringify(data.field);
+            var opFlag = true;
+            var doorData = {};
+            doorData.userInfo = userInfo;
+            var sendUrl = "";
+            if($('#flag1').val()>0){
+                sendUrl = "/accessDoorUpdate.json"
+            }else{
+                sendUrl = "/accessDoorAdd.json"
+            }        
+            $.ajax({
+                url: backServiceUrl + sendUrl,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                async: false,
+                data: JSON.stringify({
+                    "userInfo":userInfo,
+                    "acId":parseInt(tableData[0].acId),
+                    "doorName":formData.door1,
+                    "doorNo":1,
+                    "operateMode":parseInt(formData.doorState1),
+                    "openDelay":parseInt(formData.doorDelay1),
+                    "doorChannel":parseInt(formData.doorChannel1),
+                    "enable":(formData.checkbox1)?1:0,
+                    "doorId":parseInt($('#flag1').val())
+                }),
+                success: function (res) {
+                    if (res.resFlag == "E") {
+                        opFlag = false;
+                    }
+                },
+                error: function () {
+                    opFlag = false;
+                }
+            });  
+
+            var sn = parseInt(tableData[0].sn);
+            if(sn > 200000000){
+                if($('#flag2').val()>0){
+                    sendUrl = "/accessDoorUpdate.json"
+                }else{
+                    sendUrl = "/accessDoorAdd.json"
+                }        
+                $.ajax({
+                    url: backServiceUrl + sendUrl,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    async: false,
+                    data: JSON.stringify({
+                        "userInfo":userInfo,
+                        "acId":parseInt(tableData[0].acId),
+                        "doorName":formData.door2,
+                        "doorNo":2,
+                        "operateMode":parseInt(formData.doorState2),
+                        "openDelay":parseInt(formData.doorDelay2),
+                        "doorChannel":parseInt(formData.doorChannel2),
+                        "enable":(formData.checkbox2)?1:0,
+                        "doorId":parseInt($('#flag2').val())
+                    }),
+                    success: function (res) {
+                        if (res.resFlag == "E") {
+                            opFlag = false;
+                        }
+                    },
+                    error: function () {
+                        opFlag = false;
+                    }
+                }); 
+            }
+            if(sn > 300000000){
+                if($('#flag3').val()>0){
+                    sendUrl = "/accessDoorUpdate.json"
+                }else{
+                    sendUrl = "/accessDoorAdd.json"
+                }        
+                $.ajax({
+                    url: backServiceUrl + sendUrl,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    async: false,
+                    data: JSON.stringify({
+                        "userInfo":userInfo,
+                        "acId":parseInt(tableData[0].acId),
+                        "doorName":formData.door3,
+                        "doorNo":3,
+                        "operateMode":parseInt(formData.doorState3),
+                        "openDelay":parseInt(formData.doorDelay3),
+                        "doorChannel":parseInt(formData.doorChannel3),
+                        "enable":(formData.checkbox3)?1:0,
+                        "doorId":parseInt($('#flag3').val())
+                    }),
+                    success: function (res) {
+                        if (res.resFlag == "E") {
+                            opFlag = false;
+                        }
+                    },
+                    error: function () {
+                        opFlag = false;
+                    }
+                }); 
+
+                if($('#flag4').val()>0){
+                    sendUrl = "/accessDoorUpdate.json"
+                }else{
+                    sendUrl = "/accessDoorAdd.json"
+                }        
+                $.ajax({
+                    url: backServiceUrl + sendUrl,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    async: false,
+                    data: JSON.stringify({
+                        "userInfo":userInfo,
+                        "acId":parseInt(tableData[0].acId),
+                        "doorName":formData.door4,
+                        "doorNo":4,
+                        "operateMode":parseInt(formData.doorState4),
+                        "openDelay":parseInt(formData.doorDelay4),
+                        "doorChannel":parseInt(formData.doorChannel4),
+                        "enable":(formData.checkbox4)?1:0,
+                        "doorId":parseInt($('#flag4').val())
+                    }),
+                    success: function (res) {
+                        if (res.resFlag == "E") {
+                            opFlag = false;
+                        }
+                    },
+                    error: function () {
+                        opFlag = false;
+                    }
+                }); 
+            }
+
+            if(opFlag) {
+                layer.msg("门设置成功!", {icon: 1});
+                setTimeout(function () {
+                    window.parent.layer.closeAll();//关闭弹窗
+                }, 1000);
+            }else{
+                layer.msg("操作失败!", {icon: 1});
+            }        
+            return false;    
         })
     })
 </script>

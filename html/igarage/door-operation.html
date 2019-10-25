@@ -89,7 +89,7 @@
 
             var igarageId = RequestParameter()["igarageId"];
             var igarageName = decodeURIComponent(RequestParameter()["igarageName"]);
-            var sn = "",ip="";
+            var sn = "",ip="",netType="",acId="";
             $.ajax({
                 url: baseUrl + '/getAccessControllerList.json',
                 type: 'POST',
@@ -103,6 +103,8 @@
                 success: function (res) {
                     sn = res.accessControllerInfoList[0].sn;
                     ip = res.accessControllerInfoList[0].ip;
+                    netType = res.accessControllerInfoList[0].netType;
+                    acId = res.accessControllerInfoList[0].acId;
                 },
                 error: function () {
                     layer.msg(res.resFlag, { icon: 2 });
@@ -120,7 +122,7 @@
                     type: 'POST',
                     data: JSON.stringify({
                         "userInfo": userInfo,
-                        "acId": 3     
+                        "acId": parseInt(acId) 
                     }),
                     contentType: "application/json",
                     dataType: 'json',
@@ -224,8 +226,12 @@
 
             $(document).on('click','#openDoor',function(){
                 var doorno = $(".bright").attr("title");
+                var openUrl = '/wiegandOpenDoor.json';
+                if(netType == 2){
+                    openUrl = '/wiegandNetOpenDoor.json';
+                }
                 $.ajax({
-                    url: baseUrl + '/wiegandOpenDoor.json',
+                    url: baseUrl + openUrl,
                     type: 'POST',
                     data: JSON.stringify({
                         "userInfo": userInfo,

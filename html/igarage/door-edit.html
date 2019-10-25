@@ -32,6 +32,15 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">控制器网络类型:</label>
+        <div class="layui-input-block" style="margin-left:150px;">
+            <select name="netType">
+                <option value="1">内网</option>
+                <option value="2">外网</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label" style="width:150px;">产品序列号SN:</label>
         <div class="layui-input-block" style="margin-left:150px;">
             <input type="text" name="sn" required  lay-verify="required" autocomplete="off" class="layui-input">
@@ -96,6 +105,7 @@
             form.val('access-detail', {
                 "acId": accessInfo.acId,
                 "acType": accessInfo.acType,
+                "netType": accessInfo.netType,
                 "sn": accessInfo.sn,
                 "ip": accessInfo.ip,
                 "port":accessInfo.port,
@@ -122,6 +132,7 @@
             }
 
             formData.acType = parseInt(formData.acType);
+            formData.netType = parseInt(formData.netType);
             formData.port = parseInt(formData.port);
             // 提交
             $.ajax({

@@ -232,9 +232,14 @@
             }, [[
                 {type: 'radio', fixed: 'left'},
                 {type: 'numbers', title: '序号', align: 'center'},
-                {
-                    field: 'acType', title: '控制器类型', templet: function (x) {
+                {field: 'acType', title: '控制器类型', 
+                    templet: function (x) {
                         return x.acType > 1 ? '四门单向控制器' : '单门双向控制器';
+                    }
+                },
+                {field: 'netType', title: '控制器网络类型', 
+                    templet: function (x) {
+                        return x.netType > 1 ? '外网' : '内网';
                     }
                 },
                 {field: 'sn', title: '产品序列号'},
@@ -287,7 +292,7 @@
                         type: 2,
                         title: false,
                         anim: 1,
-                        area: ['480px', '600px'],
+                        area: ['480px', '650px'],
                         content: './door-edit.html',
                     });
                     break;
@@ -304,7 +309,7 @@
                             type: 2,
                             title: false,
                             anim: 1,
-                            area: ['480px', '600px'],
+                            area: ['480px', '650px'],
                             content: './door-edit.html',
                         });
                     }
