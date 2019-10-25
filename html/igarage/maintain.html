@@ -91,7 +91,7 @@
                     <table class="layui-hide" id="maintainTable" lay-filter="maintainTable"></table>
                 </div>
                 <div class="layui-col-md12" id="maintainInfoDetails"
-                     style="border: 1px solid #848d92; margin-top: 10px;display: none">
+                     style="border: 1px solid #848d92; margin-top: 10px;">
                     <div class="row">
                         <div class="layui-col-md8" style="height: 600px;border: 1px solid #848d92;margin: 10px">
 
@@ -283,6 +283,7 @@
         map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
         var marker = new BMap.Marker(new BMap.Point(119.98186101, 31.77139674));
         map.addOverlay(marker);
+        map.panTo(point);
         map.addEventListener("click", function (e) {
             map.clearOverlays();
             var new_point = new BMap.Point(e.point.lng, e.point.lat);
@@ -427,11 +428,10 @@
             if (res.data) {
                 if (res.data[0]) {
                     maintainInfo = res.data[0];
-                    theLocation(res.data[0].ing, res.data[0].lat, res.data[0].garageName);
-                    showMaintain(res.data[0]);
-                    $("#maintainInfoDetails").show();
+                    // $("#maintainInfoDetails").show();
+                    showMaintain(maintainInfo);
                 } else {
-                    $("#maintainInfoDetails").hide();
+                    // $("#maintainInfoDetails").hide();
                 }
             }
         }
@@ -440,7 +440,7 @@
 
 
         function setMaintain(maintainInfo) {
-            $("#garageId").val(maintainInfo.garageId)
+            $("#garageId").val(maintainInfo.garageId);
             $("#garageName").val(maintainInfo.garageName);//车库名称
             $("#ing").val(maintainInfo.ing);//经度
             $("#lat").val(maintainInfo.lat);//纬度
@@ -448,9 +448,9 @@
             $("#admin").val(maintainInfo.admin);//车库管理员
             $("#mobile").val(maintainInfo.mobile);//联系方式
             $("#engPic").val(maintainInfo.engPic);//联系方式
+            // $("#maintainInfoDetails").show();
             theLocation(maintainInfo.ing, maintainInfo.lat, maintainInfo.garageName);
             maintainImgShowOrHide(maintainInfo.engPic);
-            $("#maintainInfoDetails").show();
         }
 
         function maintainImgShowOrHide(engPic) {
@@ -486,14 +486,14 @@
 
         // 用经纬度设置地图中心点
         function theLocation(longitude, latitude, name) {
+            map.clearOverlays();
             if (longitude != "" && latitude != "") {
-                map.clearOverlays();
                 var new_point = new BMap.Point(longitude, latitude);
                 var marker = new BMap.Marker(new_point);  // 创建标注
                 map.addOverlay(marker);              // 将标注添加到地图中
+                map.panTo(new_point);
                 var label = new BMap.Label(name, {offset: new BMap.Size(20, -10)});
                 marker.setLabel(label);
-                map.panTo(new_point);
             }
         }
 
@@ -554,7 +554,6 @@
                     if (level === 1 || level === 2) {
                         selectOrg(level + 1, childOrg.orgId)
                     } else {
-                        map.clearOverlays();
                         tableReload(tableIns, {orgId: parseInt(childOrg.orgId)})
                         $("#editMaintainForm").hide();
                         $("#showMaintain").show()
@@ -573,7 +572,6 @@
         });
 
         form.on('select(threeTierAgent)', function (data) {
-            map.clearOverlays();
             tableReload(tableIns, {orgId: parseInt(data.value)})
             $("#editMaintainForm").hide();
             $("#showMaintain").show()
