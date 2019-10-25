@@ -43,7 +43,9 @@
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
         <div class="layui-col-md10">
-            <input name="garageList" id="garageList" readonly class="layui-input">
+            <select name="garageList" id="garageList" lay-filter="garageList">
+                <option>请选择</option>
+            </select>
         </div>
         <div class="layui-col-md2">
             <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加监控</button>
@@ -177,70 +179,6 @@
             }
         }, function () {
             layer.msg("查询失败");
-        });
-
-// -----------------------------------功能性操作----------------------------------
-//         ---------------------------车库-------------------------
-
-        var garageListCols = [[
-            {type: 'numbers', title: '序号', fixed: 'center'},
-            {
-                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
-            }
-        ]];
-
-        function res(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.rows
-            };
-        }
-
-        function garageListdone(elem, data) {
-            //如果是异步请求数据方式，res即为你接口返回的信息。
-            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-            if (data.data && data.data[0]) {
-                noPageTableReload(cameraTableIns, {garageId: data.data[0].garageId});
-                maintainInfo = data.data[0];
-            } else {
-                maintainInfo = null;
-            }
-        }
-
-        selectCheck(0);
-
-        function selectCheck(orgId) {
-            tableSelect.render({
-                elem: '#garageList',	//定义输入框input对象
-                checkedKey: 'id', //表格的唯一建值，非常重要，影响到选中状态 必填
-                // searchKey: 'keyword',	//搜索输入框的name值 默认keyword
-                // searchPlaceholder: '关键词搜索',	//搜索输入框的提示文字 默认关键词搜索
-                table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
-                    method: 'POST',
-                    contentType: 'application/json',
-                    limit: 6,
-                    limits: [20, 50, 100],
-                    url: backServiceUrl + "/getGarageList.json",
-                    where: {orgId: orgId},
-                    parseData: res,
-                    request: {
-                        pageName: 'pageNo', //页码的参数名称，默认：page
-                        limitName: 'pageSize' //每页数据量的参数名，默认：limit
-                    },
-                    page: true,
-                    cols: garageListCols,
-                    toolbar: false,
-                },
-                done: garageListdone
-            })
-        }
-
-        $("#addChargeBtn").click(function () {
-            if (maintainInfo) {
-                openCameraEditPage();
-            }
         });
 
 //         ---------------------------监控-------------------------
@@ -405,9 +343,7 @@
                     if (level === 1 || level === 2) {
                         selectOrg(level + 1, childOrg.orgId)
                     } else {
-                        selectCheck(parseInt(childOrg.orgId))
                         initCharge(parseInt(childOrg.orgId));
-                        // tableReload(tableIns, {orgId: parseInt(childOrg.orgId)})
                     }
                 }
             }
@@ -418,17 +354,45 @@
             sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({
                 "orgId": orgId,
                 "pageNo": 1,
-                "pageSize": 1
+                "pageSize": 20
             }), function (res) {
                 if (res.resFlag === 'N') {
                     if (res.rows && res.rows.length > 0) {
+                        $("#garageList").html("");
                         maintainInfo = res.rows[0];
                         noPageTableReload(cameraTableIns, {garageId: maintainInfo.garageId});
-                        $("#garageList").val(maintainInfo.garageName);
+                        for (var i = 0; i < res.rows.length; i++) {
+                            var garage = res.rows[i];
+                            $("#garageList").append("<option value=" + garage.garageId + ">" + garage.garageName + "</option>")
+                        }
+                        form.render();
+                        if(res.totalPages > 1){
+                            for(var i = 2; i <= res.totalPages; i++){
+                                getGarageList(orgId, i);
+                            }
+                        }
                     } else {
                         maintainInfo = null;
                         noPageTableReload(cameraTableIns, {garageId: 0});
                         $("#garageList").val("");
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+        }
+
+        function getGarageList(orgId, pageNo){
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({"orgId": orgId, "pageNo": pageNo, "pageSize": 20}), function (res) {
+                if (res.resFlag === 'N') {
+                    if(res.rows && res.rows.length > 0){
+                        for (var i = 0; i < res.rows.length; i++) {
+                            var garage = res.rows[i];
+                            $("#garageList").append("<option value=" + garage.garageId + ">" + garage.garageName + "</option>")
+                        }
+                        form.render();
                     }
                 } else {
                     layer.msg("查询失败");
@@ -448,7 +412,6 @@
 
         form.on('select(threeTierAgent)', function (data) {
             initCharge(parseInt(data.value));
-            selectCheck(parseInt(data.value));
         });
     });
 </script>
