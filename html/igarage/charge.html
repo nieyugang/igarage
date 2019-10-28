@@ -831,6 +831,7 @@
         });
 
         form.on('select(garageList)', function (data) {
+            maintainInfo.garageId = parseInt(data.value);
             noPageTableReload(garageChargerTableIns, {garageId: parseInt(data.value)});
         });
     });

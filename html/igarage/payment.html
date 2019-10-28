@@ -12,130 +12,170 @@
 </head>
 
 <body>
-    <h1>车库系统 / 消费标准维护</h1>
-
-    <div class="row" style="background-color: white;">
-        <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
-            <div style="margin-top: 20%; height: 100%">
-                <label
-                        style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
-                <div id="orgTree" class="demo-tree"></div>
-            </div>
-        </div>
-        <div class="layui-col-md10">
-                <div class="layui-col-md12" id="parkingPayStandardOrgDiv"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
-                    <div class="" style="background-color: #848d92">车位消费标准（机构级别）列表</div>
-                    <table style="margin: 10px" class="layui-hide" id="parkingPayStandardOrgTable"
-                           lay-filter="parkingPayStandardOrgTable"></table>
-                </div>
-                <div class="layui-col-md12" id="garageTable"
-                     style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
-                    <div class="" style="background-color: #848d92">车库列表</div>
-                    <table style="margin: 10px" class="layui-hide" id="maintainTable"
-                           lay-filter="maintainTable"></table>
-
-                    <div class="layui-col-md6">
-                        <div style="margin: 10px">
-                            <div class="" style="background-color: #848d92">车位消费标准（机构级别）列表</div>
-                        <table style="margin: 10px" class="layui-hide" id="parkingPayOrgTable"
-                               lay-filter="parkingPayOrgTable"></table>
-                        </div>
-                    </div>
-                    <div class="layui-col-md6">
-                        <div style="margin: 10px">
-                            <div class="" style="background-color: #848d92">车位消费标准（车库级别）列表</div>
-                        <table style="margin: 10px" class="layui-hide" id="parkingPayStandardGarageTable"
-                               lay-filter="parkingPayStandardGarageTable"></table>
-                        </div>
-                    </div>
-                </div>
+<div class="layui-form layui-row"
+     style="height: 56px; background-color: #ced1d4;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+    <div class="layui-col-md2" style="font-size: 26px; margin-top: 10px; margin-left: 10px"><i
+            class="layui-icon layui-icon-align-center" style="font-size: 24px"></i> 消费标准维护
+    </div>
+    <div class="layui-col-md2" style="margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">选择一级代理</div>
+        <div class="layui-col-md7">
+            <select name="firstTierAgent" id="firstTierAgent" lay-filter="firstTierAgent">
+                <option>请选择</option>
+            </select>
         </div>
     </div>
-    <script type="text/html" id="parkingPayStandardOrgUpdatePage">
-        <div class="container" style="width: 98%">
-            <div class="layui-form">
-                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                    <legend>车位消费标准（机构级别）修改</legend>
-                </fieldset>
-                <form class="layui-form layui-form-pane" id="parkingPayStandardOrgUpdateForm" action="" lay-filter="parkingPayStandardOrgUpdate-edit">
-                    <input id="standardId" name="standardId" type="hidden">
-                    <input id="typeId" name="typeId" type="hidden">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">车位类型</label>
-                        <div class="layui-input-block">
-                            <label class="layui-input" style="padding-top: 10px" id="typeName"></label>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">标准金额</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="moneyYuan" autocomplete="off" id="moneyYuan"
-                                   placeholder="标准金额, 单元：元/月"
-                                   lay-reqtext="标准金额不能为空" lay-verify="required" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingPayStandardOrgUpdateBtn">立即提交
-                            </button>
-                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                        </div>
-                    </div>
-                </form>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">选择二级代理</div>
+        <div class="layui-col-md7">
+            <select name="twoTierAgent" id="twoTierAgent" lay-filter="twoTierAgent">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">选择三级代理</div>
+        <div class="layui-col-md7">
+            <select name="threeTierAgent" id="threeTierAgent" lay-filter="threeTierAgent">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md10">
+            <select name="garageList" id="garageList" lay-filter="garageList">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="background-color: white;">
+    <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
+        <div style="margin-top: 20%; height: 100%">
+            <label
+                    style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
+            <div id="orgTree" class="demo-tree"></div>
+        </div>
+    </div>
+    <div class="layui-col-md10">
+        <div class="layui-col-md12" id="parkingPayStandardOrgDiv"
+             style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
+            <div class="" style="background-color: #848d92">车位消费标准（机构级别）列表</div>
+            <table style="margin: 10px" class="layui-hide" id="parkingPayStandardOrgTable"
+                   lay-filter="parkingPayStandardOrgTable"></table>
+        </div>
+        <div class="layui-col-md12" id="garageTable"
+             style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
+            <div class="" style="background-color: #848d92">车库列表</div>
+            <table style="margin: 10px" class="layui-hide" id="maintainTable"
+                   lay-filter="maintainTable"></table>
+
+            <div class="layui-col-md6">
+                <div style="margin: 10px">
+                    <div class="" style="background-color: #848d92">车位消费标准（机构级别）列表</div>
+                    <table style="margin: 10px" class="layui-hide" id="parkingPayOrgTable"
+                           lay-filter="parkingPayOrgTable"></table>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div style="margin: 10px">
+                    <div class="" style="background-color: #848d92">车位消费标准（车库级别）列表</div>
+                    <table style="margin: 10px" class="layui-hide" id="parkingPayStandardGarageTable"
+                           lay-filter="parkingPayStandardGarageTable"></table>
+                </div>
             </div>
         </div>
-    </script>
-
-    <script type="text/html" id="parkingPayStandardGarageUpdatePage">
-        <div class="container" style="width: 98%">
-            <div class="layui-form">
-                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-                    <legend>车位消费标准（车库级别）修改</legend>
-                </fieldset>
-                <form class="layui-form layui-form-pane" id="parkingPayStandardGarageUpdateForm" action="" lay-filter="parkingPayStandardGarageUpdateForm-edit">
-                    <input id="parkStandardId" name="standardId" type="hidden">
-                    <input id="parkTypeId" name="typeId" type="hidden">
-                    <input id="garageId" name="garageId" type="hidden">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">车位类型</label>
-                        <div class="layui-input-block">
-                            <label class="layui-input" style="padding-top: 10px" id="parkTypeName"></label>
-                        </div>
+    </div>
+</div>
+<script type="text/html" id="parkingPayStandardOrgUpdatePage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>车位消费标准（机构级别）修改</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="parkingPayStandardOrgUpdateForm" action=""
+                  lay-filter="parkingPayStandardOrgUpdate-edit">
+                <input id="standardId" name="standardId" type="hidden">
+                <input id="typeId" name="typeId" type="hidden">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车位类型</label>
+                    <div class="layui-input-block">
+                        <label class="layui-input" style="padding-top: 10px" id="typeName"></label>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">标准金额</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="moneyYuan" autocomplete="off" id="parkMoneyYuan"
-                                   placeholder="标准金额, 单元：元/月"
-                                   lay-reqtext="标准金额不能为空" lay-verify="required" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标准金额</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="moneyYuan" autocomplete="off" id="moneyYuan"
+                               placeholder="标准金额, 单元：元/月"
+                               lay-reqtext="标准金额不能为空" lay-verify="required" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingPayStandardGarageUpdateBtn">立即提交
-                            </button>
-                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button"
+                                lay-filter="parkingPayStandardOrgUpdateBtn">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-    </script>
+    </div>
+</script>
+
+<script type="text/html" id="parkingPayStandardGarageUpdatePage">
+    <div class="container" style="width: 98%">
+        <div class="layui-form">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>车位消费标准（车库级别）修改</legend>
+            </fieldset>
+            <form class="layui-form layui-form-pane" id="parkingPayStandardGarageUpdateForm" action=""
+                  lay-filter="parkingPayStandardGarageUpdateForm-edit">
+                <input id="parkStandardId" name="standardId" type="hidden">
+                <input id="parkTypeId" name="typeId" type="hidden">
+                <input id="garageId" name="garageId" type="hidden">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车位类型</label>
+                    <div class="layui-input-block">
+                        <label class="layui-input" style="padding-top: 10px" id="parkTypeName"></label>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标准金额</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="moneyYuan" autocomplete="off" id="parkMoneyYuan"
+                               placeholder="标准金额, 单元：元/月"
+                               lay-reqtext="标准金额不能为空" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" type="button"
+                                lay-filter="parkingPayStandardGarageUpdateBtn">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
 
 
-    <script type="text/html" id="editBar">
-        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    </script>
+<script type="text/html" id="editBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+</script>
 
 
-    <!-- js插件 -->
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/layui/layui.js" charset="utf-8"></script>
-    <!-- js公共代码 -->
-    <script src="../../js/common.js"></script>
-    <script src="../../js/front.js"></script>
+<!-- js插件 -->
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
 <script>
     layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate'], function () {
         var tree = layui.tree
@@ -145,7 +185,7 @@
             , $ = layui.jquery
             , form = layui.form
             , laydate = layui.laydate;
-        var orgInfo;
+        var garageInfo;
 
         //          -------------------------车位消费标准（机构级别）列表---------------------
 
@@ -158,9 +198,10 @@
                 field: 'moneyYuan', title: '标准金额', sort: false, fixed: 'center'
             },
             {
-                title: '操作', toolbar:"#editBar", sort: false, fixed: 'center'
+                title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
             }
         ]];
+
         function parkingPayStandardOrgRes(res) {
             var records = 0;
             if (res.parkingPayStandardOrgList) {
@@ -173,6 +214,7 @@
                 data: res.parkingPayStandardOrgList
             };
         }
+
         var parkingPayStandardOrgTableIns = initTable(table, null, "parkingPayStandardOrgTable", 20, "/getParkingPayStandardOrgList.json", {}, parkingPayStandardOrgRes, parkingPayStandardOrgCols, null, null);
 
         //监听车位行工具事件
@@ -198,16 +240,16 @@
             $("#moneyYuan").val(data.moneyYuan);
         }
 
-        //车位延期
+        //
         form.on('submit(parkingPayStandardOrgUpdateBtn)', function () {
             var data = $("#parkingPayStandardOrgUpdateForm").serializeObject();
-            data.orgId = parseInt(orgInfo.id)
+            data.orgId = parseInt(garageInfo.orgId)
             data.standardId = parseInt(data.standardId)
             data.typeId = parseInt(data.typeId)
             sendAjaxRequest("POST", "parkingPayStandardOrgUpdate.json", "json", JSON.stringify(data), function (res) {
                 if (res.resFlag === 'N') {
                     layer.msg("保存成功");
-                    tableReload(parkingPayStandardOrgTableIns, {orgId: orgInfo.id});
+                    tableReload(parkingPayStandardOrgTableIns, {orgId: garageInfo.orgId});
                     layer.closeAll();
                 } else {
                     layer.msg("保存失败");
@@ -250,7 +292,6 @@
             };
         }
 
-        var garageInfo;
 
         function garageListdone(res, curr, count) {
             //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -283,9 +324,10 @@
                 field: 'moneyYuan', title: '标准金额', sort: false, fixed: 'center'
             },
             {
-                title: '操作', toolbar:"#editBar", sort: false, fixed: 'center'
+                title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
             }
         ]];
+
         function parkingPayStandardGarageRes(res) {
             var records = 0;
             if (res.parkingPayStandardGarageList) {
@@ -298,6 +340,7 @@
                 data: res.parkingPayStandardGarageList
             };
         }
+
         var parkingPayStandardGarageTableIns = initTable(table, null, "parkingPayStandardGarageTable", 20, "/getParkingPayStandardGarageList.json", {}, parkingPayStandardGarageRes, parkingPayStandardGarageCols, null, null);
 
         var parkingPayOrgTableCols = [[
@@ -309,6 +352,7 @@
                 field: 'moneyYuan', title: '标准金额', sort: false, fixed: 'center'
             }
         ]];
+
         function parkingPayOrgTableRes(res) {
             var records = 0;
             if (res.parkingPayStandardOrgList) {
@@ -321,8 +365,8 @@
                 data: res.parkingPayStandardOrgList
             };
         }
-        var parkingPayOrgTableIns = initTable(table, null, "parkingPayOrgTable", 20, "/getParkingPayStandardGarageList.json", {}, parkingPayOrgTableRes, parkingPayOrgTableCols, null, null);
 
+        var parkingPayOrgTableIns = initTable(table, null, "parkingPayOrgTable", 20, "/getParkingPayStandardGarageList.json", {}, parkingPayOrgTableRes, parkingPayOrgTableCols, null, null);
 
 
         //监听车位行工具事件
@@ -369,23 +413,125 @@
         });
 
         // ----------------------------机构数-----------------------------
-        initTree(tree, '#orgTree', "/getOrgTree.json", JSON.stringify({"orgId": 1}), clickOrg)
+        selectOrg(null, 1);
 
-        function clickOrg(org) {
-            orgInfo = org.data;
-            if (org.data.level === 3) {
-                tableReload(tableIns, {orgId: org.data.id})
-                $("#parkingPayStandardOrgDiv").hide();
-                $("#garageTable").show();
-            } else if (org.data.level === 2){
-                tableReload(parkingPayStandardOrgTableIns, {orgId: org.data.id})
-                $("#parkingPayStandardOrgDiv").show();
-                $("#garageTable").hide();
+        function selectOrg(level, orgId) {
+            var data;
+            if (level) {
+                data = JSON.stringify({"queryOrgLevel": level, "orgId": orgId})
             } else {
-                $("#parkingPayStandardOrgDiv").hide();
-                $("#garageTable").hide();
+                data = JSON.stringify({"orgId": orgId})
             }
+            sendAjaxRequest("POST", "/getOrgTree.json", "json", data, function (res) {
+                if (res.resFlag === 'N') {
+                    if (!level) {
+                        setOrgSelect(res.orgTreeInfo.childOrgList, "#firstTierAgent", 1);
+                    } else if (level === 2) {
+                        setOrgSelect(res.orgTreeInfo.childOrgList, "#twoTierAgent", 2);
+                    } else if (level === 3) {
+                        setOrgSelect(res.orgTreeInfo.childOrgList, "#threeTierAgent", 3);
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
         }
+
+        function setOrgSelect(childOrgList, id, level) {
+            $(id).html("");
+            if (childOrgList) {
+                for (var i = 0; i < childOrgList.length; i++) {
+                    var childOrg = childOrgList[i];
+                    $(id).append("<option value=" + childOrg.orgId + ">" + childOrg.orgName + "</option>")
+                }
+                $(id).attr("disabled", false);
+                if (childOrgList.length > 0) {
+                    var childOrg = childOrgList[0]
+                    if (childOrgList.length === 1) {
+                        $(id).attr("disabled", true);
+                    }
+                    if (level === 1 || level === 2) {
+                        selectOrg(level + 1, childOrg.orgId)
+                    } else {
+                        initCharge(parseInt(childOrg.orgId));
+                    }
+                }
+            }
+            form.render();
+        }
+
+        function initCharge(orgId) {
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({
+                "orgId": orgId,
+                "pageNo": 1,
+                "pageSize": 20
+            }), function (res) {
+                if (res.resFlag === 'N') {
+                    if (res.rows && res.rows.length > 0) {
+                        $("#garageList").html("");
+                        garageInfo = res.rows[0];
+                        tableReload(parkingPayStandardGarageTableIns, {garageId: res.data[0].garageId});
+                        tableReload(parkingPayOrgTableIns, {garageId: garageInfo.garageId});
+                        for (var i = 0; i < res.rows.length; i++) {
+                            var garage = res.rows[i];
+                            $("#garageList").append("<option value=" + garage.garageId + ">" + garage.garageName + "</option>")
+                        }
+                        form.render();
+                        if(res.totalPages > 1){
+                            for(var i = 2; i <= res.totalPages; i++){
+                                getGarageList(orgId, i);
+                            }
+                        }
+                    } else {
+                        maintainInfo = null;
+                        noPageTableReload(cameraTableIns, {garageId: 0});
+                        $("#garageList").val("");
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+        }
+
+        function getGarageList(orgId, pageNo){
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({"orgId": orgId, "pageNo": pageNo, "pageSize": 20}), function (res) {
+                if (res.resFlag === 'N') {
+                    if(res.rows && res.rows.length > 0){
+                        for (var i = 0; i < res.rows.length; i++) {
+                            var garage = res.rows[i];
+                            $("#garageList").append("<option value=" + garage.garageId + ">" + garage.garageName + "</option>")
+                        }
+                        form.render();
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+        }
+
+        form.on('select(firstTierAgent)', function (data) {
+            selectOrg(2, parseInt(data.value));
+        });
+
+        form.on('select(twoTierAgent)', function (data) {
+            selectOrg(3, parseInt(data.value));
+        });
+
+        form.on('select(threeTierAgent)', function (data) {
+            initCharge(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            garageInfo.garageId = parseInt(data.value);
+            tableReload(parkingPayStandardGarageTableIns, {garageId: garageInfo.garageId});
+            tableReload(parkingPayOrgTableIns, {garageId: garageInfo.garageId});
+        });
     })
 </script>
 </body>

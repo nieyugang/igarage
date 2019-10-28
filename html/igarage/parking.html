@@ -1066,6 +1066,7 @@
         });
 
         form.on('select(garageList)', function (data) {
+            maintainInfo.garageId = parseInt(data.value);
             tableReload(parkingSpaceTableIns, {garageId: parseInt(data.value)});
         });
     });
