@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="layui-col-md2">
-            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加车位</button>
+            <button type="button" class="layui-btn layui-btn-radius" id="carPageBtn">增加车位</button>
         </div>
     </div>
 </div>
@@ -527,6 +527,23 @@
 
         form.on('select(upChargerId)', function (data) {
             getGaragePlugList(data.value);
+        });
+
+        //打开增加修改车位页面
+        $("#carPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                , content: $("#carEditPage").html()
+            });
+            $("#spaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            form.render();
         });
 
         function getGaragePlugList(chargerValue) {
@@ -1046,6 +1063,10 @@
 
         form.on('select(threeTierAgent)', function (data) {
             initCharge(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            tableReload(parkingSpaceTableIns, {garageId: parseInt(data.value)});
         });
     });
 </script>

@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="layui-col-md2">
-            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加监控</button>
+            <button type="button" class="layui-btn layui-btn-radius" id="cameraAddPageBtn">增加监控</button>
         </div>
     </div>
 </div>
@@ -253,6 +253,11 @@
             $("#installAddress").val("");
         }
 
+        //打开增加修改监控页面
+        $("#cameraAddPageBtn").click(function (event) {
+            openCameraEditPage();
+        });
+
         function openCameraEditPage() {
             layer.open({
                 type: 1
@@ -412,6 +417,10 @@
 
         form.on('select(threeTierAgent)', function (data) {
             initCharge(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            noPageTableReload(cameraTableIns, {garageId: parseInt(data.value)});
         });
     });
 </script>

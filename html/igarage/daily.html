@@ -447,6 +447,7 @@
 </script>
 
 <script type="text/html" id="garageMomeBar">
+    <button type="button" class="layui-btn layui-btn-xs" lay-event="detail">查看</button>
     <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
     <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>-->
 <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>-->
@@ -1483,7 +1484,9 @@
         table.on('tool(maintainMomeTable)', function (obj) {
             var data = obj.data;
             if (obj.event === 'detail') {
-
+                layer.alert(data.content)
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             } else if (obj.event === 'edit') {
                 layer.prompt({title: '修改备注', formType: 2, value: data.content}, function (text, index) {
                     layer.close(index);
@@ -1514,13 +1517,13 @@
             }
         });
 
-        //监听行单击事件（单击事件为：rowDouble）
-        table.on('row(maintainMomeTable)', function (obj) {
-            var data = obj.data;
-            layer.alert(data.content)
-            //标注选中样式
-            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
-        });
+        // //监听行单击事件（单击事件为：rowDouble）
+        // table.on('row(maintainMomeTable)', function (obj) {
+        //     var data = obj.data;
+        //     layer.alert(data.content)
+        //     //标注选中样式
+        //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        // });
 
         //         ---------------------------监控-------------------------
 

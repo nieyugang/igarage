@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="layui-col-md2">
-            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加充电站</button>
+            <button type="button" class="layui-btn layui-btn-radius" id="garageChargerPageBtn">增加充电站</button>
         </div>
     </div>
 </div>
@@ -430,6 +430,11 @@
                 tableReload(garagePlugTableIns, {chargerId: 0})
             }
         }
+
+        //打开增加修改充电桩页面
+        $("#garageChargerPageBtn").click(function (event) {
+            openGarageChargerPage();
+        });
 
         //监听监控行工具事件
         table.on('tool(garageChargerTable)', function (obj) {
@@ -822,7 +827,11 @@
         form.on('select(threeTierAgent)', function (data) {
             // tableReload(tableIns, {orgId: parseInt(data.value)});
             initCharge(parseInt(data.value));
-            selectCheck(parseInt(data.value));
+            // selectCheck(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            noPageTableReload(garageChargerTableIns, {garageId: parseInt(data.value)});
         });
     });
 </script>
