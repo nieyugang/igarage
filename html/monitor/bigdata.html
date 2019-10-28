@@ -12,9 +12,10 @@
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
     <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
     <style>
-        html body{
+        html body {
             font-size: 14px;
         }
+
         .main {
             width: 100vw;
             height: 100vh;
@@ -22,6 +23,34 @@
             background-position-x: left;
             background-size: cover;
         }
+
+        .equipment-province {
+            background: url('../../img/home-page/leftUper.png') no-repeat center center;
+            background-position-x: left;
+            background-size: cover;
+        }
+
+        .equipment-log {
+            background: url('../../img/home-page/leftLower.png') no-repeat center center;
+            background-position-x: left;
+            background-size: cover;
+        }
+        .map {
+            background: url('../../img/home-page/center.png') no-repeat center center;
+            background-position-x: left;
+            background-size: cover;
+        }
+        .equipment-warning {
+            background: url('../../img/home-page/leftUper.png') no-repeat center center;
+            background-position-x: left;
+            background-size: cover;
+        }
+        .Patrol-warning {
+            background: url('../../img/home-page/leftLower.png') no-repeat center center;
+            background-position-x: left;
+            background-size: cover;
+        }
+
         .equipment-log p {
             display: block;
             background: #112D59;
@@ -35,13 +64,14 @@
             text-align: center;
             color: #D8EFFF;
             line-height: 5vh;
+            font-weight: bold;
         }
 
         .equipment-warning {
-            background: #0e2147;
             color: #fff;
         }
-        .equipment-warning-item{
+
+        .equipment-warning-item {
             margin: 0 15px 15px 15px;
         }
 
@@ -73,7 +103,7 @@
                             style="height: 50vh;margin: 1.5vh 0; border-radius: 5px;">
                         </div>
                         <div class="equipment-log" id="equipment-log"
-                            style="height: 45vh;background: #0e2147;color: #739AD2;">
+                            style="height: 45vh;color: #739AD2;">
                             <span>设备维护日志</span>
                             <p>2019年9月25日清潭路10号车库开门异常！&nbsp;已处理&nbsp;张二华</p>
                             <p>2019年9月25日清潭路10号车库开门异常！&nbsp;已处理&nbsp;张二华</p>
@@ -93,18 +123,17 @@
                 </div>
                 <div class="layui-col-md3">
                     <div>
-                        <div class="equipment-warning" id="equipment-warning"
-                            style="border: 1px solid black;height: 50vh;margin: 1.5vh 0;">
+                        <div class="equipment-warning" id="equipment-warning" style="height: 50vh;margin: 1.5vh 0;">
                             <span>设备预警信息</span>
-                            <div  class="equipment-warning-item">
+                            <div class="equipment-warning-item">
                                 <p>2018-09-23 12：10&nbsp;清凉新村2社区1号车库</p>
                                 <p>预警消息：开门异常</p>
                                 <p>处理进度：未处理(0%)</p>
-                                <div class="layui-progress"  title="未处理">
-                                   <div class="layui-progress-bar layui-bg-red" lay-percent="10%" ></div>
+                                <div class="layui-progress" title="未处理">
+                                    <div class="layui-progress-bar layui-bg-red" lay-percent="10%"></div>
                                 </div>
                             </div>
-                            <div  class="equipment-warning-item" >
+                            <div class="equipment-warning-item">
                                 <p>2018-09-23 12：10&nbsp;清凉新村2社区1号车库</p>
                                 <p>预警消息：开门异常</p>
                                 <p>处理进度：正在处理...(50%)</p>
@@ -112,7 +141,7 @@
                                     <div class="layui-progress-bar layui-bg-orange" lay-percent="50%"></div>
                                 </div>
                             </div>
-                            <div  class="equipment-warning-item">
+                            <div class="equipment-warning-item">
                                 <p>2018-09-23 12：10&nbsp;清凉新村2社区1号车库</p>
                                 <p>预警消息：开门异常</p>
                                 <p>处理进度：已处理(100%)</p>
@@ -154,7 +183,7 @@
             var titlename = ['北京', '上海', '广州', '深圳', '浙江', '江苏', '安徽', '山东', '西藏', '内蒙库'];
             var myColor = ['#1089E7', '#F57474', '#56D0E3', '#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6', '#F8B448', '#8B78F6'];
             var equipment_province_option = {
-                backgroundColor: '#0e2147',
+                // backgroundColor: '#0e2147',
                 title: {
                     text: '各省设备数量top10',
                     x: 'center',
@@ -299,7 +328,7 @@
 
 
                 var map_option = {
-                    backgroundColor: '#0e2147',
+                    // backgroundColor: '#0e2147',
                     title: {
                         text: '在线设备 - 常州市',
                         subtext: '',
@@ -341,13 +370,13 @@
                             // color: ['#ffc0cb', '#800080'] // 红紫
                             // color: ['#3C3B3F', '#605C3C'] // 黑绿
                             // color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
-                            // color: ['#23074d', '#cc5333'] // 紫红
+                            color: ['#302b63', '#cc5333'] // 紫红
                             // color: ['#00467F', '#A5CC82'] // 蓝绿
-                            color: ['#1488CC', '#2B32B2'] // 浅蓝
-                            // color: ['#00467F', '#A5CC82'] // 蓝绿
-                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#1488CC', '#2B32B2'] // 浅蓝
                             // color: ['#00467F', '#A5CC82'] // 蓝绿
                             // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#DADC93','#E7A38E','#E6CAA2'] // 蓝绿
 
                         }
                     },
@@ -386,7 +415,7 @@
                     },
                     series: [
                         {
-                            name: 'credit_pm2.5',
+
                             type: 'scatter',
                             coordinateSystem: 'geo',
                             data: convertData(data),
@@ -517,7 +546,7 @@
             var Patrol_warningp_Chart = echarts.init(Patrol_warning_dom, "customed");
 
             var Patrol_warningp_option = {
-                backgroundColor: '#0e2147',
+                // backgroundColor: '#0e2147',
                 title: {
                     text: '隐患排查统计',
                     // subtext: '纯属虚构'
@@ -526,13 +555,14 @@
                         fontSize: 15,
                         color: '#D8EFFF'
                     },
+                    top: '3%'
                 },
                 tooltip: {
                     trigger: 'axis'
                 },
                 legend: {
                     data: ['巡查量', '故障量'],
-                    bottom:10,
+                    bottom: 10,
                     textStyle: {
                         color: '#D8EFFF'
                     }
