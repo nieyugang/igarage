@@ -19,6 +19,8 @@
       margin-top: 4vh;
     }
 
+
+
     form input {
       height: 6vh;
       width: 27vw;
@@ -78,14 +80,22 @@
                 class="layui-input">
             </div>
             <div class="layui-form-item">
-              <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit" id="submit"
-                >登&nbsp;&nbsp;录</button>
+              <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit"
+                id="submit">登&nbsp;&nbsp;录</button>
             </div>
           </form>
         </div>
       </div>
     </div>
     <div class="copyrights text-center">
+      <div style="margin-bottom: 3vh;">
+        <a href="./WebComponentsKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="局域网视频监控插件下载" style="text-decoration: none;">
+          <i class="fa fa-download" style="font-size:16px"></i>&nbsp;&nbsp;WebComponentsKit.exe
+        </a>
+        <a href="./EZUIKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="萤石云视频监控插件下载" style="text-decoration: none;">
+          <i class="fa fa-download" style="font-size:16px"></i>&nbsp;&nbsp;EZUIKit.exe
+        </a>
+      </div>
       <p>Copyright &copy; 2019 江苏华谦保全系统服务有限公司</p>
     </div>
   </div>
@@ -148,13 +158,13 @@
             } else {
               //关闭loading
               $(".shade").css('display', 'none');
-              layer.msg('用户名或者密码错误', function(){});
+              layer.msg('用户名或者密码错误', function () { });
             }
           },
           error: function () {
             //关闭loading
             $(".shade").css('display', 'none');
-            layer.msg('网络异常', {icon:2});
+            layer.msg('网络异常', { icon: 2 });
           }
         });
         return false;
