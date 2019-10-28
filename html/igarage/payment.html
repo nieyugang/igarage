@@ -51,26 +51,8 @@
 </div>
 
 <div class="row" style="background-color: white;">
-    <div class="layui-col-md2" style="border-right:2px solid #f2f2f2;height: 100%;">
-        <div style="margin-top: 20%; height: 100%">
-            <label
-                    style="font-size: 14px; padding: 0 15px; display: inline; margin: 0 13px;border-left: 5px solid #28a745;">组织机构</label>
-            <div id="orgTree" class="demo-tree"></div>
-        </div>
-    </div>
-    <div class="layui-col-md10">
-        <div class="layui-col-md12" id="parkingPayStandardOrgDiv"
-             style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
-            <div class="" style="background-color: #848d92">车位消费标准（机构级别）列表</div>
-            <table style="margin: 10px" class="layui-hide" id="parkingPayStandardOrgTable"
-                   lay-filter="parkingPayStandardOrgTable"></table>
-        </div>
         <div class="layui-col-md12" id="garageTable"
-             style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
-            <div class="" style="background-color: #848d92">车库列表</div>
-            <table style="margin: 10px" class="layui-hide" id="maintainTable"
-                   lay-filter="maintainTable"></table>
-
+             style="min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%;">
             <div class="layui-col-md6">
                 <div style="margin: 10px">
                     <div class="" style="background-color: #848d92">车位消费标准（机构级别）列表</div>
@@ -86,7 +68,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 <script type="text/html" id="parkingPayStandardOrgUpdatePage">
     <div class="container" style="width: 98%">
@@ -187,53 +168,7 @@
             , laydate = layui.laydate;
         var garageInfo;
 
-        //          -------------------------车位消费标准（机构级别）列表---------------------
-
-        var parkingPayStandardOrgCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-            {
-                field: 'typeName', title: '车位类型名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'moneyYuan', title: '标准金额', sort: false, fixed: 'center'
-            },
-            {
-                title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
-            }
-        ]];
-
-        function parkingPayStandardOrgRes(res) {
-            var records = 0;
-            if (res.parkingPayStandardOrgList) {
-                records = res.parkingPayStandardOrgList.length;
-            }
-            return {
-                code: 0,
-                msg: "",
-                count: records,
-                data: res.parkingPayStandardOrgList
-            };
-        }
-
-        var parkingPayStandardOrgTableIns = initTable(table, null, "parkingPayStandardOrgTable", 20, "/getParkingPayStandardOrgList.json", {}, parkingPayStandardOrgRes, parkingPayStandardOrgCols, null, null);
-
-        //监听车位行工具事件
-        table.on('tool(parkingPayStandardOrgTable)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'edit') {
-                layer.open({
-                    type: 1
-                    , title: false //不显示标题栏
-                    , area: ['500px', '300px']
-                    , id: 'lay-parkingPayStandardOrg' //设定一个id，防止重复弹出
-                    , content: $("#parkingPayStandardOrgUpdatePage").html()
-                });
-                setParkingPayStandardOrg(data);
-            }
-        });
-
         function setParkingPayStandardOrg(data) {
-            debugger
             $("#standardId").val(data.standardId);
             $("#typeId").val(data.typeId);
             $("#typeName").html(data.typeName);
@@ -243,13 +178,13 @@
         //
         form.on('submit(parkingPayStandardOrgUpdateBtn)', function () {
             var data = $("#parkingPayStandardOrgUpdateForm").serializeObject();
-            data.orgId = parseInt(garageInfo.orgId)
+            data.orgId = parseInt($("#twoTierAgent").val());
             data.standardId = parseInt(data.standardId)
             data.typeId = parseInt(data.typeId)
             sendAjaxRequest("POST", "parkingPayStandardOrgUpdate.json", "json", JSON.stringify(data), function (res) {
                 if (res.resFlag === 'N') {
                     layer.msg("保存成功");
-                    tableReload(parkingPayStandardOrgTableIns, {orgId: garageInfo.orgId});
+                    tableReload(parkingPayOrgTableIns, {orgId: data.orgId });
                     layer.closeAll();
                 } else {
                     layer.msg("保存失败");
@@ -258,61 +193,6 @@
                 layer.msg("操作失败");
             });
             return false;
-        });
-        //         ---------------------------车库-------------------------
-
-        var garageListCols = [[
-            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
-            {
-                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '经纬度', toolbar: "#ingAndLat", sort: false, fixed: 'center'
-            },
-            {
-                field: 'mobile', title: '联系方式', sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '车位申请', width: 100, sort: false, fixed: 'center'
-            },
-            {
-                field: 'userId', title: '微信数', width: 80, sort: false, fixed: 'center'
-            },
-            {
-                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
-            }
-        ]];
-
-        function res(res) {
-            return {
-                code: 0,
-                msg: "",
-                count: res.records,
-                data: res.rows
-            };
-        }
-
-
-        function garageListdone(res, curr, count) {
-            //如果是异步请求数据方式，res即为你接口返回的信息。
-            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-            if (res.data) {
-                if (res.data[0]) {
-                    garageInfo = res.data[0];
-                    tableReload(parkingPayStandardGarageTableIns, {garageId: res.data[0].garageId});
-                    tableReload(parkingPayOrgTableIns, {garageId: garageInfo.garageId});
-                }
-            }
-        }
-
-        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
-
-        //监听行工具事件
-        table.on('row(maintainTable)', function (obj) {
-            var data = obj.data;
-            garageInfo = data;
-            tableReload(parkingPayStandardGarageTableIns, {garageId: garageInfo.garageId});
-            tableReload(parkingPayOrgTableIns, {garageId: garageInfo.garageId});
         });
 
         var parkingPayStandardGarageCols = [[
@@ -350,6 +230,9 @@
             },
             {
                 field: 'moneyYuan', title: '标准金额', sort: false, fixed: 'center'
+            },
+            {
+                title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
             }
         ]];
 
@@ -368,7 +251,6 @@
 
         var parkingPayOrgTableIns = initTable(table, null, "parkingPayOrgTable", 20, "/getParkingPayStandardGarageList.json", {}, parkingPayOrgTableRes, parkingPayOrgTableCols, null, null);
 
-
         //监听车位行工具事件
         table.on('tool(parkingPayStandardGarageTable)', function (obj) {
             var data = obj.data;
@@ -381,6 +263,21 @@
                     , content: $("#parkingPayStandardGarageUpdatePage").html()
                 });
                 setParkingPayStandardGarage(data);
+            }
+        });
+
+        //监听车位行工具事件
+        table.on('tool(parkingPayOrgTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                layer.open({
+                    type: 1
+                    , title: false //不显示标题栏
+                    , area: ['500px', '300px']
+                    , id: 'lay-parkingPayStandardOrg' //设定一个id，防止重复弹出
+                    , content: $("#parkingPayStandardOrgUpdatePage").html()
+                });
+                setParkingPayStandardOrg(data);
             }
         });
 
@@ -472,7 +369,7 @@
                     if (res.rows && res.rows.length > 0) {
                         $("#garageList").html("");
                         garageInfo = res.rows[0];
-                        tableReload(parkingPayStandardGarageTableIns, {garageId: res.data[0].garageId});
+                        tableReload(parkingPayStandardGarageTableIns, {garageId: garageInfo.garageId});
                         tableReload(parkingPayOrgTableIns, {garageId: garageInfo.garageId});
                         for (var i = 0; i < res.rows.length; i++) {
                             var garage = res.rows[i];
