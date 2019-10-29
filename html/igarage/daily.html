@@ -53,7 +53,7 @@
             padding: 0px 6px;
             text-align: center;
             cursor: pointer;
-            border-radius: 5px 5px 5px 5px;
+            border-radius: 5px;
             background-color: #3296f4;
             margin: 5px;
         }
@@ -99,6 +99,38 @@
             box-sizing: border-box;
             pointer-events: none;
         }
+
+        /*.layui-btn {*/
+        /*    display: inline-block;*/
+        /*    height: 26px;*/
+        /*    line-height: 26px;*/
+        /*    padding: 0 18px;*/
+        /*    background-color: #009688;*/
+        /*    color: #fff;*/
+        /*    white-space: nowrap;*/
+        /*    text-align: center;*/
+        /*    font-size: 14px;*/
+        /*    border: none;*/
+        /*    border-radius: 2px;*/
+        /*    cursor: pointer;*/
+        /*    border-radius: 5px;*/
+        /*}*/
+        .layui-btn {
+            background-color: #2b90d9;
+            height: 26px;
+            line-height: 26px;
+            border-radius: 5px;;
+        }
+
+        .layui-tab {
+            margin: 0px;
+            text-align: left !important;
+        }
+
+        .layui-table, .layui-table-view {
+            margin: 0px;
+        }
+
     </style>
 </head>
 
@@ -181,13 +213,13 @@
                 </div>
             </div>
             <div class="layui-col-md4" id="maintainInfoDetails"
-                 style="background-color: #e1e1e1; min-height: 440px; margin-left: 1%; min-width: 40%; display: none">
-                <div class="layui-tab layui-tab-brief" id="showMaintain">
+                 style="min-height: 440px; margin-left: 1%; min-width: 40%; display: none">
+                <div class="layui-tab layui-tab-brief" id="showMaintain"
+                     style="background-color: #e1e1e1;min-height: 240px">
                     <div class="layui-tab layui-tab-brief" style="width: 99%">
                         <ul class="layui-tab-title">
                             <li class="layui-this">信息描述</li>
                             <li>车位信息</li>
-                            <li>设备统计</li>
                             <li>控制面板</li>
                         </ul>
                         <div class="layui-tab-content">
@@ -296,46 +328,6 @@
                                 </div>
                             </div>
                             <div class="layui-tab-item">
-                                <div class="layui-col-md6" style="margin-bottom: 0px;">
-                                    <label class="layui-col-md4"
-                                           style="text-align: right; color: cornflowerblue">车位</label>
-                                    <label class="layui-col-md7" style="margin-left: 5px"></label>
-                                </div>
-                                <div class="layui-col-md6" style="margin-bottom: 0px;">
-                                    <label class="layui-col-md4"
-                                           style="text-align: right; color: cornflowerblue">充电站</label>
-                                    <label class="layui-col-md7" style="margin-left: 5px"></label>
-                                </div>
-                                <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
-                                    <label class="layui-col-md4"
-                                           style="text-align: right; color: cornflowerblue">门禁</label>
-                                    <label class="layui-col-md7" style="margin-left: 5px"></label>
-                                </div>
-                                <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
-                                    <label class="layui-col-md4"
-                                           style="text-align: right; color: cornflowerblue">监控</label>
-                                    <label class="layui-col-md7" style="margin-left: 5px"></label>
-                                </div>
-                                <div style="text-align: center; margin-top: 10px">
-                                    <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
-                                </div>
-                                <div style="text-align: center; margin-top: 10px">
-                                    <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i
-                                            class="fa fa-car" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="layui-btn" title="增加充电站"
-                                            id="garageChargerPageBtn">
-                                        <i class="fa fa-bolt" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i
-                                            class="fa fa-unlock-alt" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="layui-btn" title="增加监控"
-                                            id="cameraAddPageBtn"><i class="fa fa-video-camera"
-                                                                     aria-hidden="true"></i></button>
-                                </div>
-                            </div>
-                            <div class="layui-tab-item">
                                 <div class="layui-form-item" style="text-align: center">
                                     <button type="button" class="layui-btn" title="远程开门" id="door_camare-preview"><i
                                             class="fa fa-key"
@@ -354,45 +346,81 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-col-md12" style="display: none">
-                    <!--                    暂时不用-->
-                    <div class="layui-inline">
-                        <label class="layui-form-label">车库名称</label>
-                        <div class="layui-input-block">
-                            <input id="garageNameSearch" class="layui-input" type="text" placeholder="请输入"
-                                   autocomplete="off">
-                        </div>
+
+                <div class="layui-tab layui-tab-brief" style="background-color: #e1e1e1; min-height: 180px">
+                    <div class="layui-col-md6" style="margin-bottom: 0px; margin-top: 20px">
+                        <label class="layui-col-md4"
+                               style="text-align: right; color: cornflowerblue">车位</label>
+                        <label class="layui-col-md7" style="margin-left: 5px"></label>
                     </div>
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn layuiadmin-btn-admin"
-                                lay-filter="LAY-user-back-search" id="searchMaintainBtn">
-                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    <div class="layui-col-md6" style="margin-bottom: 0px; margin-top: 20px">
+                        <label class="layui-col-md4"
+                               style="text-align: right; color: cornflowerblue">充电站</label>
+                        <label class="layui-col-md7" style="margin-left: 5px"></label>
+                    </div>
+                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                        <label class="layui-col-md4"
+                               style="text-align: right; color: cornflowerblue">门禁</label>
+                        <label class="layui-col-md7" style="margin-left: 5px"></label>
+                    </div>
+                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                        <label class="layui-col-md4"
+                               style="text-align: right; color: cornflowerblue">监控</label>
+                        <label class="layui-col-md7" style="margin-left: 5px"></label>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px">
+                        <button type="button" class="layui-btn" id="deviceBtn" style="margin-top: 10px">查看设备详情</button>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px">
+                        <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i
+                                class="fa fa-car" aria-hidden="true"></i>
                         </button>
+                        <button type="button" class="layui-btn" title="增加充电站"
+                                id="garageChargerPageBtn">
+                            <i class="fa fa-bolt" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i
+                                class="fa fa-unlock-alt" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="layui-btn" title="增加监控"
+                                id="cameraAddPageBtn"><i class="fa fa-video-camera"
+                                                         aria-hidden="true"></i></button>
                     </div>
+
                 </div>
             </div>
             <div class="layui-col-md12" id="garageTable"
-                 style="border: 1px solid #848d92;min-height: 100px; margin-top: 10px;">
-                <div class="" style="background-color: #848d92">车库列表</div>
-                <table style="margin: 10px" class="layui-hide" id="maintainTable" lay-filter="maintainTable">
+                 style="min-height: 100px; margin-top: 10px; ">
+                <div class="layui-form layui-row"
+                     style="height: 30px; background-color: #288efc;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+                    <div class="layui-col-md2" style="margin-top: 5px; margin-left: 10px"> <span style="color: #ffffff">车库列表</span>
+                    </div>
+                </div>
+
+                <table class="layui-hide" id="maintainTable" lay-filter="maintainTable">
                 </table>
             </div>
 
             <div class="layui-col-md12" id="maintainMomeDiv"
-                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
+                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;display: none">
                 <div class="" style="background-color: #848d92">备忘录</div>
                 <table class="layui-hide" id="maintainMomeTable" lay-filter="maintainMomeTable"></table>
             </div>
+
             <div id="deviceContent" class="layui-col-md12"
-                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%; display: none">
-                <div style="background-color: #848d92" class="layui-col-md12">
-                    <div class="layui-col-md11">设备信息</div>
-                    <div class="layui-col-md1" style="text-align: right;">
-                        <a class="layui-btn-xs" style="line-height: 20px;cursor: pointer;color: #ffffff"
-                           lay-event="detail">
-                            <i class="fa fa-times" aria-hidden="true" id="closeDeviceContent"
-                               style="font-size: 20px !important"></i>
-                        </a>
+                 style="min-height: 100px; margin-right: 10px; margin-top: 10px;display: none">
+                <div class="layui-col-md12">
+                    <div class="layui-form layui-row"
+                         style="height: 30px; background-color: #288efc;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+                        <div class="layui-col-md11" style="margin-top: 5px;"> <span style="color: #ffffff; margin-left: 10px">设备信息</span>
+                        </div>
+                        <div class="layui-col-md1" style="text-align: right;">
+                            <a class="layui-btn-xs" style="line-height: 20px;cursor: pointer;color: #ffffff"
+                               lay-event="detail">
+                                <i class="fa fa-times" aria-hidden="true" id="closeDeviceContent"
+                                   style="font-size: 20px !important; margin-top: 5px"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="layui-tab layui-col-md12" lay-filter="deviceDetails"
