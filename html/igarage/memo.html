@@ -6,20 +6,322 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
-    <link rel="stylesheet" href="../../vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../vendor/layui/css/layui.css">
-    <link rel="stylesheet" href="../../css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="" id="layui-theme-stylesheet">
 </head>
 
 <body>
-    <h1>车库系统 / 车库备忘录维护</h1>
+<div class="layui-form layui-row"
+     style="height: 56px; background-color: #ced1d4;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+    <div class="layui-col-md2" style="font-size: 26px; margin-top: 10px; margin-left: 10px"><i
+            class="layui-icon layui-icon-align-center" style="font-size: 24px"></i> 监控维护
+    </div>
+    <div class="layui-col-md2" style="margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">一级代理</div>
+        <div class="layui-col-md7">
+            <select name="firstTierAgent" id="firstTierAgent" lay-filter="firstTierAgent">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">二级代理</div>
+        <div class="layui-col-md7">
+            <select name="twoTierAgent" id="twoTierAgent" lay-filter="twoTierAgent">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md5" style="margin-top: 8px">三级代理</div>
+        <div class="layui-col-md7">
+            <select name="threeTierAgent" id="threeTierAgent" lay-filter="threeTierAgent">
+                <option>请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
+        <div class="layui-col-md10">
+            <select name="garageList" id="garageList" lay-filter="garageList">
+                <option>请选择</option>
+            </select>
+        </div>
+        <div class="layui-col-md2">
+            <button type="button" class="layui-btn layui-btn-radius" id="garageMemoAddPageBtn">增加备忘录</button>
+        </div>
+    </div>
+</div>
+<div class="work-area" style="margin-top: 10px;margin-left: 10px;height: 100%">
+    <!-- ===================================================== -->
+    <!-- 请在此处编写你的业务代码 -->
+    <!-- ===================================================== -->
+    <div class="row" style="background-color: white;">
+        <div class="layui-col-md12">
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
+            <div class="layui-col-md12">
+                <table class="layui-hide" id="maintainMomeTable" lay-filter="maintainMomeTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="garageMomeBar">
+    <button type="button" class="layui-btn layui-btn-xs" lay-event="detail">查看</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
+</script>
+
+<!-- js插件 -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/layui/layui.js" charset="utf-8"></script>
+<!-- js公共代码 -->
+<script src="../../js/common.js"></script>
+<script src="../../js/front.js"></script>
+
+<script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=GbQ9Fn1S6DwGf4nAjXwrN9vLVEfKrT2V"></script>
+<script>
+    var maintainInfo;//车库
+    layui.use(['tree', 'util', 'table', 'element', 'upload', 'form', 'layedit', 'laydate', 'tableSelect'], function () {
+        var tree = layui.tree
+            , layer = layui.layer
+            , table = layui.table
+            , element = layui.element
+            , $ = layui.jquery
+            , form = layui.form
+            , tableSelect = layui.tableSelect
+            , laydate = layui.laydate;
+
+        //         ---------------------------备忘录-------------------------
+        //打开增加备忘录页面
+        $("#garageMemoAddPageBtn").click(function (event) {
+            layer.prompt({title: '增加车库备忘录', formType: 2}, function (text, index) {
+                layer.close(index);
+                saveGarageMemoBtn({
+                    "garageId": maintainInfo.garageId,
+                    "content": text,
+                    "orgId": maintainInfo.orgId
+                });
+            });
+        });
+
+        //增加备忘录
+        function saveGarageMemoBtn(content) {
+            if (content) {
+                var url = "/garageMemoAdd.json";
+                if (content.id) {
+                    url = "/garageMemoUpdate.json";
+                }
+                sendAjaxRequest("POST", url, "json", JSON.stringify(content), function (res) {
+                    if (res.resFlag === 'N') {
+                        layer.msg("保存成功");
+                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                    } else {
+                        layer.msg("保存失败");
+                    }
+                }, function () {
+                    layer.msg("操作失败");
+                });
+            } else {
+                layer.msg("请填写备注")
+            }
+        }
+
+        function res(res) {
+            return {
+                code: 0,
+                msg: "",
+                count: res.records,
+                data: res.rows
+            };
+        }
+
+        var maintainMomeCols = [[
+            {type: 'numbers', title: '序号', width: 80, fixed: 'center'},
+            {
+                field: 'userName', title: '操作者', sort: false, fixed: 'center'
+            },
+            {
+                field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
+            },
+            {
+                field: 'garageName', title: '车库名称', sort: false, fixed: 'center'
+            },
+            {
+                field: 'content', title: '备注内容', sort: false, fixed: 'center'
+            },
+            {
+                field: 'memoId', title: '操作', toolbar: "#garageMomeBar", sort: false, fixed: 'center'
+            }
+        ]];
+
+        var momeTableIns = initTable(table, null, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null, null);
+
+        //监听行工具事件
+        table.on('tool(maintainMomeTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.alert(data.content)
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            } else if (obj.event === 'edit') {
+                layer.prompt({title: '修改备注', formType: 2, value: data.content}, function (text, index) {
+                    layer.close(index);
+                    var content = {
+                        "memoId": data.memoId,
+                        "garageId": data.garageId,
+                        "content": text,
+                        "orgId": data.orgId
+                    };
+                    saveGarageMemoBtn(content);
+                });
+            } else if (obj.event === 'delete') {
+                var data = {memoId: data.memoId};
+                layer.confirm('真的删除行么', function (index) {
+
+                    sendAjaxRequest("POST", "/garageMemoDelete.json", "json", JSON.stringify(data), function (res) {
+                        if (res.resFlag === 'N') {
+                            tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg("删除失败");
+                        }
+                    }, function () {
+                        layer.msg("删除失败");
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+        // //监听行单击事件（单击事件为：rowDouble）
+        // table.on('row(maintainMomeTable)', function (obj) {
+        //     var data = obj.data;
+        //     layer.alert(data.content)
+        //     //标注选中样式
+        //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        // });
+
+// ----------------------------机构数-----------------------------
+        selectOrg(null, 1);
+
+        function selectOrg(level, orgId) {
+            var data;
+            if (level) {
+                data = JSON.stringify({"queryOrgLevel": level, "orgId": orgId})
+            } else {
+                data = JSON.stringify({"orgId": orgId})
+            }
+            sendAjaxRequest("POST", "/getOrgTree.json", "json", data, function (res) {
+                if (res.resFlag === 'N') {
+                    if (!level) {
+                        setOrgSelect(res.orgTreeInfo.childOrgList, "#firstTierAgent", 1);
+                    } else if (level === 2) {
+                        setOrgSelect(res.orgTreeInfo.childOrgList, "#twoTierAgent", 2);
+                    } else if (level === 3) {
+                        setOrgSelect(res.orgTreeInfo.childOrgList, "#threeTierAgent", 3);
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+        }
+
+        function setOrgSelect(childOrgList, id, level) {
+            $(id).html("");
+            if (childOrgList) {
+                for (var i = 0; i < childOrgList.length; i++) {
+                    var childOrg = childOrgList[i];
+                    $(id).append("<option value=" + childOrg.orgId + ">" + childOrg.orgName + "</option>")
+                }
+                $(id).attr("disabled", false);
+                if (childOrgList.length > 0) {
+                    var childOrg = childOrgList[0]
+                    if (childOrgList.length === 1) {
+                        $(id).attr("disabled", true);
+                    }
+                    if (level === 1 || level === 2) {
+                        selectOrg(level + 1, childOrg.orgId)
+                    } else {
+                        initCharge(parseInt(childOrg.orgId));
+                    }
+                }
+            }
+            form.render();
+        }
+
+        function initCharge(orgId) {
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({
+                "orgId": orgId,
+                "pageNo": 1,
+                "pageSize": 20
+            }), function (res) {
+                if (res.resFlag === 'N') {
+                    if (res.rows && res.rows.length > 0) {
+                        $("#garageList").html("");
+                        maintainInfo = res.rows[0];
+                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                        for (var i = 0; i < res.rows.length; i++) {
+                            var garage = res.rows[i];
+                            $("#garageList").append("<option value=" + garage.garageId + ">" + garage.garageName + "</option>")
+                        }
+                        form.render();
+                        if(res.totalPages > 1){
+                            for(var i = 2; i <= res.totalPages; i++){
+                                getGarageList(orgId, i);
+                            }
+                        }
+                    } else {
+                        maintainInfo = null;
+                        tableReload(momeTableIns, {garageId: maintainInfo.garageId})
+                        $("#garageList").val("");
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+        }
+
+        function getGarageList(orgId, pageNo){
+            sendAjaxRequest("POST", "/getGarageList.json", "json", JSON.stringify({"orgId": orgId, "pageNo": pageNo, "pageSize": 20}), function (res) {
+                if (res.resFlag === 'N') {
+                    if(res.rows && res.rows.length > 0){
+                        for (var i = 0; i < res.rows.length; i++) {
+                            var garage = res.rows[i];
+                            $("#garageList").append("<option value=" + garage.garageId + ">" + garage.garageName + "</option>")
+                        }
+                        form.render();
+                    }
+                } else {
+                    layer.msg("查询失败");
+                }
+            }, function () {
+                layer.msg("查询失败");
+            });
+        }
+
+        form.on('select(firstTierAgent)', function (data) {
+            selectOrg(2, parseInt(data.value));
+        });
+
+        form.on('select(twoTierAgent)', function (data) {
+            selectOrg(3, parseInt(data.value));
+        });
+
+        form.on('select(threeTierAgent)', function (data) {
+            initCharge(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            maintainInfo.garageId = parseInt(data.value);
+            tableReload(momeTableIns, {garageId: parseInt(data.value)})
+        });
+    });
+</script>
 </body>
 
 </html>

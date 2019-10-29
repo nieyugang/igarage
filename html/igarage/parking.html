@@ -18,7 +18,7 @@
             class="layui-icon layui-icon-align-center" style="font-size: 24px"></i> 车位维护
     </div>
     <div class="layui-col-md2" style="margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择一级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">一级代理</div>
         <div class="layui-col-md7">
             <select name="firstTierAgent" id="firstTierAgent" lay-filter="firstTierAgent">
                 <option>请选择</option>
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择二级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">二级代理</div>
         <div class="layui-col-md7">
             <select name="twoTierAgent" id="twoTierAgent" lay-filter="twoTierAgent">
                 <option>请选择</option>
@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择三级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">三级代理</div>
         <div class="layui-col-md7">
             <select name="threeTierAgent" id="threeTierAgent" lay-filter="threeTierAgent">
                 <option>请选择</option>
@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="layui-col-md2">
-            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加车位</button>
+            <button type="button" class="layui-btn layui-btn-radius" id="carPageBtn">增加车位</button>
         </div>
     </div>
 </div>
@@ -527,6 +527,23 @@
 
         form.on('select(upChargerId)', function (data) {
             getGaragePlugList(data.value);
+        });
+
+        //打开增加修改车位页面
+        $("#carPageBtn").click(function (event) {
+            layer.open({
+                type: 1
+                , title: false //不显示标题栏
+                , area: ['500px', '300px']
+                , id: 'lay-carPageBtn' //设定一个id，防止重复弹出
+                , content: $("#carEditPage").html()
+            });
+            $("#spaceType").html("");
+            for (var i = 0; i < spaceTypeList.length; i++) {
+                var spaceType = spaceTypeList[i];
+                $("#spaceType").append("<option value=" + spaceType.id + ">" + spaceType.name + "</option>")
+            }
+            form.render();
         });
 
         function getGaragePlugList(chargerValue) {
@@ -1046,6 +1063,11 @@
 
         form.on('select(threeTierAgent)', function (data) {
             initCharge(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            maintainInfo.garageId = parseInt(data.value);
+            tableReload(parkingSpaceTableIns, {garageId: parseInt(data.value)});
         });
     });
 </script>

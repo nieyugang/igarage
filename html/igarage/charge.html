@@ -18,7 +18,7 @@
             class="layui-icon layui-icon-align-center" style="font-size: 24px"></i> 充电桩维护
     </div>
     <div class="layui-col-md2" style="margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择一级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">一级代理</div>
         <div class="layui-col-md7">
             <select name="firstTierAgent" id="firstTierAgent" lay-filter="firstTierAgent">
                 <option>请选择</option>
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择二级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">二级代理</div>
         <div class="layui-col-md7">
             <select name="twoTierAgent" id="twoTierAgent" lay-filter="twoTierAgent">
                 <option>请选择</option>
@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择三级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">三级代理</div>
         <div class="layui-col-md7">
             <select name="threeTierAgent" id="threeTierAgent" lay-filter="threeTierAgent">
                 <option>请选择</option>
@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="layui-col-md2">
-            <button type="button" class="layui-btn layui-btn-radius" id="addChargeBtn">增加充电站</button>
+            <button type="button" class="layui-btn layui-btn-radius" id="garageChargerPageBtn">增加充电站</button>
         </div>
     </div>
 </div>
@@ -430,6 +430,11 @@
                 tableReload(garagePlugTableIns, {chargerId: 0})
             }
         }
+
+        //打开增加修改充电桩页面
+        $("#garageChargerPageBtn").click(function (event) {
+            openGarageChargerPage();
+        });
 
         //监听监控行工具事件
         table.on('tool(garageChargerTable)', function (obj) {
@@ -822,7 +827,12 @@
         form.on('select(threeTierAgent)', function (data) {
             // tableReload(tableIns, {orgId: parseInt(data.value)});
             initCharge(parseInt(data.value));
-            selectCheck(parseInt(data.value));
+            // selectCheck(parseInt(data.value));
+        });
+
+        form.on('select(garageList)', function (data) {
+            maintainInfo.garageId = parseInt(data.value);
+            noPageTableReload(garageChargerTableIns, {garageId: parseInt(data.value)});
         });
     });
 </script>

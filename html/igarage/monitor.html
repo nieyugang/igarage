@@ -293,6 +293,11 @@
             $("#installAddress").val("");
         }
 
+        //打开增加修改监控页面
+        $("#cameraAddPageBtn").click(function (event) {
+            openCameraEditPage();
+        });
+
         function openCameraEditPage() {
             layer.open({
                 type: 1
@@ -493,6 +498,10 @@
             initCharge(parseInt(data.value));
         });
 
+        form.on('select(garageList)', function (data) {
+            maintainInfo.garageId = parseInt(data.value);
+            noPageTableReload(cameraTableIns, {garageId: parseInt(data.value)});
+        });
     });
 
 
