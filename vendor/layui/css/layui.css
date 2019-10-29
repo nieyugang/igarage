@@ -2298,7 +2298,7 @@ hr {
 .layui-form-label-left {
     float: left;
     display: block;
-    padding: 9px 15px;
+    padding: 9px;
     font-weight: 400;
     min-width: 60px;
     line-height: 20px;

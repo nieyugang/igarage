@@ -40,6 +40,65 @@
         .anchorBL {
             display: none;
         }
+
+        .layui-tab-title li {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 13px;
+            transition: all .2s;
+            -webkit-transition: all .2s;
+            position: relative;
+            line-height: 26px;
+            min-width: 65px;
+            padding: 0px 6px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px 5px 5px 5px;
+            background-color: #3296f4;
+            margin: 5px;
+        }
+
+        .layui-tab-brief > .layui-tab-title .layui-this {
+            color: #ffffff;
+            background-color: #f2a40e;
+        }
+
+        .layui-tab-brief > .layui-tab-more li.layui-this:after, .layui-tab-brief > .layui-tab-title .layui-this:after {
+            border-bottom: 0px solid #2b90d9;
+        }
+
+        .layui-tab-title {
+            position: relative;
+            left: 0;
+            height: 40px;
+            white-space: nowrap;
+            font-size: 0;
+            border-bottom-width: 0px;
+            border-bottom-style: solid;
+            transition: all .2s;
+            -webkit-transition: all .2s;
+            text-align: center;
+        }
+
+        .layui-tab-title .layui-this {
+            color: #ffffff;
+            background-color: #f2a40e;
+        }
+
+        .layui-tab-title .layui-this:after {
+            position: absolute;
+            left: 0;
+            top: 0;
+            content: '';
+            width: 100%;
+            height: 41px;
+            border-width: 1px;
+            border-style: hidden;
+            border-bottom-color: rgba(0, 0, 0, 0);
+            border-radius: 2px 2px 0 0;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -50,7 +109,7 @@
             class="layui-icon layui-icon-align-center" style="font-size: 24px"></i> 日常管理
     </div>
     <div class="layui-col-md2" style="margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择一级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">一级代理</div>
         <div class="layui-col-md7">
             <select name="firstTierAgent" id="firstTierAgent" lay-filter="firstTierAgent">
                 <option>请选择</option>
@@ -58,7 +117,7 @@
         </div>
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择二级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">二级代理</div>
         <div class="layui-col-md7">
             <select name="twoTierAgent" id="twoTierAgent" lay-filter="twoTierAgent">
                 <option>请选择</option>
@@ -66,7 +125,7 @@
         </div>
     </div>
     <div class="layui-col-md2" style="margin-left: 10px; margin-top: 10px">
-        <div class="layui-col-md5" style="margin-top: 8px">选择三级代理</div>
+        <div class="layui-col-md5" style="margin-top: 8px">三级代理</div>
         <div class="layui-col-md7">
             <select name="threeTierAgent" id="threeTierAgent" lay-filter="threeTierAgent">
                 <option>请选择</option>
@@ -89,7 +148,7 @@
         <!--        </div>-->
         <div class="layui-col-md12">
             <div class="layui-col-md7" id="maintainMapInfo"
-                 style="border: 1px solid #848d92;min-height: 550px; min-width: 97%">
+                 style="background-color: #e1e1e1;min-height: 440px; min-width: 100%">
                 <div class="layui-tab layui-tab-brief" lay-filter="maintainMapInfo_tab">
                     <ul class="layui-tab-title">
                         <li class="layui-this">地图</li>
@@ -101,7 +160,7 @@
                     <div class="layui-tab-content">
                         <!-- 地图 -->
                         <div class="layui-tab-item layui-show">
-                            <div id="allmap" style="height: 450px"></div>
+                            <div id="allmap" style="height: 360px"></div>
                         </div>
                         <!-- 工程图 -->
                         <div class="layui-tab-item">
@@ -122,7 +181,7 @@
                 </div>
             </div>
             <div class="layui-col-md4" id="maintainInfoDetails"
-                 style="border: 1px solid #848d92;min-height: 550px; margin-left: 2%; max-width: 30%; display: none">
+                 style="background-color: #e1e1e1; min-height: 440px; margin-left: 1%; min-width: 40%; display: none">
                 <div class="layui-tab layui-tab-brief" id="showMaintain">
                     <div class="layui-tab layui-tab-brief" style="width: 99%">
                         <ul class="layui-tab-title">
@@ -133,163 +192,173 @@
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show" id="maintainInfo">
-                                <div class="layui-form-item" style="margin-top: 10px; margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">车库名称</label>
-                                    <label class="layui-form-label-left" id="garageNameLabel"></label>
+                                <div class="layui-row">
+                                    <div class="layui-col-md6" style="margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">车库名称</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" id="garageNameLabel"></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">车库地址</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" id="addressLabel"></label>
+                                    </div>
                                 </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">车库地址</label>
-                                    <label class="layui-form-label-left" id="addressLabel"></label>
+                                <div class="layui-row">
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">经纬度</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" id="inglatLabel"></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">管理员</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" id="adminLabel"></label>
+                                    </div>
                                 </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">经纬度</label>
-                                    <label class="layui-form-label-left" id="inglatLabel"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">管理员</label>
-                                    <label class="layui-form-label-left" id="adminLabel"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">联系电话</label>
-                                    <label class="layui-form-label-left" id="mobileLabel"></label>
-                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">联系电话</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" id="mobileLabel"></label>
+                                    </div>
 
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">微信绑定用户</label>
-                                    <label class="layui-form-label-left">
-                                        <a href="#" class="menu-btn active" title="点击查看微信用户详情" id="wxUserNum">
-                                        </a>
-                                    </label>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">微信绑定用户</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" >
+                                            <a href="#" class="menu-btn active" title="点击查看微信用户详情" id="wxUserNum">
+                                            </a>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">创建时间</label>
-                                    <label class="layui-form-label-left" id="createTime"></label>
+                                <div class="layui-row">
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">创建时间</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" id="createTime"></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">门禁控制器数量</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" >
+                                            <a href="#" class="menu-btn active" title="点击查看门禁详情"
+                                               id="accessControlNum"> </a>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">门禁控制器数量</label>
-                                    <label class="layui-form-label-left">
-                                        <a href="#" class="menu-btn active" title="点击查看门禁详情"
-                                           id="accessControlNum"> </a>
-                                    </label>
+                                <div class="layui-row">
+                                    <div class="layui-row" style="text-align: center">
+                                        <button type="button" class="layui-btn"
+                                                id="garageMemoAddPageBtn">增加备忘录
+                                        </button>
+                                    </div>
                                 </div>
-                                <div style="text-align: center">
-                                    <button type="button" class="layui-btn"
-                                            id="garageMemoAddPageBtn">增加备忘录
-                                    </button>
+                                <div class="layui-tab-item">
+                                    <div class="layui-col-md6" style="margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">车位总数</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">摩托车车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">电动车车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">三轮车车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">自行车车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">残疾车车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">待定车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">电动车车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">报警用户车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="layui-tab-item">
-                                <div class="layui-form-item" style="margin-top: 10px; margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">车位总数</label>
-                                    <label class="layui-form-label-left"></label>
+                                <div class="layui-tab-item">
+                                    <div class="layui-col-md6" style="margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">车位</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">充电站</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">门禁</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div class="layui-col-md6" style="margin-top:10px; margin-bottom: 0px;">
+                                        <label class="layui-col-md4" style="text-align: right; color: cornflowerblue">监控</label>
+                                        <label class="layui-col-md7" style="margin-left: 5px" ></label>
+                                    </div>
+                                    <div style="text-align: center">
+                                        <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
+                                    </div>
+                                    <div style="text-align: center; margin-top: 10px">
+                                        <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i
+                                                class="fa fa-car" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="layui-btn" title="增加充电站"
+                                                id="garageChargerPageBtn">
+                                            <i class="fa fa-bolt" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i
+                                                class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="layui-btn" title="增加监控"
+                                                id="cameraAddPageBtn"><i class="fa fa-video-camera"
+                                                                         aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">摩托车车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">电动车车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">三轮车车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">自行车车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">残疾车车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">待定车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">电动车车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">报警用户车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                            </div>
-                            <div class="layui-tab-item">
-                                <div class="layui-form-item" style="margin-top: 10px; margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">车位</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">充电站</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">门禁</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div class="layui-form-item" style="margin-bottom: 0px;">
-                                    <label class="layui-form-label-left">监控</label>
-                                    <label class="layui-form-label-left"></label>
-                                </div>
-                                <div style="text-align: center">
-                                    <button type="button" class="layui-btn" id="deviceBtn">查看设备详情</button>
-                                </div>
-                                <div style="text-align: center; margin-top: 10px">
-                                    <button type="button" class="layui-btn" title="增加车位" id="carPageBtn"><i
-                                            class="fa fa-car" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="layui-btn" title="增加充电站"
-                                            id="garageChargerPageBtn">
-                                        <i class="fa fa-bolt" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="layui-btn" title="增加门禁" id="acAddPageBtn"><i
-                                            class="fa fa-unlock-alt" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="layui-btn" title="增加监控"
-                                            id="cameraAddPageBtn"><i class="fa fa-video-camera"
-                                                                     aria-hidden="true"></i></button>
-                                </div>
-                            </div>
-                            <div class="layui-tab-item">
-                                <div class="layui-form-item" style="text-align: center">
-                                    <button type="button" class="layui-btn" title="远程开门" id="door_camare-preview"><i
-                                            class="fa fa-key"
-                                            aria-hidden="true"></i>
-                                    </button>
-                                    <!-- 增加 id="camare-preview"   ********creator：  yugang.nie start ******  -->
-                                    <button type="button" class="layui-btn" title="监控" id="camare-preview"><i
-                                            class="fa fa-video-camera" aria-hidden="true"></i>
-                                    </button>
-                                    <!-- 增加 id="camare-preview"   ********creator：  yugang.nie end ******  -->
-                                    <button type="button" class="layui-btn" title="报警"><i class="fa fa-bell"
-                                                                                          aria-hidden="true"></i>
-                                    </button>
+                                <div class="layui-tab-item">
+                                    <div class="layui-form-item" style="text-align: center">
+                                        <button type="button" class="layui-btn" title="远程开门" id="door_camare-preview"><i
+                                                class="fa fa-key"
+                                                aria-hidden="true"></i>
+                                        </button>
+                                        <!-- 增加 id="camare-preview"   ********creator：  yugang.nie start ******  -->
+                                        <button type="button" class="layui-btn" title="监控" id="camare-preview"><i
+                                                class="fa fa-video-camera" aria-hidden="true"></i>
+                                        </button>
+                                        <!-- 增加 id="camare-preview"   ********creator：  yugang.nie end ******  -->
+                                        <button type="button" class="layui-btn" title="报警"><i class="fa fa-bell"
+                                                                                              aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="layui-col-md12" style="display: none">
-                <!--                    暂时不用-->
-                <div class="layui-inline">
-                    <label class="layui-form-label">车库名称</label>
-                    <div class="layui-input-block">
-                        <input id="garageNameSearch" class="layui-input" type="text" placeholder="请输入"
-                               autocomplete="off">
+                <div class="layui-col-md12" style="display: none">
+                    <!--                    暂时不用-->
+                    <div class="layui-inline">
+                        <label class="layui-form-label">车库名称</label>
+                        <div class="layui-input-block">
+                            <input id="garageNameSearch" class="layui-input" type="text" placeholder="请输入"
+                                   autocomplete="off">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <button type="button" class="layui-btn layuiadmin-btn-admin"
-                            lay-filter="LAY-user-back-search" id="searchMaintainBtn">
-                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                    </button>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layuiadmin-btn-admin"
+                                lay-filter="LAY-user-back-search" id="searchMaintainBtn">
+                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="layui-col-md12" id="garageTable"
-                 style="border: 1px solid #848d92;min-height: 100px; margin-right: 10px; margin-top: 10px;max-width: 97%">
+                 style="border: 1px solid #848d92;min-height: 100px; margin-top: 10px;">
                 <div class="" style="background-color: #848d92">车库列表</div>
                 <table style="margin: 10px" class="layui-hide" id="maintainTable" lay-filter="maintainTable">
                 </table>
@@ -312,7 +381,8 @@
                         </a>
                     </div>
                 </div>
-                <div class="layui-tab layui-col-md12" lay-filter="deviceDetails">
+                <div class="layui-tab layui-col-md12" lay-filter="deviceDetails"
+                     style="background-color: rgb(225, 225, 225)">
                     <ul class="layui-tab-title">
                         <li class="layui-this">车位</li>
                         <li>门禁</li>
@@ -443,35 +513,58 @@
 </script>
 
 <script type="text/html" id="garageBar">
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #1989ff" lay-event="garageMemo">备忘录</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #1989ff"
+            lay-event="garageMemo">备忘录
+    </button>
 </script>
 
 <script type="text/html" id="garageMomeBar">
     <button type="button" class="layui-btn layui-btn-xs" lay-event="detail">查看</button>
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red"
+            lay-event="delete">删除
+    </button>
     <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>-->
-<!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>-->
+    <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delete">删除</a>-->
 </script>
 
 <script type="text/html" id="editBar">
-    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500" lay-event="edit">编辑</button>
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500"
+            lay-event="edit">编辑
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red"
+            lay-event="delete">删除
+    </button>
 </script>
 
 <script type="text/html" id="garageChargerBar">
-    <button type="button" class="layui-btn layui-btn layui-btn-normal layui-btn-xs" lay-event="addPlug">增加插头</button>
-    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500" lay-event="edit">编辑</button>
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
+    <button type="button" class="layui-btn layui-btn layui-btn-normal layui-btn-xs" lay-event="addPlug">增加插头
+    </button>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500"
+            lay-event="edit">编辑
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red"
+            lay-event="delete">删除
+    </button>
 </script>
 
 <script type="text/html" id="parkingSpaceBar">
     {{#  if(d.cardId){ }}
-    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #0fc689" lay-event="cardInfo">卡信息</button>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #0fc689"
+            lay-event="cardInfo">卡信息
+    </button>
     {{#  } }}
-    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500" lay-event="edit">编辑</button>
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red" lay-event="delete">删除</button>
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #ff8a5e" lay-event="renewFee">续费</button>
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #92a3ff" lay-event="delay">延期</button>
+    <button type="button" class="layui-btn layui-btn layui-btn-warm layui-btn-xs" style="background-color: #c69500"
+            lay-event="edit">编辑
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: red"
+            lay-event="delete">删除
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #ff8a5e"
+            lay-event="renewFee">续费
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" style="background-color: #92a3ff"
+            lay-event="delay">延期
+    </button>
 </script>
 
 <script type="text/html" id="cameraEditPage">
@@ -631,7 +724,8 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="acFormSubmit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="acFormSubmit">立即提交
+                        </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -664,7 +758,8 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="carFormSubmit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="carFormSubmit">立即提交
+                        </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -711,7 +806,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">版本</label>
                     <div class="layui-input-block">
-                        <select name="currentVersion" id="currentVersion" lay-verify="required" lay-reqtext="当前版本不能为空">
+                        <select name="currentVersion" id="currentVersion" lay-verify="required"
+                                lay-reqtext="当前版本不能为空">
                         </select>
                     </div>
                 </div>
@@ -781,7 +877,8 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="doorFormSubmit">立即提交</button>
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="doorFormSubmit">立即提交
+                        </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -839,7 +936,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">版本</label>
                     <div class="layui-input-block">
-                        <select name="currentVersion" id="gpCurrentVersion" lay-verify="required" lay-reqtext="版本不能为空">
+                        <select name="currentVersion" id="gpCurrentVersion" lay-verify="required"
+                                lay-reqtext="版本不能为空">
                         </select>
                     </div>
                 </div>
@@ -899,7 +997,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">续租月数</label>
                     <div class="layui-input-block">
-                        <input type="number" name="addMonths" autocomplete="off" id="addMonths" lay-filter="addMonths"
+                        <input type="number" name="addMonths" autocomplete="off" id="addMonths"
+                               lay-filter="addMonths"
                                placeholder="续租月数"
                                lay-reqtext="续租月数不能为空" lay-verify="required" class="layui-input">
                     </div>
@@ -921,7 +1020,8 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceRenewFeeBtn">立即提交
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceRenewFeeBtn">
+                            立即提交
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
@@ -992,7 +1092,8 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">车位类型</label>
                             <div class="layui-input-block">
-                                <select name="spaceType" id="upSpaceType" lay-verify="required" lay-reqtext="车库类型不能为空">
+                                <select name="spaceType" id="upSpaceType" lay-verify="required"
+                                        lay-reqtext="车库类型不能为空">
                                 </select>
                             </div>
                         </div>
@@ -1011,7 +1112,8 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">充电站</label>
                             <div class="layui-input-block">
-                                <select name="chargerId" id="upChargerId" lay-verify="required" lay-filter="upChargerId"
+                                <select name="chargerId" id="upChargerId" lay-verify="required"
+                                        lay-filter="upChargerId"
                                         lay-reqtext="充电站不能为空">
                                 </select>
                             </div>
@@ -1099,7 +1201,8 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceUpdateBtn">立即提交
+                        <button class="layui-btn" lay-submit="" type="button" lay-filter="parkingSpaceUpdateBtn">
+                            立即提交
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
@@ -1373,7 +1476,7 @@
             }
         }
 
-        var tableIns = initTable(table, null, "maintainTable", 20, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
+        var tableIns = initTable(table, null, "maintainTable", 10, "/getGarageList.json", {orgId: 0}, res, garageListCols, null, garageListdone);
 
         //监听行工具事件
         table.on('tool(maintainTable)', function (obj) {
@@ -1420,7 +1523,7 @@
             }
             if (maintainInfo) {
                 $("#maintainInfoDetails").show();
-                $("#maintainMapInfo").css("min-width", "65%");
+                $("#maintainMapInfo").css("min-width", "59%");
             }
         }
 
@@ -1479,7 +1582,7 @@
             }
         ]];
 
-        var momeTableIns = initTable(table, null, "maintainMomeTable", 20, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null, null);
+        var momeTableIns = initTable(table, null, "maintainMomeTable", 10, "/getGarageMemoListByGarage.json", {garageId: -1}, res, maintainMomeCols, null, null);
 
         //监听行工具事件
         table.on('tool(maintainMomeTable)', function (obj) {
@@ -1868,7 +1971,7 @@
                 field: 'memoId', title: '操作', width: 350, toolbar: "#parkingSpaceBar", sort: false, fixed: 'center'
             }
         ]];
-        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 20, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, parkingSpaceTableDone);
+        var parkingSpaceTableIns = initTable(table, null, "parkingSpaceTable", 10, "/getParkingSpaceList.json", {garageId: -1}, parkingSpaceRes, parkingSpaceCols, null, parkingSpaceTableDone);
 
         function parkingSpaceTableDone(res, curr, count) {
             //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -2330,10 +2433,15 @@
                 field: 'createTime', title: '创建时间', sort: false, fixed: 'center'
             },
             {
-                field: 'chargerId', title: '操作', toolbar: "#garageChargerBar", width: 400, sort: false, fixed: 'center'
+                field: 'chargerId',
+                title: '操作',
+                toolbar: "#garageChargerBar",
+                width: 400,
+                sort: false,
+                fixed: 'center'
             }
         ]];
-        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 20, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, garageChargerDone);
+        var garageChargerTableIns = initTable(table, null, "garageChargerTable", 10, "/getGarageChargerList.json", {garageId: -1}, garageChargerRes, garageChargerCols, null, garageChargerDone);
 
         function garageChargerDone(res, curr, count) {
             //如果是异步请求数据方式，res即为你接口返回的信息。
@@ -2475,7 +2583,7 @@
                 field: 'plugId', title: '操作', toolbar: "#editBar", sort: false, fixed: 'center'
             }
         ]];
-        var garagePlugTableIns = initTable(table, null, "garagePlugTable", 20, "getGaragePlugList.json", {chargerId: -1}, garagePlugRes, garagePlugCols, null, null);
+        var garagePlugTableIns = initTable(table, null, "garagePlugTable", 10, "getGaragePlugList.json", {chargerId: -1}, garagePlugRes, garagePlugCols, null, null);
 
         //监听监控行工具事件
         table.on('tool(garagePlugTable)', function (obj) {
@@ -2741,6 +2849,7 @@
         checkPluginInstall();
         // clickLogout(szIP);//先退出上次视频预览ip
         sendAjaxRequest("POST", "/getCameraList.json", "json", JSON.stringify({garageId: checkedGarageId}), getOrgTreeSuccess, getOrgTreeError);
+
         function getOrgTreeSuccess(res) {
             if (res.resFlag == "N") {
                 if (res.cameraInfoList.length != 0) {
@@ -2751,7 +2860,7 @@
                     szUsername = cameraInfo.loginAccount;
                     szPassword = cameraInfo.password;
                     layui.element.tabChange('maintainMapInfo_tab', 'camare_tab');
-                    clickLogin(szIP, szPort, szUsername, szPassword,"#camare-preview");
+                    clickLogin(szIP, szPort, szUsername, szPassword, "#camare-preview");
                 } else {
                     layer.tips('该车库下没有摄像头', '#camare-preview', {tips: [1, '#FFB800'],});
                 }
@@ -2760,6 +2869,7 @@
                 layer.msg(res.resMsg, {icon: 5, offset: 't'});
             }
         };
+
         function getOrgTreeError() {
             layer.msg("通信异常", {icon: 5});
         }
@@ -2768,6 +2878,7 @@
         checkPluginInstall();
         // clickLogout(szIP);//先退出上次视频预览ip
         sendAjaxRequest("POST", "/getCameraList.json", "json", JSON.stringify({garageId: checkedGarageId}), getOrgTreeSuccess, getOrgTreeError);
+
         function getOrgTreeSuccess(res) {
             if (res.resFlag == "N") {
                 if (res.cameraInfoList.length != 0) {
@@ -2778,7 +2889,7 @@
                     szUsername = cameraInfo.loginAccount;
                     szPassword = cameraInfo.password;
                     layui.element.tabChange('maintainMapInfo_tab', 'camare_tab');
-                    door_clickLogin("192.168.1.99", '80', 'admin', '123456789a',1,"#door_camare-preview");//打开门禁对应的摄像头
+                    door_clickLogin("192.168.1.99", '80', 'admin', '123456789a', 1, "#door_camare-preview");//打开门禁对应的摄像头
                 } else {
                     layer.tips('该车库下没有摄像头', '#door_camare-preview', {tips: [1, '#FFB800'],});
                 }
@@ -2787,34 +2898,37 @@
                 layer.msg(res.resMsg, {icon: 5, offset: 't'});
             }
         };
+
         function getOrgTreeError() {
             layer.msg("通信异常", {icon: 5});
         }
     });
 
     // 檢查插件是否安裝
-    function checkPluginInstall(){
-                var iRet = WebVideoCtrl.I_CheckPluginInstall();
-            if (-2 == iRet) {
-                layer.msg("您的Chrome浏览器版本过高，不支持NPAPI插件！",function(){});
-                return;
-            } else if (-1 == iRet) {
-                layer.msg("未安装！",function(){});
+    function checkPluginInstall() {
+        var iRet = WebVideoCtrl.I_CheckPluginInstall();
+        if (-2 == iRet) {
+            layer.msg("您的Chrome浏览器版本过高，不支持NPAPI插件！", function () {
+            });
+            return;
+        } else if (-1 == iRet) {
+            layer.msg("未安装！", function () {
+            });
             layer.open({
                 type: 1 //Page层类型
-                ,area: [ '550px', '200px']
-                ,shade: 0.6 //遮罩透明度
-                ,anim: 1 //0-6的动画形式，-1不开启
-                ,content:
-            '<div style="padding:50px;">'+
-            '<p>您还未安装过插件，请下载安装！'+
-            '<a href="../../WebComponentsKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="局域网视频监控插件下载" style="text-decoration: none;">'+
-                            '  <i class="layui-icon">&#xe620;</i>&nbsp;&nbsp;WebComponentsKit.exe'+
-                        ' </a></p>'+
-            '</div>'
+                , area: ['550px', '200px']
+                , shade: 0.6 //遮罩透明度
+                , anim: 1 //0-6的动画形式，-1不开启
+                , content:
+                    '<div style="padding:50px;">' +
+                    '<p>您还未安装过插件，请下载安装！' +
+                    '<a href="../../WebComponentsKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="局域网视频监控插件下载" style="text-decoration: none;">' +
+                    '  <i class="layui-icon">&#xe620;</i>&nbsp;&nbsp;WebComponentsKit.exe' +
+                    ' </a></p>' +
+                    '</div>'
             });
-                return;
-            }
+            return;
+        }
     }
 
     // 监控自动预览********creator：yugang.nie end ******
