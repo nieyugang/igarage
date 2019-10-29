@@ -1141,7 +1141,7 @@
 <!-- 监控视频预览js   ********creator：  yugang.nie start ******-->
 <script src="../../vendor/hikvision/webVideoCtrl.js"></script>
 <script src="../../vendor/hikvision/WebComponentsKit_preview.js"></script>
-<script src="../../vendor/hikvision/EZUIKit_preview.js"></script>
+<!-- <script src="../../vendor/hikvision/EZUIKit_preview.js"></script> -->
 <!-- 监控视频预览js   ********creator：  yugang.nie end ******-->
 <!-- js公共代码 -->
 <script src="../../js/common.js"></script>
@@ -2791,25 +2791,24 @@
 
     // 檢查插件是否安裝
     function checkPluginInstall(){
-                var iRet = WebVideoCtrl.I_CheckPluginInstall();
+            var iRet = WebVideoCtrl.I_CheckPluginInstall();
             if (-2 == iRet) {
                 layer.msg("您的Chrome浏览器版本过高，不支持NPAPI插件！",function(){});
                 return;
             } else if (-1 == iRet) {
-                layer.msg("未安装！",function(){});
             layer.open({
                 type: 1 //Page层类型
-                ,area: [ '550px', '200px']
+                ,area: [ '750px', '200px']
                 ,shade: 0.6 //遮罩透明度
                 ,anim: 1 //0-6的动画形式，-1不开启
                 ,content:
-            '<div style="padding:50px;">'+
-            '<p>您还未安装过插件，请下载安装！'+
-            '<a href="../../WebComponentsKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="局域网视频监控插件下载" style="text-decoration: none;">'+
-                            '  <i class="layui-icon">&#xe620;</i>&nbsp;&nbsp;WebComponentsKit.exe'+
-                        ' </a></p>'+
-            '</div>'
-            });
+                        '<div style="padding:50px;">'+
+                        '<p>您还未安装过插件(<em style="color:red;">此插件仅支持IE浏览器</em>)，请下载安装！'+
+                        '<a href="../../WebComponentsKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="局域网视频监控插件下载" style="text-decoration: none;">'+
+                                        '  <i class="layui-icon">&#xe620;</i>&nbsp;&nbsp;WebComponentsKit.exe'+
+                                    ' </a></p>'+
+                        '</div>'
+                });
                 return;
             }
     }
