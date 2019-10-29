@@ -3271,8 +3271,12 @@ hr {
 .layui-table-total,
 .layui-table-total tr,
 .layui-table[lay-even] tr:nth-child(even) {
-    background-color: #f2f2f2
+    background-color: #E3E8EE
 }
+tr:nth-child(even) {
+    background-color: #F1F1F3
+}
+
 
 .layui-table td,
 .layui-table th,
