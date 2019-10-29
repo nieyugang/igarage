@@ -4,15 +4,15 @@
 var g_iWndIndex = 0; //可以不用设置这个变量，有窗口参数的接口中，不用传值，开发包会默认使用当前选择窗口
 var channels_;
 $(function () {
-	// 检查插件是否已经安装过
-	var iRet = WebVideoCtrl.I_CheckPluginInstall();
-	if (-2 == iRet) {
-		alert("您的Chrome浏览器版本过高，不支持NPAPI插件！");
-		return;
-	} else if (-1 == iRet) {
-		alert("您还未安装过插件，双击开发包目录里的WebComponentsKit.exe安装！");
-		return;
-	}
+	// // 检查插件是否已经安装过
+	// var iRet = WebVideoCtrl.I_CheckPluginInstall();
+	// if (-2 == iRet) {
+	// 	alert("您的Chrome浏览器版本过高，不支持NPAPI插件！");
+	// 	return;
+	// } else if (-1 == iRet) {
+	// 	alert("您还未安装过插件，双击开发包目录里的WebComponentsKit.exe安装！");
+	// 	return;
+	// }
 
 	// 初始化插件参数及插入插件
 	WebVideoCtrl.I_InitPlugin(950, 450, {

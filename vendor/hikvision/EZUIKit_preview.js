@@ -2,7 +2,7 @@ layui.use('layer', function () {
 	var layer = layui.layer;
 	window.onload = function () {
 		TestActiveX();
-		hikGetCameraList("129088421");
+		hikGetCameraList("D59643120");
 		// hikGetCameraByChannelNo("129088421",5);
 		// Play("EZUIKit","150c6adecae64a4b9dae7dd9717daae8","at.6w4rlrjdbesna7uh0l5i5df89hglh89m-2rt4jubyi3-128sguu-yiehmq0ix","ezopen://open.ys7.com/122602365/5.live");
 	}
@@ -15,7 +15,7 @@ var size;
 //获取设备的通道信息
 function ready4Preview(gAppKey, gAccessToken, deviceSerial, webCameraList) {
 	//添加所有通道播放窗口
-	var containerDom = $("#camera-container");
+	var containerDom = $("#camare_tab");
 	//定义分屏
 	size = webCameraList.length;
 	var divWidth = 880;
@@ -120,13 +120,13 @@ function TestActiveX() {
 		layer.open({
 			type: 1 //Page层类型
 				,
-			area: ['550px', '200px'],
+			area: ['750px', '200px'],
 			shade: 0.6 //遮罩透明度
 				,
 			anim: 1 //0-6的动画形式，-1不开启
 				,
 			content: '<div style="padding:50px;">' +
-				'<p>您还未安装过插件，请下载安装后刷新页面重试！' +
+				'<p>您还未安装过插件(<em style="color:red;">此插件仅支持IE浏览器</em>)，请下载安装后刷新页面重试！' +
 				'<a href="../../EZUIKit.exe" target="_blank" class="layui-btn layui-btn-primary" title="局域网视频监控插件下载" style="text-decoration: none;">' +
 				'  <i class="layui-icon">&#xe620;</i>&nbsp;&nbsp;EZUIKit.exe' +
 				' </a></p>' +
