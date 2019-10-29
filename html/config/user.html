@@ -18,38 +18,37 @@
 
 <body>
     <div class="content-inner" style=" width: 98%;">
-        <!-- ===================================================== -->
-        <!-- 请在此处编写你的业务代码 -->
-        <!-- ===================================================== -->
-        <div class="layui-row">
-            <div class="layui-col-md2 _overflow_scroll" style="border-right:2px solid #f2f2f2;height: calc(95vh);">
+        <div class="layui-form layui-row" style="height: 56px;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+            <div class="layui-col-md2"
+                style="height: 100%;font-size:24px;display: flex;justify-content: left;  align-items: center;">
+                <i class="fa fa-bars"></i>&nbsp;&nbsp;用户信息
+            </div>
+            <div class="layui-col-md10"
+                style="height: 100%;display: flex;   justify-content: center;  align-items: center;">
+                <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                position: absolute;
+                top: 20px;
+                left: 5px;"></i>
+                <input type="text" name="title" required="" lay-verify="required" placeholder="请输入登陆ID/用户名/手机号码 按Enter健进行查询"
+                    autocomplete="off" class="layui-input caller-pl32" style="padding: 0 32px;">
+                <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                position: absolute;
+                top: 20px;left: 98%;"></i>
+            </div>
+
+
+            <div class="layui-col-md2 _overflow_scroll"
+                style="border-right:2px solid #f2f2f2;height: calc(90vh);top: 3vh;">
                 <div>
                     <div id="orgTree"></div>
                 </div>
             </div>
-            <div class="layui-col-md10" style="height: calc(95vh);">
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>用户列表</legend>
-                    <div class="layui-field-box">
-                        <div style="margin-top: 2%;">
-                            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                                <form class="layui-form caller-seach" action="" style="position: relative;
-                                padding-bottom: 40px;">
-                                    <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
-                                    position: absolute;
-                                    top: -3px;
-                                    left: 5px;"></i>
-                                    <input type="text" name="title" required="" lay-verify="required"
-                                        placeholder="请输入登陆ID/用户名/手机号码进行查询" autocomplete="off"
-                                        class="layui-input caller-pl32" style="padding: 0 32px;">
-                                    <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
-                                    position: absolute;
-                                    top: -3px;left: 98%;"></i>
-                                </form>
-                            </div>
-                            <div class="table-content">
-                                <!-- 定义头部工具栏 -->
-                                <script id="toolbar" type="text/html">
+            <div class="layui-col-md10" style="height: calc(90vh);">
+                <div class="layui-field-box">
+                    <div style="margin-top: 2%;">
+                        <div class="table-content">
+                            <!-- 定义头部工具栏 -->
+                            <script id="toolbar" type="text/html">
                                 <div class="layui-btn-group">
                                     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="update">
                                         <i class="layui-icon">&#xe642;</i>
@@ -59,11 +58,11 @@
                                     </button>
                                 </div>
                             </script>
-                                <table class="layui-hide" id="t-user" lay-filter="t-user"></table>
-                            </div>
+                            <table class="layui-hide" id="t-user" lay-filter="t-user"></table>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+
             </div>
         </div>
     </div>
@@ -137,7 +136,7 @@
                 };
             };
             // 表格初始化
-            var tableIns = initTable(table, "基础-用户信息表", "t-user", 20, "/getUserList.json", { "userInfo": userInfo, "orgId": userInfo.orgId }, res, cols, "#toolbar", "",false,"90vh");
+            var tableIns = initTable(table, "基础-用户信息表", "t-user", 20, "/getUserList.json", { "userInfo": userInfo, "orgId": userInfo.orgId }, res, cols, "#toolbar", "", false, "90vh");
             // 监听头部工具栏事件
             table.on('toolbar(t-user)', function (obj) {
                 var checkStatus = table.checkStatus(obj.config.id);

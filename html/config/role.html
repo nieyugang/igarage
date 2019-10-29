@@ -16,151 +16,151 @@
 <body>
     <!-- 主体内容区 -->
     <div class="content-inner" style="width: 98%">
-        <!-- ===================================================== -->
-        <!-- 请在此处编写你的业务代码 -->
-        <!-- ===================================================== -->
-        <fieldset class="layui-elem-field layui-field-title">
-            <legend>角色列表</legend>
-            <div class="layui-field-box">
-                <div class="work-area" style="margin-top: 10px;margin-left: 10px">
-                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                        <form class="layui-form caller-seach" action="" style="position: relative;
-                            padding-bottom: 40px;">
-                            <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
-                                position: absolute;
-                                top: -3px;
-                                left: 5px;"></i>
-                            <input type="text" name="title" required="" lay-verify="required" placeholder="请输入角色名称进行查询"
-                                autocomplete="off" class="layui-input caller-pl32" style="padding: 0 32px;">
-                            <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
-                                position: absolute;
-                                top: -3px;left: 98%;"></i>
-                        </form>
-                    </div>
-                    <!-- 定义角色授权按钮 -->
-                    <script type="text/html" id="authorizationbar">
+        <div class="layui-form layui-row" style="height: 56px;box-shadow: 5px 10px 15px 2px rgba(0,0,0,0.1);">
+            <div class="layui-col-md2"
+                style="height: 100%;font-size:24px;display: flex;justify-content: left;  align-items: center;">
+                <i class="fa fa-bars"></i>&nbsp;&nbsp;角色列表
+            </div>
+            <div class="layui-col-md10"
+                style="height: 100%;display: flex;   justify-content: center;  align-items: center;">
+                <i class="layui-icon layui-icon-search caller-seach-icon caller-icon" style=" font-size: 18px;
+                        position: absolute;
+                        top: 20px;
+                        left: 5px;"></i>
+                <input type="text" name="title" required="" lay-verify="required" placeholder="请输入角色名称 按Enter健进行查询"
+                    autocomplete="off" class="layui-input caller-pl32" style="padding: 0 32px;">
+                <i class="layui-icon layui-icon-close caller-dump-icon caller-icon" style="    font-size: 18px;
+                        position: absolute;
+                        top: 20px;left: 98%;"></i>
+            </div>
+
+            <div class="layui-col-md12" style="height: calc(90vh);">
+                <div class="layui-field-box">
+                    <div class="work-area" style="margin-top: 10px;margin-left: 10px">
+                        <!-- 定义角色授权按钮 -->
+                        <script type="text/html" id="authorizationbar">
                         <div class="layui-btn-group">
                             <button type="button" class="layui-btn layui-btn-xs" id = "roleAuthorization"  lay-event="roleAuthorization" >菜单授权</button>
                         </div>
                      </script>
-                    <table class="layui-hide" id="role" lay-filter="role"></table>
+                        <table class="layui-hide" id="role" lay-filter="role"></table>
+                    </div>
                 </div>
             </div>
-        </fieldset>
-    </div>
+        </div>
 
-    <!-- js插件 -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../vendor/layui/layui.js"></script>
-    <script src="../../js/front.js"></script>
-    <script src="../../js/common.js"></script>
+        <!-- js插件 -->
+        <script src="../../vendor/jquery/jquery.min.js"></script>
+        <script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../../vendor/layui/layui.js"></script>
+        <script src="../../js/front.js"></script>
+        <script src="../../js/common.js"></script>
 
-    <script>
-        layui.use('table', function () {
-            var table = layui.table;
-            var $ = layui.jquery;
-            var layer = layui.layer;
-            var cols = [[
-                { type: 'radio', fixed: 'left' },
-                { type: 'numbers', title: '序号', align: 'center' },
-                { field: 'roleId', title: '角色ID', sort: false, align: 'center', hide: true },
-                { field: 'roleName', title: '角色名称', sort: false, align: 'center' },
-                { field: 'authorization', title: '授权', sort: false, align: 'center', toolbar: '#authorizationbar' }
-            ]];
-            function res(res) {
-                return {
-                    code: 0,
-                    msg: "",
-                    count: res.roleList.length,
-                    data: res.roleList
+        <script>
+            layui.use('table', function () {
+                var table = layui.table;
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var cols = [[
+                    { type: 'radio', fixed: 'left' },
+                    { type: 'numbers', title: '序号', align: 'center' },
+                    { field: 'roleId', title: '角色ID', sort: false, align: 'center', hide: true },
+                    { field: 'roleName', title: '角色名称', sort: false, align: 'center' },
+                    { field: 'authorization', title: '授权', sort: false, align: 'center', toolbar: '#authorizationbar' }
+                ]];
+                function res(res) {
+                    return {
+                        code: 0,
+                        msg: "",
+                        count: res.roleList.length,
+                        data: res.roleList
+                    };
                 };
-            };
-            // 表格初始化
-            var tableIns = initTable(table, "基础-角色管理", "role", 20, "/getRoleList.json", { "userInfo": userInfo, "pageNo": 1, "pageSize": 20 }, res, cols, "default", "");
-            // 监听头部工具栏事件
-            table.on('toolbar(role)', function (obj) {
-                var checkStatus = table.checkStatus(obj.config.id);
-                var data = checkStatus.data; //获取选中的数据
-                var layEvet = obj.event;
-                switch (layEvet) {
-                    case 'add':
-                        layer.open({
-                            type: 2,
-                            title: false,
-                            anim: 1,
-                            area: ['800px', '300px'],
-                            content: './roleAdd.html',
-                            end: function () {
-                                tableReload(tableIns);
-                            }
-                        });
-                        break;
-                    case 'update':
-                        if (data.length === 0) {
-                            layer.msg('请选择一行');
-                        } else if (data.length > 1) {
-                            layer.msg('只能同时编辑一个', function () { });
-                        } else {
-                            var content = './roleEdit.html?roleInfo=' + encodeURIComponent(JSON.stringify(checkStatus.data[0]));
+                // 表格初始化
+                var tableIns = initTable(table, "基础-角色管理", "role", 20, "/getRoleList.json", { "userInfo": userInfo, "pageNo": 1, "pageSize": 20 }, res, cols, "default", "");
+                // 监听头部工具栏事件
+                table.on('toolbar(role)', function (obj) {
+                    var checkStatus = table.checkStatus(obj.config.id);
+                    var data = checkStatus.data; //获取选中的数据
+                    var layEvet = obj.event;
+                    switch (layEvet) {
+                        case 'add':
                             layer.open({
                                 type: 2,
                                 title: false,
                                 anim: 1,
                                 area: ['800px', '300px'],
-                                content: content,
+                                content: './roleAdd.html',
                                 end: function () {
                                     tableReload(tableIns);
                                 }
                             });
+                            break;
+                        case 'update':
+                            if (data.length === 0) {
+                                layer.msg('请选择一行');
+                            } else if (data.length > 1) {
+                                layer.msg('只能同时编辑一个', function () { });
+                            } else {
+                                var content = './roleEdit.html?roleInfo=' + encodeURIComponent(JSON.stringify(checkStatus.data[0]));
+                                layer.open({
+                                    type: 2,
+                                    title: false,
+                                    anim: 1,
+                                    area: ['800px', '300px'],
+                                    content: content,
+                                    end: function () {
+                                        tableReload(tableIns);
+                                    }
+                                });
 
-                        }
-                        break;
-                    case 'delete':
-                        if (data.length === 0) {
-                            layer.msg('请选择一行');
-                        } else {
-                            var roleId = checkStatus.data[0].roleId;
-                            sendDelRequest("/roleDelete.json", JSON.stringify({ "userInfo": userInfo,  "roleId": roleId }),tableIns);
-                        }
-                        break;
-                };
-            });
-
-            //监听行工具事件
-            table.on('tool(role)', function (obj) {
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                switch (layEvent) {
-                    case 'roleAuthorization': // 角色授权
-                        layer.open({
-                            type: 2,
-                            title: false,
-                            anim: 1,
-                            area: ['800px', '400px'],
-                            content: './roleAuthorization.html?roleId=' + data.roleId + "&roleName=" + encodeURIComponent(data.roleName),
-                            end: function () {
-                                table.reload('role');
                             }
-                        });
-                        break;
-                };
+                            break;
+                        case 'delete':
+                            if (data.length === 0) {
+                                layer.msg('请选择一行');
+                            } else {
+                                var roleId = checkStatus.data[0].roleId;
+                                sendDelRequest("/roleDelete.json", JSON.stringify({ "userInfo": userInfo, "roleId": roleId }), tableIns);
+                            }
+                            break;
+                    };
+                });
+
+                //监听行工具事件
+                table.on('tool(role)', function (obj) {
+                    var data = obj.data; //获得当前行数据
+                    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                    switch (layEvent) {
+                        case 'roleAuthorization': // 角色授权
+                            layer.open({
+                                type: 2,
+                                title: false,
+                                anim: 1,
+                                area: ['800px', '400px'],
+                                content: './roleAuthorization.html?roleId=' + data.roleId + "&roleName=" + encodeURIComponent(data.roleName),
+                                end: function () {
+                                    table.reload('role');
+                                }
+                            });
+                            break;
+                    };
+                });
+                // // 监听角色按钮 roleAuthorization.html
+                // $(document).on('click', '#roleAuthorization', function () {
+                //     layer.open({
+                //         type: 2,
+                //         title: false,
+                //         anim: 1,
+                //         area: ['800px', '300px'],
+                //         content: './roleAuthorization.html',
+                //         end: function () {
+                //             table.reload('role');
+                //         }
+                //     });
+                // });
             });
-            // // 监听角色按钮 roleAuthorization.html
-            // $(document).on('click', '#roleAuthorization', function () {
-            //     layer.open({
-            //         type: 2,
-            //         title: false,
-            //         anim: 1,
-            //         area: ['800px', '300px'],
-            //         content: './roleAuthorization.html',
-            //         end: function () {
-            //             table.reload('role');
-            //         }
-            //     });
-            // });
-        });
-    </script>
+        </script>
 </body>
 
 </html>
